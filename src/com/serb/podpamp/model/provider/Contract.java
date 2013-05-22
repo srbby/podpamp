@@ -26,6 +26,7 @@ public class Contract {
 		public static final String MEDIA_URL = "media_url";
 		public static final String FILE_PATH = "file_path";
 		public static final String IS_READ = "is_read";
+		public static final String LENGTH = "length";
 	}
 
 	public static final class Feeds implements BaseColumns, FeedsColumns {

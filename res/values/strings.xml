@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">podpamp</string>
+	<string name="app_name">PodPAmp</string>
+	<string name="feeds_list_title">Subscriptions</string>
+	<string name="add_feed">Add</string>
 </resources>

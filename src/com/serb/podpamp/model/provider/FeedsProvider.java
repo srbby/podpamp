@@ -41,7 +41,7 @@ public class FeedsProvider extends ContentProvider {
 			}
 			case PATH_FEED_ITEMS: {
 				Cursor cursor = mDBHelper.getReadableDatabase().query(Contract.TABLE_FEED_ITEMS,
-						projection, selection, selectionArgs, null, null, sortOrder);
+					projection, selection, selectionArgs, null, null, sortOrder);
 				cursor.setNotificationUri(getContext().getContentResolver(), Contract.FeedItems.CONTENT_URI);
 				return cursor;
 			}
