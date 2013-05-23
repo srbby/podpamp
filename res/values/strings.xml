@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">PodPAmp</string>
+
+	<string name="add_button_text">Add</string>
+	<string name="cancel_button_text">Cancel</string>
+
 	<string name="feeds_list_title">Subscriptions</string>
-	<string name="add_feed">Add</string>
+
+	<string name="add_feed_dialog_title">Add a subscription</string>
+	<string name="add_feed_dialog_message">Type or paste a feed url to add a subscription.</string>
 </resources>

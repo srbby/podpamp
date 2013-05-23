@@ -9,5 +9,9 @@
 			android:layout_height="wrap_content"
 			android:text="Hello World, MyActivity"
 			/>
+	<Button android:id="@+id/btn_feeds"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/feeds_list_title"/>
 </LinearLayout>
 
