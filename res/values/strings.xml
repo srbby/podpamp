@@ -9,4 +9,5 @@
 
 	<string name="add_feed_dialog_title">Add a subscription</string>
 	<string name="add_feed_dialog_message">Type or paste a feed url to add a subscription.</string>
+	<string name="failed_to_add_feed">Unable to add a subscription.</string>
 </resources>
