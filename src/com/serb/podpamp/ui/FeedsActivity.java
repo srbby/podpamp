@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import com.foxykeep.datadroid.requestmanager.Request;
@@ -109,6 +110,34 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 
 		ListView listView = (ListView)findViewById(R.id.feeds_list);
 		listView.setAdapter(adapter);
+
+		listView.setOnItemLongClickListener (new AdapterView.OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
+				deleteFeed(id);
+				return false;
+			}
+		});
+	}
+
+
+
+	private void deleteFeed(long id) {
+		String mSelectionClause = Contract.FeedItems.FEED_ID + " = ?";
+		String[] mSelectionArgs = { String.valueOf(id) };
+
+		getContentResolver().delete(
+				Contract.FeedItems.CONTENT_URI,
+				mSelectionClause,
+				mSelectionArgs
+		);
+
+		mSelectionClause = Contract.Feeds._ID + " = ?";
+
+		getContentResolver().delete(
+			Contract.Feeds.CONTENT_URI,
+			mSelectionClause,
+			mSelectionArgs
+		);
 	}
 
 

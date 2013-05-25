@@ -83,11 +83,16 @@ public class FeedsProvider extends ContentProvider {
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		int count;
 		switch (sUriMatcher.match(uri)) {
 			case PATH_FEEDS:
-				return mDBHelper.getWritableDatabase().delete(Contract.TABLE_FEEDS, selection, selectionArgs);
+				count = mDBHelper.getWritableDatabase().delete(Contract.TABLE_FEEDS, selection, selectionArgs);
+				getContext().getContentResolver().notifyChange(Contract.Feeds.CONTENT_URI, null);
+				return count;
 			case PATH_FEED_ITEMS:
-				return mDBHelper.getWritableDatabase().delete(Contract.TABLE_FEED_ITEMS, selection, selectionArgs);
+				count = mDBHelper.getWritableDatabase().delete(Contract.TABLE_FEED_ITEMS, selection, selectionArgs);
+				getContext().getContentResolver().notifyChange(Contract.FeedItems.CONTENT_URI, null);
+				return count;
 			default:
 				return 0;
 		}
