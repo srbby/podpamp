@@ -1,6 +1,7 @@
 package com.serb.podpamp.model.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -66,12 +67,14 @@ public class FeedsProvider extends ContentProvider {
 	public Uri insert(Uri uri, ContentValues contentValues) {
 		switch (sUriMatcher.match(uri)) {
 			case PATH_FEEDS: {
-				mDBHelper.getWritableDatabase().insert(Contract.TABLE_FEEDS, null, contentValues);
+				long id = mDBHelper.getWritableDatabase().insert(Contract.TABLE_FEEDS, null, contentValues);
 				getContext().getContentResolver().notifyChange(Contract.Feeds.CONTENT_URI, null);
+				return ContentUris.withAppendedId(Contract.Feeds.CONTENT_URI, id);
 			}
 			case PATH_FEED_ITEMS: {
-				mDBHelper.getWritableDatabase().insert(Contract.TABLE_FEED_ITEMS, null, contentValues);
+				long id = mDBHelper.getWritableDatabase().insert(Contract.TABLE_FEED_ITEMS, null, contentValues);
 				getContext().getContentResolver().notifyChange(Contract.FeedItems.CONTENT_URI, null);
+				return ContentUris.withAppendedId(Contract.FeedItems.CONTENT_URI, id);
 			}
 			default:
 				return null;
