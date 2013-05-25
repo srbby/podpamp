@@ -1,6 +1,7 @@
 package com.serb.podpamp.ui;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -97,7 +98,7 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 			Contract.Feeds.URL
 		};
 
-		Cursor cursor = this.getContentResolver().query(Contract.Feeds.CONTENT_URI,
+		Cursor cursor = getContentResolver().query(Contract.Feeds.CONTENT_URI,
 			projection, null, null, null);
 		startManagingCursor(cursor);
 
@@ -117,26 +118,32 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 				return false;
 			}
 		});
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView parent, View view, int position, long id) {
+				showFeedItemsList(id);
+			}
+		});
 	}
 
 
 
 	private void deleteFeed(long id) {
-		String mSelectionClause = Contract.FeedItems.FEED_ID + " = ?";
-		String[] mSelectionArgs = { String.valueOf(id) };
+		String selection = Contract.FeedItems.FEED_ID + " = ?";
+		String[] selectionArgs = { String.valueOf(id) };
 
 		getContentResolver().delete(
-				Contract.FeedItems.CONTENT_URI,
-				mSelectionClause,
-				mSelectionArgs
+			Contract.FeedItems.CONTENT_URI,
+			selection,
+			selectionArgs
 		);
 
-		mSelectionClause = Contract.Feeds._ID + " = ?";
+		selection = Contract.Feeds._ID + " = ?";
 
 		getContentResolver().delete(
 			Contract.Feeds.CONTENT_URI,
-			mSelectionClause,
-			mSelectionArgs
+			selection,
+			selectionArgs
 		);
 	}
 
@@ -153,6 +160,15 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 		Request updateRequest = new Request(RequestFactory.REQUEST_ADD_FEED);
 		updateRequest.put(RequestFactory.FEED_URL, feed_url);
 		requestManager.execute(updateRequest, requestListener);
+	}
+
+
+
+	private void showFeedItemsList(long id)
+	{
+		Intent intent = new Intent(this, FeedItemsActivity.class);
+		intent.putExtra("feed_id", id);
+		startActivity(intent);
 	}
 
 	//endregion
