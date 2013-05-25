@@ -16,19 +16,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			Contract.Feeds.URL + " text, " +
 			Contract.Feeds.TITLE + " text, " +
 			Contract.Feeds.ICON + " text, " +
-			Contract.Feeds.NEW_ITEMS_COUNT + " text" +
+			Contract.Feeds.NEW_ITEMS_COUNT + " integer" +
 			")";
 		db.execSQL(sql);
 
 		sql = "create table " + Contract.TABLE_FEED_ITEMS + " (" +
 			Contract.FeedItems._ID + " integer primary key autoincrement, " +
-			Contract.FeedItems.FEED_ID + " text, " +
+			Contract.FeedItems.FEED_ID + " integer, " +
 			Contract.FeedItems.TITLE + " text, " +
 			Contract.FeedItems.DESC + " text, " +
 			Contract.FeedItems.MEDIA_URL + " text, " +
 			Contract.FeedItems.FILE_PATH + " text, " +
-			Contract.FeedItems.IS_READ + " text, " +
-			Contract.FeedItems.LENGTH + " text" +
+			Contract.FeedItems.IS_READ + " integer, " +
+			Contract.FeedItems.LENGTH + " integer, " +
+			Contract.FeedItems.PUBLISHED + " integer" +
 			")";
 		db.execSQL(sql);
 	}

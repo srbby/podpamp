@@ -1,7 +1,9 @@
 package com.serb.podpamp.model.operations;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.CustomRequestException;
@@ -29,15 +31,34 @@ public class AddFeedOperation implements RequestService.Operation {
 			RSSFeed rss_feed = reader.load(url);
 			List<RSSItem> items = rss_feed.getItems();
 
-			ContentValues feed = new ContentValues();
-			feed.put(Contract.FeedsColumns.TITLE, rss_feed.getTitle());
-			feed.put(Contract.FeedsColumns.URL, url);
-			feed.put(Contract.FeedsColumns.NEW_ITEMS_COUNT, items.size());
+			ContentValues values = new ContentValues();
+			values.put(Contract.FeedsColumns.TITLE, rss_feed.getTitle());
+			values.put(Contract.FeedsColumns.URL, url);
+			values.put(Contract.FeedsColumns.NEW_ITEMS_COUNT, items.size());
 
-			context.getContentResolver().insert(Contract.Feeds.CONTENT_URI, feed);
+			Uri feedUri = context.getContentResolver().insert(Contract.Feeds.CONTENT_URI, values);
+
+			long feedId = ContentUris.parseId(feedUri);
+			for (RSSItem item : items) {
+				addFeedItem(context, feedId, item);
+			}
 		} catch (RSSReaderException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+
+
+	private void addFeedItem(Context context, long feedId, RSSItem item) {
+		ContentValues values = new ContentValues();
+		values.put(Contract.FeedItemsColumns.FEED_ID, feedId);
+		values.put(Contract.FeedItemsColumns.TITLE, item.getTitle());
+		values.put(Contract.FeedItemsColumns.DESC, item.getDescription());
+		values.put(Contract.FeedItemsColumns.MEDIA_URL, item.getLink().toString());
+		values.put(Contract.FeedItemsColumns.IS_READ, false);
+		values.put(Contract.FeedItemsColumns.PUBLISHED, item.getPubDate().getTime());
+
+		context.getContentResolver().insert(Contract.FeedItems.CONTENT_URI, values);
 	}
 }
