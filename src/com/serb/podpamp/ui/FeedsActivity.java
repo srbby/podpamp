@@ -1,7 +1,6 @@
 package com.serb.podpamp.ui;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -9,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.serb.podpamp.R;
@@ -104,10 +102,10 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(
 			this, // Context.
-			android.R.layout.two_line_list_item,
+			R.layout.feed_list_item,
 			cursor,
-			new String[] { Contract.Feeds.TITLE, Contract.Feeds.URL },
-			new int[] {android.R.id.text1, android.R.id.text2});
+			new String[] { Contract.Feeds.ICON, Contract.Feeds.TITLE, Contract.Feeds.NEW_ITEMS_COUNT },
+			new int[] { R.id.img_feed_icon, R.id.txt_feed_title, R.id.txt_new_feeds_count });
 
 		ListView listView = (ListView)findViewById(R.id.feeds_list);
 		listView.setAdapter(adapter);
