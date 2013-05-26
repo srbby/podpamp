@@ -15,6 +15,8 @@ public class Contract {
 	public interface FeedsColumns {
 		public static final String URL = "url";
 		public static final String TITLE = "title";
+		public static final String SUBTITLE = "subtitle";
+		public static final String ICON_URL = "icon_url";
 		public static final String ICON = "icon";
 		public static final String NEW_ITEMS_COUNT = "new_items_count";
 	}

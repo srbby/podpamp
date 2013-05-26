@@ -3,9 +3,11 @@ package com.serb.podpamp.ui;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
+import com.serb.podpamp.utils.ImageUtils;
 
 public class FeedItemsActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,8 @@ public class FeedItemsActivity extends Activity {
 
 			String[] projection = {
 				Contract.Feeds.ICON,
-				Contract.Feeds.TITLE
+				Contract.Feeds.TITLE,
+				Contract.Feeds.SUBTITLE
 			};
 
 			String selection = Contract.FeedItems._ID + " = ?";
@@ -37,13 +40,17 @@ public class FeedItemsActivity extends Activity {
 
 			if (cursor != null)
 			{
-				if (cursor.getCount() == 1)
+				if (cursor.moveToNext())
 				{
-					cursor.moveToNext();
-					//ImageView feedIcon = (ImageView)findViewById(R.id.img_feed_icon);
-					//feedIcon.setImageBitmap(cursor.g);
-					TextView feedTitle = (TextView) findViewById(R.id.txt_feed_title);
-					feedTitle.setText(cursor.getString(1));
+					ImageUtils.setImageView((ImageView)findViewById(R.id.img_feed_icon),
+						cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON)),
+						R.drawable.icon_rss);
+
+					TextView title_view = (TextView) findViewById(R.id.txt_feed_title);
+					title_view.setText(cursor.getString(cursor.getColumnIndex(Contract.Feeds.TITLE)));
+
+					TextView subtitle_view = (TextView) findViewById(R.id.txt_feed_subtitle);
+					subtitle_view.setText(cursor.getString(cursor.getColumnIndex(Contract.Feeds.SUBTITLE)));
 				}
 				cursor.close();
 			}

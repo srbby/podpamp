@@ -11,4 +11,6 @@
 	<string name="add_feed_dialog_message">Type or paste a feed url to add a subscription.</string>
 	<string name="failed_to_add_feed">Unable to add a subscription.</string>
 	<string name="no_new_episodes">No new episodes</string>
+
+	<string name="icon_desc">Logo</string>
 </resources>

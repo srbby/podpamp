@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.serb.podpamp.R;
@@ -94,15 +93,14 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 			Contract.Feeds._ID,
 			Contract.Feeds.ICON,
 			Contract.Feeds.TITLE,
-			Contract.Feeds.NEW_ITEMS_COUNT,
-			Contract.Feeds.URL
+			Contract.Feeds.NEW_ITEMS_COUNT
 		};
 
 		Cursor cursor = getContentResolver().query(Contract.Feeds.CONTENT_URI,
 			projection, null, null, null);
 		startManagingCursor(cursor);
 
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+		FeedsCursorAdapter adapter = new FeedsCursorAdapter(
 			this, // Context.
 			R.layout.feed_list_item,
 			cursor,
