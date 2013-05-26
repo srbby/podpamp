@@ -35,13 +35,17 @@ public class FeedItemsActivity extends Activity {
 			Cursor cursor = getContentResolver().query(Contract.Feeds.CONTENT_URI,
 				projection, selection, selectionArgs, null);
 
-			if (cursor != null && cursor.getCount() == 1)
+			if (cursor != null)
 			{
-				cursor.moveToNext();
-//				ImageView feedIcon = (ImageView)findViewById(R.id.img_feed_icon);
-//				feedIcon.setImageBitmap(cursor.g);
-				TextView feedTitle = (TextView) findViewById(R.id.txt_feed_title);
-				feedTitle.setText(cursor.getString(1));
+				if (cursor.getCount() == 1)
+				{
+					cursor.moveToNext();
+					//ImageView feedIcon = (ImageView)findViewById(R.id.img_feed_icon);
+					//feedIcon.setImageBitmap(cursor.g);
+					TextView feedTitle = (TextView) findViewById(R.id.txt_feed_title);
+					feedTitle.setText(cursor.getString(1));
+				}
+				cursor.close();
 			}
 		}
 	}

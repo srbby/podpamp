@@ -12,10 +12,7 @@ import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.model.request.RequestFactory;
-import org.mcsoxford.rss.RSSFeed;
-import org.mcsoxford.rss.RSSItem;
-import org.mcsoxford.rss.RSSReader;
-import org.mcsoxford.rss.RSSReaderException;
+import org.mcsoxford.rss.*;
 
 import java.util.List;
 
@@ -33,6 +30,7 @@ public class AddFeedOperation implements RequestService.Operation {
 
 			ContentValues values = new ContentValues();
 			values.put(Contract.FeedsColumns.TITLE, rss_feed.getTitle());
+			values.put(Contract.FeedsColumns.ICON, rss_feed.getIconUrl().toString());
 			values.put(Contract.FeedsColumns.URL, url);
 			values.put(Contract.FeedsColumns.NEW_ITEMS_COUNT, items.size());
 
@@ -54,8 +52,15 @@ public class AddFeedOperation implements RequestService.Operation {
 		ContentValues values = new ContentValues();
 		values.put(Contract.FeedItemsColumns.FEED_ID, feedId);
 		values.put(Contract.FeedItemsColumns.TITLE, item.getTitle());
-		values.put(Contract.FeedItemsColumns.DESC, item.getDescription());
-		values.put(Contract.FeedItemsColumns.MEDIA_URL, item.getLink().toString());
+		values.put(Contract.FeedItemsColumns.DESC, item.getSummary());
+
+		final Enclosure enclosure = item.getEnclosure();
+		if (enclosure != null)
+		{
+			values.put(Contract.FeedItemsColumns.MEDIA_URL, enclosure.getUrl().toString());
+			values.put(Contract.FeedItemsColumns.LENGTH, enclosure.getLength());
+		}
+
 		values.put(Contract.FeedItemsColumns.IS_READ, false);
 		values.put(Contract.FeedItemsColumns.PUBLISHED, item.getPubDate().getTime());
 
