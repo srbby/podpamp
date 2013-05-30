@@ -6,21 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.utils.ImageUtils;
 
 public class FeedsCursorAdapter extends SimpleCursorAdapter {
-	private Cursor cursor;
 	private Context context;
 
 
 
-	public FeedsCursorAdapter(Context context, int layout, Cursor cursor, String[] from, int[] to) {
-		super(context, layout, cursor, from, to);
-		this.cursor = cursor;
+	public FeedsCursorAdapter(Context context, int layout, Cursor cursor, String[] from, int[] to, int flags) {
+		super(context, layout, cursor, from, to, flags);
 		this.context = context;
 	}
 
@@ -33,6 +31,7 @@ public class FeedsCursorAdapter extends SimpleCursorAdapter {
 			view = inflater.inflate(R.layout.feed_list_item, null);
 		}
 
+		Cursor cursor = getCursor();
 		cursor.moveToPosition(pos);
 
 		String feed_title = cursor.getString(cursor.getColumnIndex(Contract.Feeds.TITLE));

@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -18,7 +21,44 @@ import com.serb.podpamp.model.request.RequestFactory;
 
 public class FeedsActivity extends FragmentActivity implements View.OnClickListener,
 		AddFeedDialog.AddFeedDialogListener {
+	private static final int LOADER_ID = 0;
+
+	String[] PROJECTION = {
+		Contract.Feeds._ID,
+		Contract.Feeds.ICON,
+		Contract.Feeds.TITLE,
+		Contract.Feeds.NEW_ITEMS_COUNT
+	};
+
+	FeedsCursorAdapter adapter;
+
 	private FeedsRequestManager requestManager;
+
+
+
+	private LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
+		@Override
+		public Loader<Cursor> onCreateLoader(int loaderId, Bundle arg1) {
+			return new CursorLoader(
+				FeedsActivity.this,
+				Contract.Feeds.CONTENT_URI,
+				PROJECTION,
+				null,
+				null,
+				null
+			);
+		}
+
+		@Override
+		public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
+			adapter.swapCursor(cursor);
+		}
+
+		@Override
+		public void onLoaderReset(Loader<Cursor> arg0) {
+			adapter.swapCursor(null);
+		}
+	};
 
 
 
@@ -89,31 +129,24 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 	//region Private Methods.
 
 	private void setupFeedsList() {
-		String[] projection = {
-			Contract.Feeds._ID,
-			Contract.Feeds.ICON,
-			Contract.Feeds.TITLE,
-			Contract.Feeds.NEW_ITEMS_COUNT
-		};
+		ListView listView = (ListView)findViewById(R.id.feeds_list);
 
-		Cursor cursor = getContentResolver().query(Contract.Feeds.CONTENT_URI,
-			projection, null, null, null);
-		startManagingCursor(cursor);
-
-		FeedsCursorAdapter adapter = new FeedsCursorAdapter(
+		adapter = new FeedsCursorAdapter(
 			this, // Context.
 			R.layout.feed_list_item,
-			cursor,
+			null,
 			new String[] { Contract.Feeds.ICON, Contract.Feeds.TITLE, Contract.Feeds.NEW_ITEMS_COUNT },
-			new int[] { R.id.img_feed_icon, R.id.txt_feed_title, R.id.txt_new_feeds_count });
+			new int[] { R.id.img_feed_icon, R.id.txt_feed_title, R.id.txt_new_feeds_count },
+			0);
 
-		ListView listView = (ListView)findViewById(R.id.feeds_list);
 		listView.setAdapter(adapter);
+
+		getSupportLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
 
 		listView.setOnItemLongClickListener (new AdapterView.OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
-				deleteFeed(id);
-				return false;
+			deleteFeed(id);
+			return false;
 			}
 		});
 
