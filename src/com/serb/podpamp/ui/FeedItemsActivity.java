@@ -76,9 +76,11 @@ public class FeedItemsActivity extends FragmentActivity {
 	private void setupFeedItemsList()
 	{
 		final String[] projection = {
-				Contract.FeedItems._ID,
-				Contract.FeedItems.TITLE,
-				Contract.FeedItems.DESC
+			Contract.FeedItems._ID,
+			Contract.FeedItems.TITLE,
+			Contract.FeedItems.DESC,
+			Contract.FeedItems.PUBLISHED,
+			Contract.FeedItems.LENGTH
 		};
 
 		final String selection = Contract.FeedItems.FEED_ID + " = ?";
@@ -88,8 +90,8 @@ public class FeedItemsActivity extends FragmentActivity {
 			this, // Context.
 			R.layout.feed_items_list_item,
 			null,
-			new String[] { Contract.FeedItems.TITLE, Contract.FeedItems.DESC },
-			new int[] { R.id.txt_feed_item_title, R.id.txt_feed_item_desc },
+			new String[] {},
+			new int[] {},
 			0);
 
 		LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {

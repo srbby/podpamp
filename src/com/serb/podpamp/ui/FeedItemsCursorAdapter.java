@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
 
+import java.util.Date;
+
 public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 	private Context context;
 
@@ -34,6 +36,8 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 
 		String title = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
 		String desc = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.DESC));
+		long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
+		long length = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.LENGTH));
 
 		TextView title_view = (TextView) view.findViewById(R.id.txt_feed_item_title);
 		title_view.setText(title);
@@ -41,6 +45,37 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 		TextView desc_view = (TextView) view.findViewById(R.id.txt_feed_item_desc);
 		desc_view.setText(desc);
 
+		TextView published_view = (TextView) view.findViewById(R.id.txt_feed_item_published);
+		published_view.setText(getPublishedText(published));
+
+		TextView length_view = (TextView) view.findViewById(R.id.txt_feed_item_length);
+		length_view.setText(getLengthText(length));
+
 		return(view);
 	}
+
+	//region Private Methods.
+
+	private String getLengthText(long length) {
+		if (length > 0)
+		{
+			if (length >= 1048576)
+				return String.valueOf((float)length / 1048576) + " MB";
+			return String.valueOf((float)length / 1024) + " KB";
+		}
+		return "";
+	}
+
+
+
+	private String getPublishedText(long published) {
+		if (published > 0)
+		{
+			Date pub_date = new Date(published);
+			return pub_date.toString();
+		}
+		return "";
+	}
+
+	//endregion
 }

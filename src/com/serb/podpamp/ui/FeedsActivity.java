@@ -135,8 +135,8 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 			this, // Context.
 			R.layout.feed_list_item,
 			null,
-			new String[] { Contract.Feeds.ICON, Contract.Feeds.TITLE, Contract.Feeds.NEW_ITEMS_COUNT },
-			new int[] { R.id.img_feed_icon, R.id.txt_feed_title, R.id.txt_new_feeds_count },
+			new String[] {},
+			new int[] {},
 			0);
 
 		listView.setAdapter(adapter);
