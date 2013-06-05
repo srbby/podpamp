@@ -1,4 +1,4 @@
-package com.serb.podpamp.ui;
+package com.serb.podpamp.ui.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,7 +10,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
-import com.serb.podpamp.utils.ImageUtils;
+import com.serb.podpamp.utils.Utils;
 
 public class FeedsCursorAdapter extends SimpleCursorAdapter {
 	private Context context;
@@ -44,7 +44,7 @@ public class FeedsCursorAdapter extends SimpleCursorAdapter {
 		TextView count_view = (TextView) view.findViewById(R.id.txt_new_feeds_count);
 		count_view.setText(String.valueOf(feeds_count));
 
-		ImageUtils.setImageView((ImageView)view.findViewById(R.id.img_feed_icon),
+		Utils.setImageView((ImageView) view.findViewById(R.id.img_feed_icon),
 			feed_icon,
 			R.drawable.icon_rss);
 

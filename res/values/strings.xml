@@ -2,7 +2,7 @@
 <resources>
 	<string name="app_name">PodPAmp</string>
 
-	<string name="add_button_text">Add</string>
+	<string name="add_feed_text">Subscribe</string>
 	<string name="cancel_button_text">Cancel</string>
 
 	<string name="feeds_list_title">Subscriptions</string>

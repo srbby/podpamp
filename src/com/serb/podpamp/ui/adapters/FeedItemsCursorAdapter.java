@@ -1,4 +1,4 @@
-package com.serb.podpamp.ui;
+package com.serb.podpamp.ui.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,10 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
-
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.serb.podpamp.utils.Utils;
 
 public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 	private Context context;
@@ -48,37 +45,11 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 		desc_view.setText(desc);
 
 		TextView published_view = (TextView) view.findViewById(R.id.txt_feed_item_published);
-		published_view.setText(getPublishedText(published));
+		published_view.setText(Utils.getDateText(published));
 
 		TextView length_view = (TextView) view.findViewById(R.id.txt_feed_item_length);
-		length_view.setText(getLengthText(length));
+		length_view.setText(Utils.getFileSizeText(length));
 
 		return(view);
 	}
-
-	//region Private Methods.
-
-	private String getLengthText(double length) {
-		if (length > 0)
-		{
-			DecimalFormat form = new DecimalFormat("#.##");
-			if (length >= 1048576)
-				return form.format(length / 1048576) + " MB";
-			return form.format(length / 1024) + " KB";
-		}
-		return "";
-	}
-
-
-
-	private String getPublishedText(long published) {
-		if (published > 0)
-		{
-			Date pub_date = new Date(published);
-			return new SimpleDateFormat("MMM dd, yyyy HH:mm").format(pub_date);
-		}
-		return "";
-	}
-
-	//endregion
 }

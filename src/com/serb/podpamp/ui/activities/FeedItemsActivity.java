@@ -1,4 +1,4 @@
-package com.serb.podpamp.ui;
+package com.serb.podpamp.ui.activities;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -11,7 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
-import com.serb.podpamp.utils.ImageUtils;
+import com.serb.podpamp.ui.adapters.FeedItemsCursorAdapter;
+import com.serb.podpamp.utils.Utils;
 
 public class FeedItemsActivity extends FragmentActivity {
 	private static final int LOADER_ID = 0;
@@ -57,9 +58,9 @@ public class FeedItemsActivity extends FragmentActivity {
 		{
 			if (cursor.moveToNext())
 			{
-				ImageUtils.setImageView((ImageView)findViewById(R.id.img_feed_icon),
-					cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON)),
-					R.drawable.icon_rss);
+				Utils.setImageView((ImageView) findViewById(R.id.img_feed_icon),
+						cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON)),
+						R.drawable.icon_rss);
 
 				TextView title_view = (TextView) findViewById(R.id.txt_feed_title);
 				title_view.setText(cursor.getString(cursor.getColumnIndex(Contract.Feeds.TITLE)));

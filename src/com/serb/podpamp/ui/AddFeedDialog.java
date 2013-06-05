@@ -46,7 +46,7 @@ public class AddFeedDialog extends DialogFragment {
 		builder.setMessage(R.string.add_feed_dialog_message)
 			.setTitle(R.string.add_feed_dialog_title)
 			.setView(input)
-			.setPositiveButton(R.string.add_button_text, new DialogInterface.OnClickListener() {
+			.setPositiveButton(R.string.add_feed_text, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					mListener.onDialogPositiveClick(String.valueOf(input.getText()));

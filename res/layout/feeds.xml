@@ -19,7 +19,7 @@
 		<Button android:id="@+id/btn_add_feed"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/add_button_text"/>
+				android:text="@string/add_feed_text"/>
 
 		<TextView android:id="@+id/txt_greet"
 				  android:layout_width="fill_parent"

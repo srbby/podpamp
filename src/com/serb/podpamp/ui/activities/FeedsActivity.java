@@ -1,4 +1,4 @@
-package com.serb.podpamp.ui;
+package com.serb.podpamp.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -18,6 +18,8 @@ import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.model.request.FeedsRequestManager;
 import com.serb.podpamp.model.request.RequestFactory;
+import com.serb.podpamp.ui.AddFeedDialog;
+import com.serb.podpamp.ui.adapters.FeedsCursorAdapter;
 
 public class FeedsActivity extends FragmentActivity implements View.OnClickListener,
 		AddFeedDialog.AddFeedDialogListener {

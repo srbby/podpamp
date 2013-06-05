@@ -3,31 +3,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				android:paddingRight="5dp"
-				android:paddingTop="2dp"
-				android:paddingBottom="2dp">
+				android:padding="5dp">
+
+	<ImageView android:id="@+id/img_feed_icon"
+			   android:layout_width="64dp"
+			   android:layout_height="64dp"
+			   android:layout_alignParentLeft="true"
+			   android:layout_alignParentTop="true"
+			   android:contentDescription="@string/icon_desc"
+			   android:adjustViewBounds="true"
+			   android:scaleType="centerInside"/>
 
 	<TextView android:id="@+id/txt_feed_item_title"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true"
-			android:layout_alignParentTop="true"
-			android:textSize="18dp"
-			android:textStyle="bold"/>
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  android:layout_alignParentTop="true"
+			  android:layout_toRightOf="@+id/img_feed_icon"
+			  android:textSize="18dp"
+			  android:textStyle="bold"/>
 
 	<TextView android:id="@+id/txt_feed_item_desc"
 			  android:layout_width="wrap_content"
 			  android:layout_height="wrap_content"
-			  android:layout_alignParentLeft="true"
+			  android:layout_toRightOf="@+id/img_feed_icon"
 			  android:layout_below="@+id/txt_feed_item_title"
-			  android:maxLines="4"
+			  android:maxLines="2"
 			  android:singleLine="false"
 			  android:textSize="14dp"/>
 
 	<TextView android:id="@+id/txt_feed_item_published"
 			  android:layout_width="wrap_content"
 			  android:layout_height="wrap_content"
-			  android:layout_alignParentLeft="true"
+			  android:layout_toRightOf="@+id/img_feed_icon"
 			  android:layout_below="@+id/txt_feed_item_desc"
 			  android:singleLine="true"
 			  android:textSize="12dp"
