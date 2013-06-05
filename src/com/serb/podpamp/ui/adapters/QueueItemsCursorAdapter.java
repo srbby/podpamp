@@ -6,6 +6,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
@@ -37,6 +38,7 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 		String desc = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.DESC));
 		long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
 		long length = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.LENGTH));
+		long feed_id = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
 
 		TextView title_view = (TextView) view.findViewById(R.id.txt_feed_item_title);
 		title_view.setText(title);
@@ -49,6 +51,11 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 
 		TextView length_view = (TextView) view.findViewById(R.id.txt_feed_item_length);
 		length_view.setText(Utils.getFileSizeText(length));
+
+		Utils.setImageView(view.getContext(),
+			(ImageView) view.findViewById(R.id.img_feed_icon),
+			feed_id,
+			R.drawable.icon_rss);
 
 		return(view);
 	}

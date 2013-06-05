@@ -1,9 +1,12 @@
 package com.serb.podpamp.utils;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.ImageView;
+import com.serb.podpamp.model.provider.Contract;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -12,8 +15,13 @@ import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public abstract class Utils {
+	private static final HashMap<Long, byte[]> feed_icons_map = new HashMap<Long, byte[]>();
+
+
+
 	public static byte[] downloadImage(String url) {
 		try {
 			if (url == null || url.length() == 0)
@@ -48,6 +56,18 @@ public abstract class Utils {
 
 
 
+	public static void setImageView(Context context, ImageView imageView, long feed_id, int alt_image) {
+		if (!feed_icons_map.containsKey(feed_id))
+			putFeedIcon(context, feed_id);
+
+		if (feed_icons_map.containsKey(feed_id))
+			setImageView(imageView, feed_icons_map.get(feed_id), alt_image);
+		else
+			setImageView(imageView, null, alt_image);
+	}
+
+
+
 	public static String getFileSizeText(double size_in_bytes) {
 		if (size_in_bytes > 0)
 		{
@@ -69,4 +89,31 @@ public abstract class Utils {
 		}
 		return "";
 	}
+
+	//region Private Methods.
+
+	private static void putFeedIcon(Context context, long feed_id) {
+		String[] projection = {
+			Contract.Feeds.ICON
+		};
+
+		String selection = Contract.Feeds._ID + " = ?";
+		String[] selectionArgs = { String.valueOf(feed_id) };
+
+		Cursor cursor = context.getContentResolver().query(Contract.Feeds.CONTENT_URI,
+			projection, selection, selectionArgs, null);
+
+		if (cursor != null)
+		{
+			if (cursor.moveToNext())
+			{
+				byte[] icon = cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON));
+				if (icon != null)
+					feed_icons_map.put(feed_id, icon);
+			}
+			cursor.close();
+		}
+	}
+
+	//endregion
 }

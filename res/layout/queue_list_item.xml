@@ -10,9 +10,12 @@
 			   android:layout_height="64dp"
 			   android:layout_alignParentLeft="true"
 			   android:layout_alignParentTop="true"
+			   android:layout_alignParentBottom="true"
 			   android:contentDescription="@string/icon_desc"
 			   android:adjustViewBounds="true"
-			   android:scaleType="centerInside"/>
+			   android:scaleType="centerInside"
+			   android:layout_marginRight="5dp"
+			   android:layout_centerInParent="true"/>
 
 	<TextView android:id="@+id/txt_feed_item_title"
 			  android:layout_width="wrap_content"
