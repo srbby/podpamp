@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
@@ -56,12 +58,13 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 
 	//region Private Methods.
 
-	private String getLengthText(long length) {
+	private String getLengthText(double length) {
 		if (length > 0)
 		{
+			DecimalFormat form = new DecimalFormat("#.##");
 			if (length >= 1048576)
-				return String.valueOf((float)length / 1048576) + " MB";
-			return String.valueOf((float)length / 1024) + " KB";
+				return form.format(length / 1048576) + " MB";
+			return form.format(length / 1024) + " KB";
 		}
 		return "";
 	}
@@ -72,7 +75,7 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 		if (published > 0)
 		{
 			Date pub_date = new Date(published);
-			return pub_date.toString();
+			return new SimpleDateFormat("MMM dd, yyyy HH:mm").format(pub_date);
 		}
 		return "";
 	}

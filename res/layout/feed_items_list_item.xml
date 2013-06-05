@@ -3,14 +3,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				android:padding="5dp">
+				android:paddingRight="5dp"
+				android:paddingTop="2dp"
+				android:paddingBottom="2dp">
 
 	<TextView android:id="@+id/txt_feed_item_title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
 			android:layout_alignParentTop="true"
-			android:layout_marginLeft="1dp"
 			android:layout_marginRight="1dp"
 			android:textSize="18dp"
 			android:textStyle="bold"/>
@@ -20,8 +21,6 @@
 			  android:layout_height="wrap_content"
 			  android:layout_alignParentLeft="true"
 			  android:layout_below="@+id/txt_feed_item_title"
-			  android:layout_marginLeft="1dp"
-			  android:layout_marginRight="1dp"
 			  android:maxLines="4"
 			  android:singleLine="false"
 			  android:textSize="14dp"/>
@@ -31,7 +30,6 @@
 			  android:layout_height="wrap_content"
 			  android:layout_alignParentLeft="true"
 			  android:layout_below="@+id/txt_feed_item_desc"
-			  android:layout_marginLeft="1dp"
 			  android:singleLine="true"
 			  android:textSize="12dp"
 			  android:textStyle="bold"
@@ -42,7 +40,6 @@
 			  android:layout_height="wrap_content"
 			  android:layout_alignParentRight="true"
 			  android:layout_below="@+id/txt_feed_item_desc"
-			  android:layout_marginRight="1dp"
 			  android:singleLine="true"
 			  android:textSize="12dp"
 			  android:textStyle="bold"
