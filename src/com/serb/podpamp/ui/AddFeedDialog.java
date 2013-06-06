@@ -52,7 +52,7 @@ public class AddFeedDialog extends DialogFragment {
 					mListener.onDialogPositiveClick(String.valueOf(input.getText()));
 				}
 			})
-			.setNegativeButton(R.string.cancel_button_text, new DialogInterface.OnClickListener() {
+			.setNegativeButton(R.string.cancel_btn_text, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 

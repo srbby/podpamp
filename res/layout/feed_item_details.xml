@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				android:padding="5dp">
+
+	<RelativeLayout android:layout_width="match_parent"
+					android:layout_height="wrap_content">
+		<ImageView android:id="@+id/img_feed_icon"
+				   android:layout_width="64dp"
+				   android:layout_height="64dp"
+				   android:layout_alignParentLeft="true"
+				   android:layout_alignParentTop="true"
+				   android:contentDescription="@string/icon_desc"
+				   android:adjustViewBounds="true"
+				   android:scaleType="centerInside"
+				   android:layout_marginRight="5dp"
+				   android:layout_marginBottom="5dp"/>
+
+		<TextView android:id="@+id/txt_feed_item_title"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_alignParentTop="true"
+				  android:layout_toRightOf="@+id/img_feed_icon"
+				  android:textSize="18dp"
+				  android:textStyle="bold"/>
+
+		<TextView android:id="@+id/txt_feed_item_published"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_toRightOf="@+id/img_feed_icon"
+				  android:layout_below="@+id/txt_feed_item_title"
+				  android:singleLine="true"
+				  android:textSize="12dp"
+				  android:textStyle="bold"
+				  android:layout_marginTop="2dp"/>
+
+		<TextView android:id="@+id/txt_feed_item_length"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_alignParentRight="true"
+				  android:layout_below="@+id/txt_feed_item_title"
+				  android:singleLine="true"
+				  android:textSize="12dp"
+				  android:textStyle="bold"
+				  android:layout_marginTop="2dp"/>
+	</RelativeLayout>
+
+	<LinearLayout android:orientation="horizontal"
+				  android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:layout_marginTop="10dp"
+				  android:layout_marginBottom="10dp">
+		<Button android:id="@+id/btn_mark_listened"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/mark_listened_btn_text"/>
+	</LinearLayout>
+
+	<ScrollView android:layout_width="match_parent"
+				android:layout_height="match_parent">
+		<TextView android:id="@+id/txt_feed_item_desc"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:singleLine="false"
+				  android:textSize="14dp"
+				/>
+	</ScrollView>
+
+</LinearLayout>

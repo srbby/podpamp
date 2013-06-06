@@ -16,6 +16,7 @@
 		<activity android:name=".ui.activities.FeedsActivity"
 				  android:label="@string/feeds_list_title"/>
 		<activity android:name=".ui.activities.FeedItemsActivity"/>
+		<activity android:name=".ui.activities.FeedItemDetailsActivity"/>
 		<provider
 				android:name="com.serb.podpamp.model.provider.FeedsProvider"
 				android:authorities="com.serb.podpamp"

@@ -8,6 +8,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
@@ -68,7 +69,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc";
 
 		final QueueItemsCursorAdapter adapter = new QueueItemsCursorAdapter(
-			this, // Context.
+			this,
 			R.layout.queue_list_item,
 			null,
 			new String[] {},
@@ -104,6 +105,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		listView.setAdapter(adapter);
 
 		getSupportLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView parent, View view, int position, long id) {
+				showFeedItemDetails(id);
+			}
+		});
+	}
+
+
+
+	private void showFeedItemDetails(long item_id) {
+		Intent intent = new Intent(this, FeedItemDetailsActivity.class);
+		intent.putExtra("item_id", item_id);
+		startActivity(intent);
 	}
 
 	//endregion
