@@ -61,6 +61,7 @@
 				android:layout_height="wrap_content"
 				android:text="@string/mark_listened_btn_text"
 				android:drawableLeft="@drawable/icon_check"
+				android:drawablePadding="5dp"
 				android:background="@android:color/transparent"
 				android:textColor="#ffffff"
 				android:textSize="16dp"/>
@@ -70,6 +71,7 @@
 				android:layout_height="wrap_content"
 				android:text="@string/download_btn_text"
 				android:drawableLeft="@drawable/icon_download"
+				android:drawablePadding="5dp"
 				android:background="@android:color/transparent"
 				android:textColor="#ffffff"
 				android:textSize="16dp"
@@ -80,6 +82,7 @@
 				android:layout_height="wrap_content"
 				android:text="@string/play_btn_text"
 				android:drawableLeft="@drawable/icon_squareplay"
+				android:drawablePadding="5dp"
 				android:background="@android:color/transparent"
 				android:textColor="#ffffff"
 				android:textSize="16dp"

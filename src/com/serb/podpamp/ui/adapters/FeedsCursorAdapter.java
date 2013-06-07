@@ -42,7 +42,11 @@ public class FeedsCursorAdapter extends SimpleCursorAdapter {
 		title_view.setText(feed_title);
 
 		TextView count_view = (TextView) view.findViewById(R.id.txt_new_feeds_count);
-		count_view.setText(String.valueOf(feeds_count));
+		if (feeds_count > 0)
+			count_view.setText(String.valueOf(feeds_count) + " " +
+				view.getResources().getText(R.string.episodes_count_text));
+		else
+			count_view.setText(R.string.no_new_episodes);
 
 		Utils.setImageView((ImageView) view.findViewById(R.id.img_feed_icon),
 			feed_icon,

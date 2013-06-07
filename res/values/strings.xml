@@ -9,13 +9,13 @@
 	<!--MainActivity-->
 	<string name="feeds_btn_text">Subscriptions</string>
 	<string name="refresh_btn_text">Refresh</string>
-	<string name="no_new_episodes">No new episodes</string>
 
 	<!--FeedsActivity-->
 	<string name="add_feed_text">Subscribe</string>
 	<string name="add_feed_dialog_title">Add a subscription</string>
 	<string name="add_feed_dialog_message">Type or paste a feed url to add a subscription.</string>
 	<string name="failed_to_add_feed">Unable to add a subscription.</string>
+	<string name="episodes_count_text">new episodes</string>
 
 	<!--FeedItemDetailsActivity-->
 	<string name="mark_listened_btn_text">Mark as listened</string>
@@ -25,4 +25,5 @@
 	<!--Common-->
 	<string name="cancel_btn_text">Cancel</string>
 	<string name="icon_desc">Icon</string>
+	<string name="no_new_episodes">No new episodes</string>
 </resources>

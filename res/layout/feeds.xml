@@ -20,6 +20,7 @@
 				android:layout_height="wrap_content"
 				android:text="@string/add_feed_text"
 				android:drawableLeft="@drawable/icon_calcplus"
+				android:drawablePadding="5dp"
 				android:background="@android:color/transparent"
 				android:textColor="#ffffff"
 				android:textSize="16dp"/>
