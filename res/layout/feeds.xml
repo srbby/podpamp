@@ -5,25 +5,30 @@
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent">
 
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				  android:orientation="horizontal"
+				  android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:layout_marginTop="10dp"
+				  android:layout_marginBottom="10dp"
+				  android:layout_marginLeft="10dp"
+				  android:layout_marginRight="10dp">
+
+		<Button android:id="@+id/btn_add_feed"
+				android:layout_alignParentRight="true"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/add_feed_text"
+				android:drawableLeft="@drawable/icon_calcplus"
+				android:background="@android:color/transparent"
+				android:textColor="#ffffff"
+				android:textSize="16dp"/>
+	</RelativeLayout>
+
+
 	<ListView android:id="@+id/feeds_list"
 			  android:layout_width="fill_parent"
 			  android:layout_height="0dp"
 			  android:layout_weight="1"
 			  android:drawSelectorOnTop="false" />
-
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-				  android:orientation="horizontal"
-				  android:layout_width="match_parent"
-				  android:layout_height="wrap_content">
-
-		<Button android:id="@+id/btn_add_feed"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/add_feed_text"/>
-
-		<TextView android:id="@+id/txt_greet"
-				  android:layout_width="fill_parent"
-				  android:layout_height="wrap_content"/>
-	</LinearLayout>
-
 </LinearLayout>
