@@ -4,14 +4,7 @@
 			  android:layout_width="fill_parent"
 			  android:layout_height="fill_parent">
 
-	<RelativeLayout android:orientation="horizontal"
-				  android:layout_height="wrap_content"
-				  android:layout_width="fill_parent"
-				  android:layout_marginTop="10dp"
-				  android:layout_marginBottom="10dp"
-				  android:layout_marginLeft="10dp"
-				  android:layout_marginRight="10dp">
-
+	<RelativeLayout style="@style/HorizontalButtonsContainer">
 		<Button android:id="@+id/btn_feeds"
 				style="@style/Button"
 				android:layout_alignParentLeft="true"

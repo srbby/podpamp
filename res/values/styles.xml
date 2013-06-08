@@ -20,4 +20,17 @@
 		<item name="android:textColor">#ffffff</item>
 		<item name="android:textSize">16dp</item>
 	</style>
+
+	<style name="ButtonsContainer">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_marginTop">10dp</item>
+		<item name="android:layout_marginBottom">10dp</item>
+		<item name="android:layout_marginLeft">10dp</item>
+		<item name="android:layout_marginRight">10dp</item>
+	</style>
+
+	<style name="HorizontalButtonsContainer" parent="ButtonsContainer">
+		<item name="android:orientation">horizontal</item>
+	</style>
 </resources>
