@@ -55,4 +55,44 @@
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:drawSelectorOnTop">false</item>
 	</style>
+
+	<!--TextViews-->
+	<style name="PageTitle">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_alignParentTop">true</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:textSize">18dp</item>
+	</style>
+
+	<style name="PageSubTitle">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:textSize">16dp</item>
+	</style>
+
+	<style name="ListItemTitle">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_alignParentTop">true</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:textSize">18dp</item>
+	</style>
+
+	<style name="Description">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:singleLine">false</item>
+		<item name="android:textSize">14dp</item>
+	</style>
+
+	<style name="AdditionalInfo">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:singleLine">true</item>
+		<item name="android:textSize">12dp</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:layout_marginTop">2dp</item>
+	</style>
 </resources>

@@ -7,19 +7,12 @@
 			   style="@style/FeedIcon"/>
 
 	<TextView android:id="@+id/txt_feed_title"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_toRightOf="@+id/img_feed_icon"
-			android:layout_alignParentTop="true"
-			android:layout_marginLeft="5dp"
-			android:textSize="18dp"
-			android:textStyle="bold"/>
+			  style="@style/ListItemTitle"
+			  android:layout_toRightOf="@+id/img_feed_icon"/>
 
 	<TextView android:id="@+id/txt_new_feeds_count"
-			  android:layout_width="wrap_content"
-			  android:layout_height="wrap_content"
+			  style="@style/AdditionalInfo"
 			  android:layout_toRightOf="@+id/img_feed_icon"
-			  android:layout_alignBottom="@+id/img_feed_icon"
-			  android:layout_marginLeft="5dp"/>
+			  android:layout_alignBottom="@+id/img_feed_icon"/>
 
 </RelativeLayout>
