@@ -13,26 +13,16 @@
 				  android:layout_marginRight="10dp">
 
 		<Button android:id="@+id/btn_feeds"
+				style="@style/Button"
 				android:layout_alignParentLeft="true"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:text="@string/feeds_btn_text"
-				android:drawableLeft="@drawable/icon_rss"
-				android:drawablePadding="5dp"
-				android:background="@android:color/transparent"
-				android:textColor="#ffffff"
-				android:textSize="16dp"/>
+				android:drawableLeft="@drawable/icon_rss"/>
 
 		<Button android:id="@+id/btn_refresh"
+				style="@style/Button"
 				android:layout_alignParentRight="true"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:text="@string/refresh_btn_text"
-				android:drawableLeft="@drawable/icon_refresh"
-				android:drawablePadding="5dp"
-				android:background="@android:color/transparent"
-				android:textColor="#ffffff"
-				android:textSize="16dp"/>
+				android:drawableLeft="@drawable/icon_refresh"/>
 	</RelativeLayout>
 
 	<ListView android:id="@+id/feed_queue_list"

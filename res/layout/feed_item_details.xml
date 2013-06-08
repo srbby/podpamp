@@ -48,36 +48,20 @@
 					android:layout_marginLeft="5dp"
 					android:layout_marginRight="5dp">
 		<Button android:id="@+id/btn_mark_listened"
+				style="@style/Button"
 				android:layout_alignParentLeft="true"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:text="@string/mark_listened_btn_text"
-				android:drawableLeft="@drawable/icon_check"
-				android:drawablePadding="5dp"
-				android:background="@android:color/transparent"
-				android:textColor="#ffffff"
-				android:textSize="16dp"/>
+				android:drawableLeft="@drawable/icon_check"/>
 		<Button android:id="@+id/btn_download"
+				style="@style/Button"
 				android:layout_alignParentRight="true"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:text="@string/download_btn_text"
-				android:drawableLeft="@drawable/icon_download"
-				android:drawablePadding="5dp"
-				android:background="@android:color/transparent"
-				android:textColor="#ffffff"
-				android:textSize="16dp"
-				/>
+				android:drawableLeft="@drawable/icon_download"/>
 		<Button android:id="@+id/btn_play"
+				style="@style/Button"
 				android:layout_alignParentRight="true"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:text="@string/play_btn_text"
 				android:drawableLeft="@drawable/icon_squareplay"
-				android:drawablePadding="5dp"
-				android:background="@android:color/transparent"
-				android:textColor="#ffffff"
-				android:textSize="16dp"
 				android:visibility="invisible"/>
 	</RelativeLayout>
 

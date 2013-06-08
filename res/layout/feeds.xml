@@ -15,15 +15,10 @@
 				  android:layout_marginRight="10dp">
 
 		<Button android:id="@+id/btn_add_feed"
+				style="@style/Button"
 				android:layout_alignParentRight="true"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:text="@string/add_feed_text"
-				android:drawableLeft="@drawable/icon_calcplus"
-				android:drawablePadding="5dp"
-				android:background="@android:color/transparent"
-				android:textColor="#ffffff"
-				android:textSize="16dp"/>
+				android:drawableLeft="@drawable/icon_calcplus"/>
 	</RelativeLayout>
 
 
