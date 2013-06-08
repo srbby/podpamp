@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+	<!--Images-->
 	<style name="FeedIcon">
 		<item name="android:layout_width">64dp</item>
 		<item name="android:layout_height">64dp</item>
@@ -12,6 +14,7 @@
 		<item name="android:layout_marginBottom">5dp</item>
 	</style>
 
+	<!--Buttons-->
 	<style name="Button">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
@@ -32,5 +35,12 @@
 
 	<style name="HorizontalButtonsContainer" parent="ButtonsContainer">
 		<item name="android:orientation">horizontal</item>
+	</style>
+
+	<!--ListViews-->
+	<style name="ListView">
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:drawSelectorOnTop">false</item>
 	</style>
 </resources>
