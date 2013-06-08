@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<!--Layouts-->
+	<style name="PageContainer">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:padding">5dp</item>
+	</style>
+
+	<style name="ListItemContainer">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:padding">5dp</item>
+	</style>
+
+	<style name="ButtonsContainer">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_marginTop">10dp</item>
+		<item name="android:layout_marginBottom">10dp</item>
+		<item name="android:layout_marginLeft">10dp</item>
+		<item name="android:layout_marginRight">10dp</item>
+	</style>
+
+	<style name="HorizontalButtonsContainer" parent="ButtonsContainer">
+		<item name="android:orientation">horizontal</item>
+	</style>
 
 	<!--Images-->
 	<style name="FeedIcon">
@@ -22,19 +47,6 @@
 		<item name="android:background">@android:color/transparent</item>
 		<item name="android:textColor">#ffffff</item>
 		<item name="android:textSize">16dp</item>
-	</style>
-
-	<style name="ButtonsContainer">
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_marginTop">10dp</item>
-		<item name="android:layout_marginBottom">10dp</item>
-		<item name="android:layout_marginLeft">10dp</item>
-		<item name="android:layout_marginRight">10dp</item>
-	</style>
-
-	<style name="HorizontalButtonsContainer" parent="ButtonsContainer">
-		<item name="android:orientation">horizontal</item>
 	</style>
 
 	<!--ListViews-->
