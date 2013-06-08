@@ -6,15 +6,8 @@
 				android:padding="5dp">
 
 	<ImageView android:id="@+id/img_feed_icon"
-			   android:layout_width="64dp"
-			   android:layout_height="64dp"
-			   android:layout_alignParentLeft="true"
-			   android:layout_alignParentTop="true"
+			   style="@style/FeedIcon"
 			   android:layout_alignParentBottom="true"
-			   android:contentDescription="@string/icon_desc"
-			   android:adjustViewBounds="true"
-			   android:scaleType="centerInside"
-			   android:layout_marginRight="5dp"
 			   android:layout_centerInParent="true"/>
 
 	<TextView android:id="@+id/txt_feed_item_title"

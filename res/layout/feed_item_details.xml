@@ -9,15 +9,7 @@
 	<RelativeLayout android:layout_width="match_parent"
 					android:layout_height="wrap_content">
 		<ImageView android:id="@+id/img_feed_icon"
-				   android:layout_width="64dp"
-				   android:layout_height="64dp"
-				   android:layout_alignParentLeft="true"
-				   android:layout_alignParentTop="true"
-				   android:contentDescription="@string/icon_desc"
-				   android:adjustViewBounds="true"
-				   android:scaleType="centerInside"
-				   android:layout_marginRight="5dp"
-				   android:layout_marginBottom="5dp"/>
+				   style="@style/FeedIcon"/>
 
 		<TextView android:id="@+id/txt_feed_item_title"
 				  android:layout_width="wrap_content"
