@@ -5,6 +5,7 @@
 	<!--Activities labels-->
 	<string name="queue_list_title">PodPAmp Queue</string>
 	<string name="feeds_list_title">Subscriptions</string>
+	<string name="settings_title">PodPAmp Settings</string>
 
 	<!--MainActivity-->
 	<string name="feeds_btn_text">Subscriptions</string>
@@ -26,4 +27,11 @@
 	<string name="cancel_btn_text">Cancel</string>
 	<string name="icon_desc">Icon</string>
 	<string name="no_new_episodes">No new episodes</string>
+
+	<!--Settings-->
+	<string name="pref_conn_type">Sync on Wi-Fi only</string>
+	<string name="pref_conn_type_summary">Download media only if connected to a Wi-Fi network</string>
+
+	<!--Main Menu-->
+	<string name="mi_settings_text">Settings</string>
 </resources>

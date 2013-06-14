@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -41,6 +44,26 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 	}
 
 
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_menu, menu);
+		return true;
+	}
+
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.mi_settings:
+				showSettings();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 
 	//region Private Methods.
 
@@ -118,6 +141,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 	private void showFeedItemDetails(long item_id) {
 		Intent intent = new Intent(this, FeedItemDetailsActivity.class);
 		intent.putExtra("item_id", item_id);
+		startActivity(intent);
+	}
+
+
+
+	private void showSettings() {
+		Intent intent = new Intent(this, SettingsActivity.class);
 		startActivity(intent);
 	}
 
