@@ -1,9 +1,13 @@
 package com.serb.podpamp.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
 import com.serb.podpamp.model.provider.Contract;
@@ -88,6 +92,25 @@ public abstract class Utils {
 			return new SimpleDateFormat("MMM dd, yyyy HH:mm").format(pub_date);
 		}
 		return "";
+	}
+
+
+
+	public static boolean isNetworkAvailable(Context context, boolean respectWifiSettings) {
+		final ConnectivityManager conMgr =  (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+		if (activeNetwork != null && activeNetwork.isConnected()) {
+			if (respectWifiSettings)
+			{
+				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+				boolean isWiFiOnly = settings.getBoolean("pref_conn_type", true);
+				return !isWiFiOnly || activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+			}
+			else
+				return true;
+		} else {
+			return false;
+		}
 	}
 
 	//region Private Methods.

@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.serb.podpamp.R;
@@ -20,6 +21,7 @@ import com.serb.podpamp.model.request.FeedsRequestManager;
 import com.serb.podpamp.model.request.RequestFactory;
 import com.serb.podpamp.ui.AddFeedDialog;
 import com.serb.podpamp.ui.adapters.FeedsCursorAdapter;
+import com.serb.podpamp.utils.Utils;
 
 public class FeedsActivity extends FragmentActivity implements View.OnClickListener,
 		AddFeedDialog.AddFeedDialogListener {
@@ -183,8 +185,13 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 
 
 	private void showAddFeed() {
-		DialogFragment newFragment = new AddFeedDialog();
-		newFragment.show(getSupportFragmentManager(), "add_feed");
+		if (Utils.isNetworkAvailable(this, false))
+		{
+			DialogFragment newFragment = new AddFeedDialog();
+			newFragment.show(getSupportFragmentManager(), "add_feed");
+		}
+		else
+			Toast.makeText(this, R.string.no_connection, Toast.LENGTH_LONG).show();
 	}
 
 
