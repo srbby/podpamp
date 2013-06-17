@@ -22,6 +22,7 @@
 	<string name="mark_listened_btn_text">Mark as listened</string>
 	<string name="download_btn_text">Download</string>
 	<string name="play_btn_text">Play</string>
+	<string name="download_failed">Unable to download episode</string>
 
 	<!--Common-->
 	<string name="cancel_btn_text">Cancel</string>

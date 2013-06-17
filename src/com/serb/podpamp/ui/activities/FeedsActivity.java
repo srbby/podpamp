@@ -190,16 +190,12 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 			DialogFragment newFragment = new AddFeedDialog();
 			newFragment.show(getSupportFragmentManager(), "add_feed");
 		}
-		else
-			Toast.makeText(this, R.string.no_connection, Toast.LENGTH_LONG).show();
 	}
 
 
 
 	private void addFeed(String feed_url) {
-		Request updateRequest = new Request(RequestFactory.REQUEST_ADD_FEED);
-		updateRequest.put(RequestFactory.FEED_URL, feed_url);
-		requestManager.execute(updateRequest, requestListener);
+		requestManager.execute(RequestFactory.getAddFeedRequest(feed_url), requestListener);
 	}
 
 

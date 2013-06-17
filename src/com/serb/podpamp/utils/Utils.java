@@ -10,6 +10,8 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
+import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
 
 import java.io.ByteArrayOutputStream;
@@ -99,18 +101,31 @@ public abstract class Utils {
 	public static boolean isNetworkAvailable(Context context, boolean respectWifiSettings) {
 		final ConnectivityManager conMgr =  (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+
+		boolean result;
 		if (activeNetwork != null && activeNetwork.isConnected()) {
 			if (respectWifiSettings)
 			{
 				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 				boolean isWiFiOnly = settings.getBoolean("pref_conn_type", true);
-				return !isWiFiOnly || activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+				result = !isWiFiOnly || activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
 			}
 			else
-				return true;
+				result = true;
 		} else {
-			return false;
+			result = false;
 		}
+
+		if (!result)
+			Toast.makeText(context, R.string.no_connection, Toast.LENGTH_LONG).show();
+
+		return result;
+	}
+
+
+
+	public static String getDownloadFolder() {
+		return "/sdcard/download/podpamp/";
 	}
 
 	//region Private Methods.

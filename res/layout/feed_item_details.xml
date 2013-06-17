@@ -38,7 +38,8 @@
 				style="@style/Button"
 				android:layout_alignParentRight="true"
 				android:text="@string/download_btn_text"
-				android:drawableLeft="@drawable/icon_download"/>
+				android:drawableLeft="@drawable/icon_download"
+				android:visibility="invisible"/>
 		<Button android:id="@+id/btn_play"
 				style="@style/Button"
 				android:layout_alignParentRight="true"

@@ -1,16 +1,59 @@
 package com.serb.podpamp.ui.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
+import com.serb.podpamp.model.request.FeedsRequestManager;
+import com.serb.podpamp.model.request.RequestFactory;
 import com.serb.podpamp.utils.Utils;
 
-public class FeedItemDetailsActivity extends Activity {
+public class FeedItemDetailsActivity extends Activity implements View.OnClickListener {
 	private long item_id = -1;
+
+	private FeedsRequestManager requestManager;
+
+
+
+	RequestManager.RequestListener requestListener = new RequestManager.RequestListener() {
+		@Override
+		public void onRequestFinished(Request request, Bundle resultData) {
+			Toast.makeText(FeedItemDetailsActivity.this, "complete", Toast.LENGTH_LONG).show();
+		}
+
+		@Override
+		public void onRequestDataError(Request request) {
+			showError();
+		}
+
+		@Override
+		public void onRequestCustomError(Request request, Bundle resultData) {
+			showError();
+		}
+
+		@Override
+		public void onRequestConnectionError(Request request, int statusCode) {
+			showError();
+		}
+
+		void showError() {
+			AlertDialog.Builder builder = new AlertDialog.Builder(FeedItemDetailsActivity.this);
+			builder.setTitle(android.R.string.dialog_alert_title)
+				.setMessage(getString(R.string.download_failed))
+				.create()
+				.show();
+		}
+	};
 
 
 
@@ -28,6 +71,21 @@ public class FeedItemDetailsActivity extends Activity {
 		{
 			setupItemInfoPanel();
 		}
+
+		findViewById(R.id.btn_download).setOnClickListener(this);
+
+		requestManager = FeedsRequestManager.from(this);
+	}
+
+
+
+	@Override
+	public void onClick(View view) {
+		switch(view.getId()) {
+			case R.id.btn_download:
+				downloadFeed();
+				break;
+		}
 	}
 
 	//region Private Methods.
@@ -40,7 +98,8 @@ public class FeedItemDetailsActivity extends Activity {
 			Contract.FeedItems.DESC,
 			Contract.FeedItems.PUBLISHED,
 			Contract.FeedItems.LENGTH,
-			Contract.FeedItems.IS_READ
+			Contract.FeedItems.IS_READ,
+			Contract.FeedItems.FILE_PATH
 		};
 
 		final String selection = Contract.FeedItems._ID + " = ?";
@@ -57,26 +116,47 @@ public class FeedItemDetailsActivity extends Activity {
 				String desc = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.DESC));
 				long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
 				long length = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.LENGTH));
-				long feed_id = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
+				long feedId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
+				String filePath = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.FILE_PATH));
 
-				TextView title_view = (TextView) findViewById(R.id.txt_feed_item_title);
-				title_view.setText(title);
+				TextView titleView = (TextView) findViewById(R.id.txt_feed_item_title);
+				titleView.setText(title);
 
-				TextView desc_view = (TextView) findViewById(R.id.txt_feed_item_desc);
-				desc_view.setText(desc);
+				TextView descView = (TextView) findViewById(R.id.txt_feed_item_desc);
+				descView.setText(desc);
 
-				TextView published_view = (TextView) findViewById(R.id.txt_feed_item_published);
-				published_view.setText(Utils.getDateText(published));
+				TextView publishedView = (TextView) findViewById(R.id.txt_feed_item_published);
+				publishedView.setText(Utils.getDateText(published));
 
-				TextView length_view = (TextView) findViewById(R.id.txt_feed_item_length);
-				length_view.setText(Utils.getFileSizeText(length));
+				TextView lengthView = (TextView) findViewById(R.id.txt_feed_item_length);
+				lengthView.setText(Utils.getFileSizeText(length));
 
 				Utils.setImageView(this,
 					(ImageView) findViewById(R.id.img_feed_icon),
-					feed_id,
+					feedId,
 					R.drawable.icon_rss);
+
+				if (TextUtils.isEmpty(filePath))
+				{
+					Button downloadButton = (Button) findViewById(R.id.btn_download);
+					downloadButton.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					Button playButton = (Button) findViewById(R.id.btn_play);
+					playButton.setVisibility(View.VISIBLE);
+				}
 			}
 			cursor.close();
+		}
+	}
+
+
+
+	private void downloadFeed() {
+		if (item_id > -1 && Utils.isNetworkAvailable(this, true))
+		{
+			requestManager.execute(RequestFactory.getDownloadEpisodeRequest(item_id), requestListener);
 		}
 	}
 
