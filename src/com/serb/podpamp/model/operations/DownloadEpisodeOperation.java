@@ -35,53 +35,38 @@ public class DownloadEpisodeOperation implements RequestService.Operation {
 
 			// download the file
 			InputStream input = new BufferedInputStream(url.openStream());
-			OutputStream output = new FileOutputStream(metadata.file);
 
-			byte data[] = new byte[1024];
-			long total = 0;
-			int count;
-			while ((count = input.read(data)) != -1) {
-				total += count;
-				// publishing the progress....
-//				Bundle resultData = new Bundle();
-//				resultData.putInt("progress" ,(int) (total * 100 / fileLength));
-//				receiver.send(UPDATE_PROGRESS, resultData);
-				output.write(data, 0, count);
+			if (metadata.file.createNewFile())
+			{
+				OutputStream output = new FileOutputStream(metadata.file);
+
+				byte data[] = new byte[1024];
+				long total = 0;
+				int count;
+				while ((count = input.read(data)) != -1) {
+					total += count;
+					// publishing the progress....
+	//				Bundle resultData = new Bundle();
+	//				resultData.putInt("progress" ,(int) (total * 100 / fileLength));
+	//				receiver.send(UPDATE_PROGRESS, resultData);
+					output.write(data, 0, count);
+				}
+
+				metadata.length = total;
+
+				output.flush();
+				output.close();
+				input.close();
 			}
-
-			metadata.length = total;
-
-			output.flush();
-			output.close();
-			input.close();
+			else
+			{
+				throw new DataException("Unable to create a file: " + metadata.fileName);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		updateFeedItem(context, metadata);
-//		RSSReader reader = new RSSReader();
-//
-//		try {
-//			RSSFeed rss_feed = reader.load(url);
-//			List<RSSItem> items = rss_feed.getItems();
-//
-//			ContentValues values = new ContentValues();
-//			values.put(Contract.FeedsColumns.TITLE, rss_feed.getTitle());
-//			values.put(Contract.FeedsColumns.SUBTITLE, rss_feed.getSubtitle());
-//			values.put(Contract.FeedsColumns.ICON_URL, rss_feed.getIconUrl().toString());
-//			values.put(Contract.FeedsColumns.ICON, Utils.downloadImage(rss_feed.getIconUrl().toString()));
-//			values.put(Contract.FeedsColumns.URL, url);
-//			values.put(Contract.FeedsColumns.NEW_ITEMS_COUNT, items.size());
-//
-//			Uri feedUri = context.getContentResolver().insert(Contract.Feeds.CONTENT_URI, values);
-//
-//			long feedItemId = ContentUris.parseId(feedUri);
-//			for (RSSItem item : items) {
-//				addFeedItem(context, feedItemId, item);
-//			}
-//		} catch (RSSReaderException e) {
-//			e.printStackTrace();
-//		}
 		return null;
 	}
 
@@ -110,7 +95,8 @@ public class DownloadEpisodeOperation implements RequestService.Operation {
 				result = new EpisodeMetadata();
 				result.feedItemId = feedItemId;
 				result.url = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.MEDIA_URL));
-				result.fileName = Utils.getDownloadFolder() + cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
+				//result.fileName = Utils.getDownloadFolder() + cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
+				result.fileName = Utils.getDownloadFolder() + feedItemId;
 				result.file = new File(result.fileName);
 			}
 			cursor.close();
@@ -141,25 +127,4 @@ public class DownloadEpisodeOperation implements RequestService.Operation {
 		public File file;
 		public long length;
 	}
-
-
-
-//	private void addFeedItem(Context context, long feedItemId, RSSItem item) {
-//		ContentValues values = new ContentValues();
-//		values.put(Contract.FeedItemsColumns.FEED_ID, feedItemId);
-//		values.put(Contract.FeedItemsColumns.TITLE, item.getTitle());
-//		values.put(Contract.FeedItemsColumns.DESC, item.getSummary());
-//
-//		final Enclosure enclosure = item.getEnclosure();
-//		if (enclosure != null)
-//		{
-//			values.put(Contract.FeedItemsColumns.MEDIA_URL, enclosure.getUrl().toString());
-//			values.put(Contract.FeedItemsColumns.LENGTH, enclosure.getLength());
-//		}
-//
-//		values.put(Contract.FeedItemsColumns.IS_READ, false);
-//		values.put(Contract.FeedItemsColumns.PUBLISHED, item.getPubDate().getTime());
-//
-//		context.getContentResolver().insert(Contract.FeedItems.CONTENT_URI, values);
-//	}
 }
