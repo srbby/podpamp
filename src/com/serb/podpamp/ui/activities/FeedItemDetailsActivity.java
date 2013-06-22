@@ -2,7 +2,9 @@ package com.serb.podpamp.ui.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.serb.podpamp.utils.Utils;
 
 public class FeedItemDetailsActivity extends Activity implements View.OnClickListener {
 	private long item_id = -1;
+	String filePath;
 
 	private FeedsRequestManager requestManager;
 
@@ -77,6 +80,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		findViewById(R.id.btn_download).setOnClickListener(this);
 		findViewById(R.id.btn_mark_listened).setOnClickListener(this);
 		findViewById(R.id.btn_mark_not_listened).setOnClickListener(this);
+		findViewById(R.id.btn_play).setOnClickListener(this);
 
 		requestManager = FeedsRequestManager.from(this);
 	}
@@ -96,6 +100,9 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 			case R.id.btn_mark_not_listened:
 				FeedsManager.MarkFeedItemAsReadOrUnread(this, item_id, false);
 				setupItemInfoPanel();
+				break;
+			case R.id.btn_play:
+				playFile();
 				break;
 		}
 	}
@@ -129,7 +136,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
 				long length = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.LENGTH));
 				long feedId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
-				String filePath = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.FILE_PATH));
+				filePath = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.FILE_PATH));
 				boolean isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
 
 				TextView titleView = (TextView) findViewById(R.id.txt_feed_item_title);
@@ -183,6 +190,26 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		if (item_id > -1 && Utils.isNetworkAvailable(this, true))
 		{
 			requestManager.execute(RequestFactory.getDownloadEpisodeRequest(item_id), requestListener);
+		}
+	}
+
+
+
+	private void playFile()
+	{
+//		if (!TextUtils.isEmpty(filePath))
+//		{
+//			startService(new Intent(PowerAMPiAPI.ACTION_API_COMMAND)
+//				.putExtra(PowerAMPiAPI.COMMAND, PowerAMPiAPI.Commands.OPEN_TO_PLAY)
+//				//.putExtra(PowerAMPiAPI.Track.POSITION, 10) // Play from 10th second.
+//				.setData(Uri.parse("file://" + filePath)));
+//		}
+		if (!TextUtils.isEmpty(filePath))
+		{
+			startService(new Intent("com.maxmpz.audioplayer.API_COMMAND")
+				.putExtra("cmd", 20)
+				//.putExtra(PowerAMPiAPI.Track.POSITION, 10) // Play from 10th second.
+				.setData(Uri.parse("file://" + filePath)));
 		}
 	}
 
