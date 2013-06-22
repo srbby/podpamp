@@ -83,16 +83,17 @@ public class FeedsProvider extends ContentProvider {
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		int count;
 		switch (sUriMatcher.match(uri)) {
-			case PATH_FEEDS:
-				count = mDBHelper.getWritableDatabase().delete(Contract.TABLE_FEEDS, selection, selectionArgs);
+			case PATH_FEEDS: {
+				int count = mDBHelper.getWritableDatabase().delete(Contract.TABLE_FEEDS, selection, selectionArgs);
 				getContext().getContentResolver().notifyChange(Contract.Feeds.CONTENT_URI, null);
 				return count;
-			case PATH_FEED_ITEMS:
-				count = mDBHelper.getWritableDatabase().delete(Contract.TABLE_FEED_ITEMS, selection, selectionArgs);
+			}
+			case PATH_FEED_ITEMS: {
+				int count = mDBHelper.getWritableDatabase().delete(Contract.TABLE_FEED_ITEMS, selection, selectionArgs);
 				getContext().getContentResolver().notifyChange(Contract.FeedItems.CONTENT_URI, null);
 				return count;
+			}
 			default:
 				return 0;
 		}
@@ -101,10 +102,16 @@ public class FeedsProvider extends ContentProvider {
 	@Override
 	public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
 		switch (sUriMatcher.match(uri)) {
-			case PATH_FEEDS:
-				return mDBHelper.getWritableDatabase().update(Contract.TABLE_FEEDS, contentValues, selection, selectionArgs);
-			case PATH_FEED_ITEMS:
-				return mDBHelper.getWritableDatabase().update(Contract.TABLE_FEED_ITEMS, contentValues, selection, selectionArgs);
+			case PATH_FEEDS: {
+				int id = mDBHelper.getWritableDatabase().update(Contract.TABLE_FEEDS, contentValues, selection, selectionArgs);
+				getContext().getContentResolver().notifyChange(Contract.FeedItems.CONTENT_URI, null);
+				return id;
+			}
+			case PATH_FEED_ITEMS: {
+				int id = mDBHelper.getWritableDatabase().update(Contract.TABLE_FEED_ITEMS, contentValues, selection, selectionArgs);
+				getContext().getContentResolver().notifyChange(Contract.FeedItems.CONTENT_URI, null);
+				return id;
+			}
 			default:
 				return 0;
 		}

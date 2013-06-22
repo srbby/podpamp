@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.serb.podpamp.R;
+import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.model.request.FeedsRequestManager;
 import com.serb.podpamp.model.request.RequestFactory;
@@ -28,6 +29,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 	RequestManager.RequestListener requestListener = new RequestManager.RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
+			setupItemInfoPanel();
 			Toast.makeText(FeedItemDetailsActivity.this, "complete", Toast.LENGTH_LONG).show();
 		}
 
@@ -73,6 +75,8 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		}
 
 		findViewById(R.id.btn_download).setOnClickListener(this);
+		findViewById(R.id.btn_mark_listened).setOnClickListener(this);
+		findViewById(R.id.btn_mark_not_listened).setOnClickListener(this);
 
 		requestManager = FeedsRequestManager.from(this);
 	}
@@ -84,6 +88,14 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		switch(view.getId()) {
 			case R.id.btn_download:
 				downloadFeed();
+				break;
+			case R.id.btn_mark_listened:
+				FeedsManager.MarkFeedItemAsReadOrUnread(this, item_id, true);
+				setupItemInfoPanel();
+				break;
+			case R.id.btn_mark_not_listened:
+				FeedsManager.MarkFeedItemAsReadOrUnread(this, item_id, false);
+				setupItemInfoPanel();
 				break;
 		}
 	}
@@ -118,6 +130,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				long length = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.LENGTH));
 				long feedId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
 				String filePath = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.FILE_PATH));
+				boolean isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
 
 				TextView titleView = (TextView) findViewById(R.id.txt_feed_item_title);
 				titleView.setText(title);
@@ -145,6 +158,19 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				{
 					Button playButton = (Button) findViewById(R.id.btn_play);
 					playButton.setVisibility(View.VISIBLE);
+				}
+
+				Button btnMarkListened = (Button) findViewById(R.id.btn_mark_listened);
+				Button btnMarkNotListened = (Button) findViewById(R.id.btn_mark_not_listened);
+				if (isRead)
+				{
+					btnMarkListened.setVisibility(View.INVISIBLE);
+					btnMarkNotListened.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					btnMarkListened.setVisibility(View.VISIBLE);
+					btnMarkNotListened.setVisibility(View.INVISIBLE);
 				}
 			}
 			cursor.close();

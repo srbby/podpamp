@@ -34,6 +34,12 @@
 				android:layout_alignParentLeft="true"
 				android:text="@string/mark_listened_btn_text"
 				android:drawableLeft="@drawable/icon_check"/>
+		<Button android:id="@+id/btn_mark_not_listened"
+				style="@style/Button"
+				android:layout_alignParentLeft="true"
+				android:text="@string/mark_not_listened_btn_text"
+				android:drawableLeft="@drawable/icon_check"
+				android:visibility="invisible"/>
 		<Button android:id="@+id/btn_download"
 				style="@style/Button"
 				android:layout_alignParentRight="true"
