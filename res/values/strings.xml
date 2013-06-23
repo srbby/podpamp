@@ -19,8 +19,8 @@
 	<string name="episodes_count_text">new episodes</string>
 
 	<!--FeedItemDetailsActivity-->
-	<string name="mark_listened_btn_text">Mark as listened</string>
-	<string name="mark_not_listened_btn_text">Mark as not listened</string>
+	<string name="mark_listened_btn_text">Mark listened</string>
+	<string name="mark_not_listened_btn_text">Mark not listened</string>
 	<string name="download_btn_text">Download</string>
 	<string name="play_btn_text">Play</string>
 	<string name="download_failed">Unable to download episode</string>

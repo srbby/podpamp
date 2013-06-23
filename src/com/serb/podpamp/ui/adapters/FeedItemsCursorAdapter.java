@@ -37,18 +37,22 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 		String desc = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.DESC));
 		long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
 		long length = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.LENGTH));
+		boolean isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
 
 		TextView title_view = (TextView) view.findViewById(R.id.txt_feed_item_title);
 		title_view.setText(title);
+		title_view.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
 		TextView desc_view = (TextView) view.findViewById(R.id.txt_feed_item_desc);
 		desc_view.setText(desc);
 
 		TextView published_view = (TextView) view.findViewById(R.id.txt_feed_item_published);
 		published_view.setText(Utils.getDateText(published));
+		published_view.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
 		TextView length_view = (TextView) view.findViewById(R.id.txt_feed_item_length);
 		length_view.setText(Utils.getFileSizeText(length));
+		length_view.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
 		return(view);
 	}

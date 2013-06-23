@@ -141,15 +141,18 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 				TextView titleView = (TextView) findViewById(R.id.txt_feed_item_title);
 				titleView.setText(title);
+				titleView.setTextColor(getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
 				TextView descView = (TextView) findViewById(R.id.txt_feed_item_desc);
 				descView.setText(desc);
 
 				TextView publishedView = (TextView) findViewById(R.id.txt_feed_item_published);
 				publishedView.setText(Utils.getDateText(published));
+				publishedView.setTextColor(getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
 				TextView lengthView = (TextView) findViewById(R.id.txt_feed_item_length);
 				lengthView.setText(Utils.getFileSizeText(length));
+				lengthView.setTextColor(getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
 				Utils.setImageView(this,
 					(ImageView) findViewById(R.id.img_feed_icon),

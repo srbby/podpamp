@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="unread_item_color">#ffffff</color>
+	<color name="read_item_color">#9b9b9b</color>
+</resources>
