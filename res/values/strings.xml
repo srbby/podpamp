@@ -37,4 +37,7 @@
 
 	<!--Main Menu-->
 	<string name="mi_settings_text">Settings</string>
+
+	<!--Feeds Menu-->
+	<string name="mi_mark_all_listened_text">Mark all listened</string>
 </resources>

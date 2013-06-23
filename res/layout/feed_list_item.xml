@@ -13,6 +13,7 @@
 	<TextView android:id="@+id/txt_new_feeds_count"
 			  style="@style/AdditionalInfo"
 			  android:layout_toRightOf="@+id/img_feed_icon"
-			  android:layout_alignBottom="@+id/img_feed_icon"/>
+			  android:layout_alignBottom="@+id/img_feed_icon"
+			  android:textColor="@color/unread_item_color"/>
 
 </RelativeLayout>

@@ -94,11 +94,11 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				downloadFeed();
 				break;
 			case R.id.btn_mark_listened:
-				FeedsManager.MarkFeedItemAsReadOrUnread(this, item_id, true);
+				FeedsManager.markFeedItemAsReadOrUnread(this, item_id, true);
 				setupItemInfoPanel();
 				break;
 			case R.id.btn_mark_not_listened:
-				FeedsManager.MarkFeedItemAsReadOrUnread(this, item_id, false);
+				FeedsManager.markFeedItemAsReadOrUnread(this, item_id, false);
 				setupItemInfoPanel();
 				break;
 			case R.id.btn_play:

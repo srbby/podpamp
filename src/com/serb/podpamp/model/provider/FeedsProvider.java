@@ -104,7 +104,7 @@ public class FeedsProvider extends ContentProvider {
 		switch (sUriMatcher.match(uri)) {
 			case PATH_FEEDS: {
 				int id = mDBHelper.getWritableDatabase().update(Contract.TABLE_FEEDS, contentValues, selection, selectionArgs);
-				getContext().getContentResolver().notifyChange(Contract.FeedItems.CONTENT_URI, null);
+				getContext().getContentResolver().notifyChange(Contract.Feeds.CONTENT_URI, null);
 				return id;
 			}
 			case PATH_FEED_ITEMS: {
