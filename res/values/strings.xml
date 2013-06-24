@@ -17,6 +17,7 @@
 	<string name="add_feed_dialog_message">Type or paste a feed url to add a subscription.</string>
 	<string name="failed_to_add_feed">Unable to add a subscription.</string>
 	<string name="episodes_count_text">new episodes</string>
+	<string name="one_episodes_text">new episode</string>
 
 	<!--FeedItemDetailsActivity-->
 	<string name="mark_listened_btn_text">Mark listened</string>

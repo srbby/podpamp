@@ -43,10 +43,16 @@ public class FeedsCursorAdapter extends SimpleCursorAdapter {
 
 		TextView count_view = (TextView) view.findViewById(R.id.txt_new_feeds_count);
 		if (feeds_count > 0)
+		{
 			count_view.setText(String.valueOf(feeds_count) + " " +
-				view.getResources().getText(R.string.episodes_count_text));
+				view.getResources().getText(feeds_count > 1 ? R.string.episodes_count_text : R.string.one_episodes_text));
+			count_view.setTextColor(context.getResources().getColor(R.color.unread_item_color));
+		}
 		else
+		{
 			count_view.setText(R.string.no_new_episodes);
+			count_view.setTextColor(context.getResources().getColor(R.color.read_item_color));
+		}
 
 		Utils.setImageView((ImageView) view.findViewById(R.id.img_feed_icon),
 			feed_icon,
