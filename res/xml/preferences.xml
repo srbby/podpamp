@@ -5,4 +5,9 @@
 						android:title="@string/pref_conn_type"
 						android:summary="@string/pref_conn_type_summary"
 						android:defaultValue="true" />
+	<EditTextPreference android:key="pref_keep_unread_count"
+						android:title="@string/pref_keep_unread_count"
+						android:summary="@string/pref_keep_unread_count_summary"
+						android:defaultValue="2"
+						android:inputType="number"/>
 </PreferenceScreen>

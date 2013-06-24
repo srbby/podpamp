@@ -128,6 +128,13 @@ public abstract class Utils {
 		return "/sdcard/download/podpamp/";
 	}
 
+
+
+	public static int getNewFeedKeepUnreadCount(Context context) {
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+		return settings.getInt("pref_keep_unread_count", 2);
+	}
+
 	//region Private Methods.
 
 	private static void putFeedIcon(Context context, long feed_id) {

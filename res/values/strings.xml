@@ -35,6 +35,8 @@
 	<!--Settings-->
 	<string name="pref_conn_type">Sync on Wi-Fi only</string>
 	<string name="pref_conn_type_summary">Download media only if connected to a Wi-Fi network</string>
+	<string name="pref_keep_unread_count_summary">How many episodes remain unread during adding a new feed</string>
+	<string name="pref_keep_unread_count">New feed unread count</string>
 
 	<!--Main Menu-->
 	<string name="mi_settings_text">Settings</string>

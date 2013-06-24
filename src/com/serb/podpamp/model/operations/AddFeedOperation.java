@@ -29,19 +29,22 @@ public class AddFeedOperation implements RequestService.Operation {
 			RSSFeed rss_feed = reader.load(url);
 			List<RSSItem> items = rss_feed.getItems();
 
+			int unreadCount = Utils.getNewFeedKeepUnreadCount(context);
+
 			ContentValues values = new ContentValues();
 			values.put(Contract.FeedsColumns.TITLE, rss_feed.getTitle());
 			values.put(Contract.FeedsColumns.SUBTITLE, rss_feed.getSubtitle());
 			values.put(Contract.FeedsColumns.ICON_URL, rss_feed.getIconUrl().toString());
 			values.put(Contract.FeedsColumns.ICON, Utils.downloadImage(rss_feed.getIconUrl().toString()));
 			values.put(Contract.FeedsColumns.URL, url);
-			values.put(Contract.FeedsColumns.NEW_ITEMS_COUNT, items.size());
+			values.put(Contract.FeedsColumns.NEW_ITEMS_COUNT, items.size() < unreadCount ? items.size() : unreadCount);
 
 			Uri feedUri = context.getContentResolver().insert(Contract.Feeds.CONTENT_URI, values);
 
 			long feedId = ContentUris.parseId(feedUri);
 			for (RSSItem item : items) {
-				addFeedItem(context, feedId, item);
+				addFeedItem(context, feedId, item, unreadCount <= 0);
+				unreadCount--;
 			}
 		} catch (RSSReaderException e) {
 			e.printStackTrace();
@@ -51,7 +54,7 @@ public class AddFeedOperation implements RequestService.Operation {
 
 
 
-	private void addFeedItem(Context context, long feedId, RSSItem item) {
+	private void addFeedItem(Context context, long feedId, RSSItem item, boolean isRead) {
 		ContentValues values = new ContentValues();
 		values.put(Contract.FeedItemsColumns.FEED_ID, feedId);
 		values.put(Contract.FeedItemsColumns.TITLE, item.getTitle());
@@ -64,7 +67,7 @@ public class AddFeedOperation implements RequestService.Operation {
 			values.put(Contract.FeedItemsColumns.LENGTH, enclosure.getLength());
 		}
 
-		values.put(Contract.FeedItemsColumns.IS_READ, false);
+		values.put(Contract.FeedItemsColumns.IS_READ, isRead);
 		values.put(Contract.FeedItemsColumns.PUBLISHED, item.getPubDate().getTime());
 
 		context.getContentResolver().insert(Contract.FeedItems.CONTENT_URI, values);
