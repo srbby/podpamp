@@ -56,6 +56,27 @@ public abstract class FeedsManager {
 		updateUnreadItemsCount(context, feedId, 0);
 	}
 
+
+
+	public static void deleteFeed(Context context, long feedId) {
+		String selection = Contract.FeedItems.FEED_ID + " = ?";
+		String[] selectionArgs = { String.valueOf(feedId) };
+
+		context.getContentResolver().delete(
+			Contract.FeedItems.CONTENT_URI,
+			selection,
+			selectionArgs
+		);
+
+		selection = Contract.Feeds._ID + " = ?";
+
+		context.getContentResolver().delete(
+			Contract.Feeds.CONTENT_URI,
+			selection,
+			selectionArgs
+		);
+	}
+
 	//region Private Methods.
 
 	private static void updateUnreadItemsCount(Context context, long feedId, int diff)

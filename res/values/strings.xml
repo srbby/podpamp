@@ -15,6 +15,8 @@
 	<string name="add_feed_text">Subscribe</string>
 	<string name="add_feed_dialog_title">Add a subscription</string>
 	<string name="add_feed_dialog_message">Type or paste a feed url to add a subscription.</string>
+	<string name="delete_feed_dialog_title">Remove the subscription</string>
+	<string name="delete_feed_dialog_message">Are you sure you want to remove the subscription?</string>
 	<string name="failed_to_add_feed">Unable to add a subscription.</string>
 	<string name="episodes_count_text">new episodes</string>
 	<string name="one_episodes_text">new episode</string>
@@ -43,4 +45,5 @@
 
 	<!--Feeds Menu-->
 	<string name="mi_mark_all_listened_text">Mark all listened</string>
+	<string name="mi_delete_feed_text">Unsubscribe</string>
 </resources>

@@ -146,39 +146,11 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 
 		getSupportLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
 
-		listView.setOnItemLongClickListener (new AdapterView.OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
-			deleteFeed(id);
-			return false;
-			}
-		});
-
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView parent, View view, int position, long id) {
 				showFeedItemsList(id);
 			}
 		});
-	}
-
-
-
-	private void deleteFeed(long id) {
-		String selection = Contract.FeedItems.FEED_ID + " = ?";
-		String[] selectionArgs = { String.valueOf(id) };
-
-		getContentResolver().delete(
-			Contract.FeedItems.CONTENT_URI,
-			selection,
-			selectionArgs
-		);
-
-		selection = Contract.Feeds._ID + " = ?";
-
-		getContentResolver().delete(
-			Contract.Feeds.CONTENT_URI,
-			selection,
-			selectionArgs
-		);
 	}
 
 

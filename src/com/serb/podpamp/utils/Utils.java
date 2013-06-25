@@ -1,6 +1,8 @@
 package com.serb.podpamp.utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -133,6 +135,20 @@ public abstract class Utils {
 	public static int getNewFeedKeepUnreadCount(Context context) {
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 		return settings.getInt("pref_keep_unread_count", 2);
+	}
+
+
+
+	public static void showConfirmationDialog(Context context, String title, String message, DialogInterface.OnClickListener okClickListener) {
+		if (okClickListener == null)
+			return;
+
+		new AlertDialog.Builder(context)
+			.setTitle(title)
+			.setMessage(message)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setPositiveButton(android.R.string.yes, okClickListener)
+			.setNegativeButton(android.R.string.no, null).show();
 	}
 
 	//region Private Methods.

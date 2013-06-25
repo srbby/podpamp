@@ -1,5 +1,6 @@
 package com.serb.podpamp.ui.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -60,6 +61,17 @@ public class FeedItemsActivity extends FragmentActivity {
 		switch (item.getItemId()) {
 			case R.id.mi_mark_all_listened:
 				FeedsManager.markAllFeedItemAsReadOrUnread(this, feed_id, true);
+				return true;
+			case R.id.mi_delete_feed:
+				Utils.showConfirmationDialog(this,
+					getResources().getString(R.string.delete_feed_dialog_title),
+					getResources().getString(R.string.delete_feed_dialog_message),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							FeedsManager.deleteFeed(FeedItemsActivity.this, feed_id);
+							finish();
+						}
+					});
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
