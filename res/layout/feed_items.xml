@@ -8,8 +8,7 @@
 
 	<TextView android:id="@+id/txt_feed_title"
 			  style="@style/PageTitle"
-			  android:layout_toRightOf="@+id/img_feed_icon"
-			  android:textColor="@color/title_color"/>
+			  android:layout_toRightOf="@+id/img_feed_icon"/>
 
 	<TextView android:id="@+id/txt_feed_subtitle"
 			  style="@style/PageSubTitle"

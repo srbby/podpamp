@@ -10,8 +10,7 @@
 
 	<TextView android:id="@+id/txt_feed_item_title"
 			  style="@style/ListItemTitle"
-			  android:layout_toRightOf="@+id/img_feed_icon"
-			  android:textColor="@color/unread_item_color"/>
+			  android:layout_toRightOf="@+id/img_feed_icon"/>
 
 	<TextView android:id="@+id/txt_feed_item_desc"
 			  style="@style/Description"
@@ -22,13 +21,11 @@
 	<TextView android:id="@+id/txt_feed_item_published"
 			  style="@style/AdditionalInfo"
 			  android:layout_toRightOf="@+id/img_feed_icon"
-			  android:layout_below="@+id/txt_feed_item_desc"
-			  android:textColor="@color/unread_item_color"/>
+			  android:layout_below="@+id/txt_feed_item_desc"/>
 
 	<TextView android:id="@+id/txt_feed_item_length"
 			  style="@style/AdditionalInfo"
 			  android:layout_alignParentRight="true"
-			  android:layout_below="@+id/txt_feed_item_desc"
-			  android:textColor="@color/unread_item_color"/>
+			  android:layout_below="@+id/txt_feed_item_desc"/>
 
 </RelativeLayout>
