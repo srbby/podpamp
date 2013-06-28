@@ -57,6 +57,8 @@ public class AddFeedOperation implements RequestService.Operation {
 	private void addFeedItem(Context context, long feedId, RSSItem item, boolean isRead) {
 		ContentValues values = new ContentValues();
 		values.put(Contract.FeedItemsColumns.FEED_ID, feedId);
+		values.put(Contract.FeedItemsColumns.GUID, item.getGuid());
+		values.put(Contract.FeedItemsColumns.PUBLISHED, item.getPubDate().getTime());
 		values.put(Contract.FeedItemsColumns.TITLE, item.getTitle());
 		values.put(Contract.FeedItemsColumns.DESC, item.getSummary());
 
@@ -64,11 +66,10 @@ public class AddFeedOperation implements RequestService.Operation {
 		if (enclosure != null)
 		{
 			values.put(Contract.FeedItemsColumns.MEDIA_URL, enclosure.getUrl().toString());
-			values.put(Contract.FeedItemsColumns.LENGTH, enclosure.getLength());
+			values.put(Contract.FeedItemsColumns.SIZE, enclosure.getLength());
 		}
 
 		values.put(Contract.FeedItemsColumns.IS_READ, isRead);
-		values.put(Contract.FeedItemsColumns.PUBLISHED, item.getPubDate().getTime());
 
 		context.getContentResolver().insert(Contract.FeedItems.CONTENT_URI, values);
 	}

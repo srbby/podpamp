@@ -117,7 +117,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 			Contract.FeedItems.TITLE,
 			Contract.FeedItems.DESC,
 			Contract.FeedItems.PUBLISHED,
-			Contract.FeedItems.LENGTH,
+			Contract.FeedItems.SIZE,
 			Contract.FeedItems.IS_READ,
 			Contract.FeedItems.FILE_PATH
 		};
@@ -135,7 +135,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				String title = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
 				String desc = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.DESC));
 				long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
-				long length = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.LENGTH));
+				long size = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.SIZE));
 				long feedId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
 				filePath = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.FILE_PATH));
 				isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
@@ -151,9 +151,9 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				publishedView.setText(Utils.getDateText(published));
 				publishedView.setTextColor(getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
-				TextView lengthView = (TextView) findViewById(R.id.txt_feed_item_length);
-				lengthView.setText(Utils.getFileSizeText(length));
-				lengthView.setTextColor(getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
+				TextView sizeView = (TextView) findViewById(R.id.txt_feed_item_size);
+				sizeView.setText(Utils.getFileSizeText(size));
+				sizeView.setTextColor(getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
 				Utils.setImageView(this,
 					(ImageView) findViewById(R.id.img_feed_icon),

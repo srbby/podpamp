@@ -23,13 +23,15 @@ public class Contract {
 
 	public interface FeedItemsColumns {
 		public static final String FEED_ID = "feed_id";
+		public static final String GUID = "guid";
+		public static final String PUBLISHED = "published";
 		public static final String TITLE = "title";
 		public static final String DESC = "desc";
 		public static final String MEDIA_URL = "media_url";
 		public static final String FILE_PATH = "file_path";
+		public static final String SIZE = "size";
 		public static final String IS_READ = "is_read";
-		public static final String LENGTH = "length";
-		public static final String PUBLISHED = "published";
+		public static final String DURATION = "duration";
 	}
 
 	public static final class Feeds implements BaseColumns, FeedsColumns {

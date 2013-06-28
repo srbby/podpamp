@@ -52,7 +52,7 @@ public class DownloadEpisodeOperation implements RequestService.Operation {
 					output.write(data, 0, count);
 				}
 
-				metadata.length = total;
+				metadata.size = total;
 
 				output.flush();
 				output.close();
@@ -110,7 +110,7 @@ public class DownloadEpisodeOperation implements RequestService.Operation {
 	private void updateFeedItem(Context context, EpisodeMetadata metadata) {
 		ContentValues values = new ContentValues();
 		values.put(Contract.FeedItemsColumns.FILE_PATH, metadata.fileName);
-		values.put(Contract.FeedItemsColumns.LENGTH, metadata.length);
+		values.put(Contract.FeedItemsColumns.SIZE, metadata.size);
 
 		final String selection = Contract.FeedItems._ID + " = ?";
 		final String[] selectionArgs = { String.valueOf(metadata.feedItemId) };
@@ -125,6 +125,6 @@ public class DownloadEpisodeOperation implements RequestService.Operation {
 		public String url;
 		public String fileName;
 		public File file;
-		public long length;
+		public long size;
 	}
 }

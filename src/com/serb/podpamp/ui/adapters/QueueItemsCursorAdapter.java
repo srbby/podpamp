@@ -37,20 +37,20 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 		String title = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
 		String desc = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.DESC));
 		long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
-		long length = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.LENGTH));
+		long size = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.SIZE));
 		long feed_id = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
 
-		TextView title_view = (TextView) view.findViewById(R.id.txt_feed_item_title);
-		title_view.setText(title);
+		TextView titleView = (TextView) view.findViewById(R.id.txt_feed_item_title);
+		titleView.setText(title);
 
-		TextView desc_view = (TextView) view.findViewById(R.id.txt_feed_item_desc);
-		desc_view.setText(desc);
+		TextView descView = (TextView) view.findViewById(R.id.txt_feed_item_desc);
+		descView.setText(desc);
 
-		TextView published_view = (TextView) view.findViewById(R.id.txt_feed_item_published);
-		published_view.setText(Utils.getDateText(published));
+		TextView publishedView = (TextView) view.findViewById(R.id.txt_feed_item_published);
+		publishedView.setText(Utils.getDateText(published));
 
-		TextView length_view = (TextView) view.findViewById(R.id.txt_feed_item_length);
-		length_view.setText(Utils.getFileSizeText(length));
+		TextView sizeView = (TextView) view.findViewById(R.id.txt_feed_item_size);
+		sizeView.setText(Utils.getFileSizeText(size));
 
 		Utils.setImageView(view.getContext(),
 			(ImageView) view.findViewById(R.id.img_feed_icon),

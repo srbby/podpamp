@@ -82,7 +82,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 			Contract.FeedItems.TITLE,
 			Contract.FeedItems.DESC,
 			Contract.FeedItems.PUBLISHED,
-			Contract.FeedItems.LENGTH,
+			Contract.FeedItems.SIZE,
 			Contract.FeedItems.FEED_ID
 		};
 

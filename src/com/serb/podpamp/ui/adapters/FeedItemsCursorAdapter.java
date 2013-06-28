@@ -36,23 +36,23 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 		String title = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
 		String desc = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.DESC));
 		long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
-		long length = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.LENGTH));
+		long size = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.SIZE));
 		boolean isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
 
-		TextView title_view = (TextView) view.findViewById(R.id.txt_feed_item_title);
-		title_view.setText(title);
-		title_view.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
+		TextView titleView = (TextView) view.findViewById(R.id.txt_feed_item_title);
+		titleView.setText(title);
+		titleView.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
-		TextView desc_view = (TextView) view.findViewById(R.id.txt_feed_item_desc);
-		desc_view.setText(desc);
+		TextView descView = (TextView) view.findViewById(R.id.txt_feed_item_desc);
+		descView.setText(desc);
 
-		TextView published_view = (TextView) view.findViewById(R.id.txt_feed_item_published);
-		published_view.setText(Utils.getDateText(published));
-		published_view.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
+		TextView publishedView = (TextView) view.findViewById(R.id.txt_feed_item_published);
+		publishedView.setText(Utils.getDateText(published));
+		publishedView.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
-		TextView length_view = (TextView) view.findViewById(R.id.txt_feed_item_length);
-		length_view.setText(Utils.getFileSizeText(length));
-		length_view.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
+		TextView sizeView = (TextView) view.findViewById(R.id.txt_feed_item_size);
+		sizeView.setText(Utils.getFileSizeText(size));
+		sizeView.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
 		return(view);
 	}

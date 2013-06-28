@@ -18,7 +18,7 @@
 				  android:layout_toRightOf="@+id/img_feed_icon"
 				  android:layout_below="@+id/txt_feed_item_title"/>
 
-		<TextView android:id="@+id/txt_feed_item_length"
+		<TextView android:id="@+id/txt_feed_item_size"
 				  style="@style/AdditionalInfo"
 				  android:layout_alignParentRight="true"
 				  android:layout_below="@+id/txt_feed_item_title"/>
