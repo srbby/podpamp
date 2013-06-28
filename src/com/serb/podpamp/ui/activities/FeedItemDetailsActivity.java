@@ -24,6 +24,7 @@ import com.serb.podpamp.utils.Utils;
 public class FeedItemDetailsActivity extends Activity implements View.OnClickListener {
 	private long item_id = -1;
 	String filePath;
+	boolean isRead;
 
 	private FeedsRequestManager requestManager;
 
@@ -137,7 +138,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				long length = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.LENGTH));
 				long feedId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
 				filePath = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.FILE_PATH));
-				boolean isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
+				isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
 
 				TextView titleView = (TextView) findViewById(R.id.txt_feed_item_title);
 				titleView.setText(title);
@@ -159,14 +160,17 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 					feedId,
 					R.drawable.icon_rss);
 
+				Button downloadButton = (Button) findViewById(R.id.btn_download);
+				Button playButton = (Button) findViewById(R.id.btn_play);
+
 				if (TextUtils.isEmpty(filePath))
 				{
-					Button downloadButton = (Button) findViewById(R.id.btn_download);
+					playButton.setVisibility(View.INVISIBLE);
 					downloadButton.setVisibility(View.VISIBLE);
 				}
 				else
 				{
-					Button playButton = (Button) findViewById(R.id.btn_play);
+					downloadButton.setVisibility(View.INVISIBLE);
 					playButton.setVisibility(View.VISIBLE);
 				}
 
@@ -213,6 +217,11 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				.putExtra("cmd", 20)
 				//.putExtra(PowerAMPiAPI.Track.POSITION, 10) // Play from 10th second.
 				.setData(Uri.parse("file://" + filePath)));
+			if (!isRead)
+			{
+				FeedsManager.markFeedItemAsReadOrUnread(this, item_id, true);
+				setupItemInfoPanel();
+			}
 		}
 	}
 

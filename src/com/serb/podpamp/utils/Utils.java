@@ -134,7 +134,7 @@ public abstract class Utils {
 
 	public static int getNewFeedKeepUnreadCount(Context context) {
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-		return settings.getInt("pref_keep_unread_count", 2);
+		return Integer.parseInt(settings.getString("pref_keep_unread_count", "2"));
 	}
 
 
