@@ -11,6 +11,7 @@
 	<string name="feeds_btn_text">Subscriptions</string>
 	<string name="refresh_btn_text">Refresh</string>
 	<string name="refresh_failed">Unable to refresh feeds</string>
+	<string name="download_new_episodes_failed">Unable to download episode</string>
 
 	<!--FeedsActivity-->
 	<string name="add_feed_text">Subscribe</string>
@@ -40,6 +41,8 @@
 	<string name="pref_conn_type_summary">Download media only if connected to a Wi-Fi network</string>
 	<string name="pref_keep_unread_count_summary">How many episodes remain unread during adding a new feed</string>
 	<string name="pref_keep_unread_count">New feed unread count</string>
+	<string name="pref_instant_download_on_refresh">Instantly download fresh episodes</string>
+	<string name="pref_instant_download_on_refresh_summary">Download new episodes during refreshing feeds</string>
 
 	<!--Main Menu-->
 	<string name="mi_settings_text">Settings</string>

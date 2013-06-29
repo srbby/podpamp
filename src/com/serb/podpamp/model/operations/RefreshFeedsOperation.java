@@ -62,6 +62,7 @@ public class RefreshFeedsOperation implements RequestService.Operation {
 			for (RSSItem item : items) {
 				if (exists(context, feedId, item))
 					break;
+				//todo remove reference to RSSItem from FeedsManager
 				FeedsManager.addFeedItem(context, feedId, item, false);
 				newItemsCount++;
 			}

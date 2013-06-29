@@ -3,9 +3,15 @@ package com.serb.podpamp.model.managers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import com.foxykeep.datadroid.exception.DataException;
 import com.serb.podpamp.model.provider.Contract;
+import com.serb.podpamp.utils.Utils;
 import org.mcsoxford.rss.Enclosure;
 import org.mcsoxford.rss.RSSItem;
+
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 
 public abstract class FeedsManager {
 	public static void markFeedItemAsReadOrUnread(Context context, long feedItemId, boolean isRead) {
@@ -136,4 +142,118 @@ public abstract class FeedsManager {
 
 		context.getContentResolver().insert(Contract.FeedItems.CONTENT_URI, values);
 	}
+
+
+
+	public static EpisodeMetadata getEpisodeMetadata(Context context, long feedItemId)
+	{
+		final String[] projection = {
+			Contract.FeedItems._ID,
+			Contract.FeedItems.TITLE,
+			Contract.FeedItems.MEDIA_URL
+		};
+
+		final String selection = Contract.FeedItems._ID + " = ?";
+		final String[] selectionArgs = { String.valueOf(feedItemId) };
+
+		Cursor cursor = context.getContentResolver().query(Contract.FeedItems.CONTENT_URI,
+			projection, selection, selectionArgs, null);
+
+		EpisodeMetadata result = null;
+
+		if (cursor != null)
+		{
+			if (cursor.moveToNext())
+			{
+				result = getEpisodeMetadata(cursor);
+			}
+			cursor.close();
+		}
+
+		return result;
+	}
+
+
+
+	public static EpisodeMetadata getEpisodeMetadata(Cursor cursor) {
+		EpisodeMetadata result = new EpisodeMetadata();
+		result.feedItemId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems._ID));
+		result.url = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.MEDIA_URL));
+		//result.fileName = Utils.getDownloadFolder() + cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
+		result.fileName = Utils.getDownloadFolder() + result.feedItemId;
+		result.file = new File(result.fileName);
+		return result;
+	}
+
+
+
+	public static void downloadEpisode(Context context, long feedItemId) {
+		EpisodeMetadata metadata = getEpisodeMetadata(context, feedItemId);
+
+		downloadEpisode(context, metadata);
+	}
+
+
+
+	public static void downloadEpisode(Context context, EpisodeMetadata metadata) {
+		try {
+			URL url = new URL(metadata.url);
+
+			URLConnection connection = url.openConnection();
+			connection.connect();
+			// this will be useful so that you can show a typical 0-100% progress bar
+			//int fileLength = connection.getContentLength();
+
+			// download the file
+			InputStream input = new BufferedInputStream(url.openStream());
+
+			if (metadata.file.createNewFile())
+			{
+				OutputStream output = new FileOutputStream(metadata.file);
+
+				byte data[] = new byte[1024];
+				long total = 0;
+				int count;
+				while ((count = input.read(data)) != -1) {
+					total += count;
+					// publishing the progress....
+					//				Bundle resultData = new Bundle();
+					//				resultData.putInt("progress" ,(int) (total * 100 / fileLength));
+					//				receiver.send(UPDATE_PROGRESS, resultData);
+					output.write(data, 0, count);
+				}
+
+				metadata.size = total;
+
+				output.flush();
+				output.close();
+				input.close();
+			}
+			else
+			{
+				throw new DataException("Unable to create a file: " + metadata.fileName);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (DataException e) {
+			e.printStackTrace();
+		}
+
+		updateFeedItem(context, metadata);
+	}
+
+	//region Private Methods.
+
+	private static void updateFeedItem(Context context, EpisodeMetadata metadata) {
+		ContentValues values = new ContentValues();
+		values.put(Contract.FeedItemsColumns.FILE_PATH, metadata.fileName);
+		values.put(Contract.FeedItemsColumns.SIZE, metadata.size);
+
+		final String selection = Contract.FeedItems._ID + " = ?";
+		final String[] selectionArgs = { String.valueOf(metadata.feedItemId) };
+
+		context.getContentResolver().update(Contract.FeedItems.CONTENT_URI, values, selection, selectionArgs);
+	}
+
+	//endregion
 }

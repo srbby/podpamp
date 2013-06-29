@@ -3,6 +3,7 @@ package com.serb.podpamp.model.request;
 import com.foxykeep.datadroid.service.RequestService;
 import com.serb.podpamp.model.operations.AddFeedOperation;
 import com.serb.podpamp.model.operations.DownloadEpisodeOperation;
+import com.serb.podpamp.model.operations.DownloadNewEpisodesOperation;
 import com.serb.podpamp.model.operations.RefreshFeedsOperation;
 
 public class FeedsService extends RequestService {
@@ -15,6 +16,8 @@ public class FeedsService extends RequestService {
 				return new DownloadEpisodeOperation();
 			case RequestFactory.REQUEST_REFRESH_FEEDS:
 				return new RefreshFeedsOperation();
+			case RequestFactory.REQUEST_DOWNLOAD_NEW_EPISODES:
+				return new DownloadNewEpisodesOperation();
 			default:
 				return null;
 		}

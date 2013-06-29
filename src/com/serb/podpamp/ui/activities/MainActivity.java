@@ -31,10 +31,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
 
-	RequestManager.RequestListener requestListener = new RequestManager.RequestListener() {
+	RequestManager.RequestListener refreshRequestListener = new RequestManager.RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			Toast.makeText(MainActivity.this, "complete", Toast.LENGTH_LONG).show();
+			Toast.makeText(MainActivity.this, "Refresh complete", Toast.LENGTH_LONG).show();
+			if (Utils.isInstantDownloadSet(MainActivity.this))
+				downloadNewEpisodes();
 		}
 
 		@Override
@@ -56,6 +58,38 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 			builder.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(getString(R.string.refresh_failed))
+				.create()
+				.show();
+		}
+	};
+
+
+
+	RequestManager.RequestListener downloadRequestListener = new RequestManager.RequestListener() {
+		@Override
+		public void onRequestFinished(Request request, Bundle resultData) {
+			Toast.makeText(MainActivity.this, "Download complete", Toast.LENGTH_LONG).show();
+		}
+
+		@Override
+		public void onRequestDataError(Request request) {
+			showError();
+		}
+
+		@Override
+		public void onRequestCustomError(Request request, Bundle resultData) {
+			showError();
+		}
+
+		@Override
+		public void onRequestConnectionError(Request request, int statusCode) {
+			showError();
+		}
+
+		void showError() {
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+			builder.setTitle(android.R.string.dialog_alert_title)
+				.setMessage(getString(R.string.download_new_episodes_failed))
 				.create()
 				.show();
 		}
@@ -123,7 +157,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 	private void refreshFeeds() {
 		if (Utils.isNetworkAvailable(this, true))
-			requestManager.execute(RequestFactory.getRefreshFeedsRequest(), requestListener);
+			requestManager.execute(RequestFactory.getRefreshFeedsRequest(), refreshRequestListener);
+	}
+
+
+
+	private void downloadNewEpisodes() {
+		if (Utils.isNetworkAvailable(this, true))
+			requestManager.execute(RequestFactory.getDownloadNewEpisodesRequest(), downloadRequestListener);
 	}
 
 

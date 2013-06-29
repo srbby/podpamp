@@ -139,6 +139,13 @@ public abstract class Utils {
 
 
 
+	public static boolean isInstantDownloadSet(Context context) {
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+		return settings.getBoolean("pref_instant_download_on_refresh", true);
+	}
+
+
+
 	public static void showConfirmationDialog(Context context, String title, String message, DialogInterface.OnClickListener okClickListener) {
 		if (okClickListener == null)
 			return;

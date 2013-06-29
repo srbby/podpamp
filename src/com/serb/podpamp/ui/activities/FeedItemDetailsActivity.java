@@ -34,7 +34,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
 			setupItemInfoPanel();
-			Toast.makeText(FeedItemDetailsActivity.this, "complete", Toast.LENGTH_LONG).show();
+			Toast.makeText(FeedItemDetailsActivity.this, "Download complete", Toast.LENGTH_LONG).show();
 		}
 
 		@Override
