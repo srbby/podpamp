@@ -10,6 +10,7 @@
 	<!--MainActivity-->
 	<string name="feeds_btn_text">Subscriptions</string>
 	<string name="refresh_btn_text">Refresh</string>
+	<string name="refresh_failed">Unable to refresh feeds</string>
 
 	<!--FeedsActivity-->
 	<string name="add_feed_text">Subscribe</string>

@@ -35,7 +35,7 @@ public class FeedsCursorAdapter extends SimpleCursorAdapter {
 		cursor.moveToPosition(pos);
 
 		String feed_title = cursor.getString(cursor.getColumnIndex(Contract.Feeds.TITLE));
-		int feeds_count = cursor.getInt(cursor.getColumnIndex(Contract.Feeds.NEW_ITEMS_COUNT));
+		int feeds_count = cursor.getInt(cursor.getColumnIndex(Contract.Feeds.UNREAD_ITEMS_COUNT));
 		byte[] feed_icon = cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON));
 
 		TextView title_view = (TextView) view.findViewById(R.id.txt_feed_title);

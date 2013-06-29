@@ -25,7 +25,7 @@ import com.serb.podpamp.utils.Utils;
 public class FeedItemsActivity extends FragmentActivity {
 	private static final int LOADER_ID = 0;
 
-	private long feed_id = -1;
+	private long feedId = -1;
 
 
 
@@ -36,9 +36,9 @@ public class FeedItemsActivity extends FragmentActivity {
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null)
-			feed_id = extras.getLong("feed_id");
+			feedId = extras.getLong("feed_id");
 
-		if (feed_id > -1)
+		if (feedId > -1)
 		{
 			setupFeedInfoPanel();
 			setupFeedItemsList();
@@ -60,7 +60,7 @@ public class FeedItemsActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.mi_mark_all_listened:
-				FeedsManager.markAllFeedItemAsReadOrUnread(this, feed_id, true);
+				FeedsManager.markAllFeedItemAsReadOrUnread(this, feedId, true);
 				return true;
 			case R.id.mi_delete_feed:
 				Utils.showConfirmationDialog(this,
@@ -68,8 +68,8 @@ public class FeedItemsActivity extends FragmentActivity {
 					getResources().getString(R.string.delete_feed_dialog_message),
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
-							FeedsManager.deleteFeed(FeedItemsActivity.this, feed_id);
-							finish();
+						FeedsManager.deleteFeed(FeedItemsActivity.this, feedId);
+						finish();
 						}
 					});
 				return true;
@@ -88,7 +88,7 @@ public class FeedItemsActivity extends FragmentActivity {
 		};
 
 		String selection = Contract.Feeds._ID + " = ?";
-		String[] selectionArgs = { String.valueOf(feed_id) };
+		String[] selectionArgs = { String.valueOf(feedId) };
 
 		Cursor cursor = getContentResolver().query(Contract.Feeds.CONTENT_URI,
 			projection, selection, selectionArgs, null);
@@ -125,7 +125,8 @@ public class FeedItemsActivity extends FragmentActivity {
 		};
 
 		final String selection = Contract.FeedItems.FEED_ID + " = ?";
-		final String[] selectionArgs = { String.valueOf(feed_id) };
+		final String[] selectionArgs = { String.valueOf(feedId) };
+		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc";
 
 		final FeedItemsCursorAdapter adapter = new FeedItemsCursorAdapter(
 			this, // Context.
@@ -144,7 +145,7 @@ public class FeedItemsActivity extends FragmentActivity {
 					projection,
 					selection,
 					selectionArgs,
-					null
+					sortOrder
 				);
 			}
 
@@ -174,9 +175,9 @@ public class FeedItemsActivity extends FragmentActivity {
 
 
 
-	private void showFeedItemDetails(long item_id) {
+	private void showFeedItemDetails(long itemId) {
 		Intent intent = new Intent(this, FeedItemDetailsActivity.class);
-		intent.putExtra("item_id", item_id);
+		intent.putExtra("item_id", itemId);
 		startActivity(intent);
 	}
 

@@ -1,5 +1,6 @@
 package com.serb.podpamp.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,12 +14,52 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
+import com.serb.podpamp.model.request.FeedsRequestManager;
+import com.serb.podpamp.model.request.RequestFactory;
 import com.serb.podpamp.ui.adapters.QueueItemsCursorAdapter;
+import com.serb.podpamp.utils.Utils;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
 	private static final int LOADER_ID = 0;
+
+	private FeedsRequestManager requestManager;
+
+
+
+	RequestManager.RequestListener requestListener = new RequestManager.RequestListener() {
+		@Override
+		public void onRequestFinished(Request request, Bundle resultData) {
+			Toast.makeText(MainActivity.this, "complete", Toast.LENGTH_LONG).show();
+		}
+
+		@Override
+		public void onRequestDataError(Request request) {
+			showError();
+		}
+
+		@Override
+		public void onRequestCustomError(Request request, Bundle resultData) {
+			showError();
+		}
+
+		@Override
+		public void onRequestConnectionError(Request request, int statusCode) {
+			showError();
+		}
+
+		void showError() {
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+			builder.setTitle(android.R.string.dialog_alert_title)
+				.setMessage(getString(R.string.refresh_failed))
+				.create()
+				.show();
+		}
+	};
 
 
 
@@ -28,8 +69,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		setContentView(R.layout.main);
 
 		findViewById(R.id.btn_feeds).setOnClickListener(this);
+		findViewById(R.id.btn_refresh).setOnClickListener(this);
 
 		setupQueueList();
+
+		requestManager = FeedsRequestManager.from(this);
 	}
 
 
@@ -39,6 +83,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		switch(view.getId()) {
 			case R.id.btn_feeds:
 				showFeedsList();
+				break;
+			case R.id.btn_refresh:
+				refreshFeeds();
 				break;
 		}
 	}
@@ -67,16 +114,21 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 	//region Private Methods.
 
-	private void showFeedsList()
-	{
+	private void showFeedsList() {
 		Intent intent = new Intent(this, FeedsActivity.class);
 		startActivity(intent);
 	}
 
 
 
-	private void setupQueueList()
-	{
+	private void refreshFeeds() {
+		if (Utils.isNetworkAvailable(this, true))
+			requestManager.execute(RequestFactory.getRefreshFeedsRequest(), requestListener);
+	}
+
+
+
+	private void setupQueueList() {
 		final String[] projection = {
 			Contract.FeedItems._ID,
 			Contract.FeedItems.TITLE,

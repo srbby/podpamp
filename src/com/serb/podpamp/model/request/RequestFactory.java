@@ -5,6 +5,7 @@ import com.foxykeep.datadroid.requestmanager.Request;
 public class RequestFactory {
 	public static final int REQUEST_ADD_FEED = 1;
 	public static final int REQUEST_DOWNLOAD_EPISODE = 2;
+	public static final int REQUEST_REFRESH_FEEDS = 3;
 
 	public static final String FEED_URL = "feed_url";
 	public static final String FEED_ITEM_ID = "feed_item_id";
@@ -28,5 +29,11 @@ public class RequestFactory {
 		Request request = new Request(REQUEST_DOWNLOAD_EPISODE);
 		request.put(FEED_ITEM_ID, feed_item_id);
 		return request;
+	}
+
+
+
+	public static Request getRefreshFeedsRequest() {
+		return new Request(REQUEST_REFRESH_FEEDS);
 	}
 }

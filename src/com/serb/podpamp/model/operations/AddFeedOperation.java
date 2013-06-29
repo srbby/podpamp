@@ -10,6 +10,7 @@ import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.exception.DataException;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService;
+import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.model.request.RequestFactory;
 import com.serb.podpamp.utils.Utils;
@@ -37,40 +38,18 @@ public class AddFeedOperation implements RequestService.Operation {
 			values.put(Contract.FeedsColumns.ICON_URL, rss_feed.getIconUrl().toString());
 			values.put(Contract.FeedsColumns.ICON, Utils.downloadImage(rss_feed.getIconUrl().toString()));
 			values.put(Contract.FeedsColumns.URL, url);
-			values.put(Contract.FeedsColumns.NEW_ITEMS_COUNT, items.size() < unreadCount ? items.size() : unreadCount);
+			values.put(Contract.FeedsColumns.UNREAD_ITEMS_COUNT, items.size() < unreadCount ? items.size() : unreadCount);
 
 			Uri feedUri = context.getContentResolver().insert(Contract.Feeds.CONTENT_URI, values);
 
 			long feedId = ContentUris.parseId(feedUri);
 			for (RSSItem item : items) {
-				addFeedItem(context, feedId, item, unreadCount <= 0);
+				FeedsManager.addFeedItem(context, feedId, item, unreadCount <= 0);
 				unreadCount--;
 			}
 		} catch (RSSReaderException e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-
-
-	private void addFeedItem(Context context, long feedId, RSSItem item, boolean isRead) {
-		ContentValues values = new ContentValues();
-		values.put(Contract.FeedItemsColumns.FEED_ID, feedId);
-		values.put(Contract.FeedItemsColumns.GUID, item.getGuid());
-		values.put(Contract.FeedItemsColumns.PUBLISHED, item.getPubDate().getTime());
-		values.put(Contract.FeedItemsColumns.TITLE, item.getTitle());
-		values.put(Contract.FeedItemsColumns.DESC, item.getSummary());
-
-		final Enclosure enclosure = item.getEnclosure();
-		if (enclosure != null)
-		{
-			values.put(Contract.FeedItemsColumns.MEDIA_URL, enclosure.getUrl().toString());
-			values.put(Contract.FeedItemsColumns.SIZE, enclosure.getLength());
-		}
-
-		values.put(Contract.FeedItemsColumns.IS_READ, isRead);
-
-		context.getContentResolver().insert(Contract.FeedItems.CONTENT_URI, values);
 	}
 }

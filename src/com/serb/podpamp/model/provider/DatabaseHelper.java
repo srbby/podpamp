@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			Contract.Feeds.SUBTITLE + " text, " +
 			Contract.Feeds.ICON_URL + " text, " +
 			Contract.Feeds.ICON + " blob, " +
-			Contract.Feeds.NEW_ITEMS_COUNT + " integer" +
+			Contract.Feeds.UNREAD_ITEMS_COUNT + " integer" +
 			")";
 		db.execSQL(sql);
 

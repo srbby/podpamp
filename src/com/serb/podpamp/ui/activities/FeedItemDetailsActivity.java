@@ -22,7 +22,7 @@ import com.serb.podpamp.model.request.RequestFactory;
 import com.serb.podpamp.utils.Utils;
 
 public class FeedItemDetailsActivity extends Activity implements View.OnClickListener {
-	private long item_id = -1;
+	private long itemId = -1;
 	String filePath;
 	boolean isRead;
 
@@ -71,9 +71,9 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null)
-			item_id = extras.getLong("item_id");
+			itemId = extras.getLong("item_id");
 
-		if (item_id > -1)
+		if (itemId > -1)
 		{
 			setupItemInfoPanel();
 		}
@@ -95,11 +95,11 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				downloadFeed();
 				break;
 			case R.id.btn_mark_listened:
-				FeedsManager.markFeedItemAsReadOrUnread(this, item_id, true);
+				FeedsManager.markFeedItemAsReadOrUnread(this, itemId, true);
 				setupItemInfoPanel();
 				break;
 			case R.id.btn_mark_not_listened:
-				FeedsManager.markFeedItemAsReadOrUnread(this, item_id, false);
+				FeedsManager.markFeedItemAsReadOrUnread(this, itemId, false);
 				setupItemInfoPanel();
 				break;
 			case R.id.btn_play:
@@ -123,7 +123,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		};
 
 		final String selection = Contract.FeedItems._ID + " = ?";
-		final String[] selectionArgs = { String.valueOf(item_id) };
+		final String[] selectionArgs = { String.valueOf(itemId) };
 
 		Cursor cursor = getContentResolver().query(Contract.FeedItems.CONTENT_URI,
 			projection, selection, selectionArgs, null);
@@ -194,9 +194,9 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 
 	private void downloadFeed() {
-		if (item_id > -1 && Utils.isNetworkAvailable(this, true))
+		if (itemId > -1 && Utils.isNetworkAvailable(this, true))
 		{
-			requestManager.execute(RequestFactory.getDownloadEpisodeRequest(item_id), requestListener);
+			requestManager.execute(RequestFactory.getDownloadEpisodeRequest(itemId), requestListener);
 		}
 	}
 
@@ -219,7 +219,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				.setData(Uri.parse("file://" + filePath)));
 			if (!isRead)
 			{
-				FeedsManager.markFeedItemAsReadOrUnread(this, item_id, true);
+				FeedsManager.markFeedItemAsReadOrUnread(this, itemId, true);
 				setupItemInfoPanel();
 			}
 		}
