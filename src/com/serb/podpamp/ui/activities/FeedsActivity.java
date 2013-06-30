@@ -26,12 +26,14 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 		AddFeedDialog.AddFeedDialogListener {
 	private static final int LOADER_ID = 0;
 
-	String[] PROJECTION = {
+	String[] projection = {
 		Contract.Feeds._ID,
 		Contract.Feeds.ICON,
 		Contract.Feeds.TITLE,
 		Contract.Feeds.UNREAD_ITEMS_COUNT
 	};
+
+	String sortOrder = Contract.Feeds.TITLE;
 
 	FeedsCursorAdapter adapter;
 
@@ -45,10 +47,10 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 			return new CursorLoader(
 				FeedsActivity.this,
 				Contract.Feeds.CONTENT_URI,
-				PROJECTION,
+					projection,
 				null,
 				null,
-				null
+				sortOrder
 			);
 		}
 
