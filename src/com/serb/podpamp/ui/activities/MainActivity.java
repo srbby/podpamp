@@ -12,9 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.serb.podpamp.R;
@@ -29,11 +27,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 	private FeedsRequestManager requestManager;
 
+	private ProgressBar progressBar;
+
+	private Button btnRefresh;
+
 
 
 	RequestManager.RequestListener refreshRequestListener = new RequestManager.RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
+			hideProgress();
 			Toast.makeText(MainActivity.this, "Refresh complete", Toast.LENGTH_LONG).show();
 			if (Utils.isInstantDownloadSet(MainActivity.this))
 				downloadNewEpisodes();
@@ -55,6 +58,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		}
 
 		void showError() {
+			hideProgress();
 			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 			builder.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(getString(R.string.refresh_failed))
@@ -68,6 +72,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 	RequestManager.RequestListener downloadRequestListener = new RequestManager.RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
+			hideProgress();
 			Toast.makeText(MainActivity.this, "Download complete", Toast.LENGTH_LONG).show();
 		}
 
@@ -87,6 +92,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		}
 
 		void showError() {
+			hideProgress();
 			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 			builder.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(getString(R.string.download_new_episodes_failed))
@@ -102,8 +108,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
+		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+		btnRefresh = (Button) findViewById(R.id.btn_refresh);
+
+		btnRefresh.setOnClickListener(this);
 		findViewById(R.id.btn_feeds).setOnClickListener(this);
-		findViewById(R.id.btn_refresh).setOnClickListener(this);
 
 		setupQueueList();
 
@@ -157,14 +166,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 	private void refreshFeeds() {
 		if (Utils.isNetworkAvailable(this, true))
+		{
+			showProgress();
 			requestManager.execute(RequestFactory.getRefreshFeedsRequest(), refreshRequestListener);
+		}
 	}
 
 
 
 	private void downloadNewEpisodes() {
 		if (Utils.isNetworkAvailable(this, true))
+		{
+			showProgress();
 			requestManager.execute(RequestFactory.getDownloadNewEpisodesRequest(), downloadRequestListener);
+		}
 	}
 
 
@@ -242,6 +257,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 	private void showSettings() {
 		Intent intent = new Intent(this, SettingsActivity.class);
 		startActivity(intent);
+	}
+
+
+
+	private void showProgress() {
+		btnRefresh.setVisibility(View.INVISIBLE);
+		progressBar.setVisibility(View.VISIBLE);
+	}
+
+
+
+	private void hideProgress() {
+		progressBar.setVisibility(View.INVISIBLE);
+		btnRefresh.setVisibility(View.VISIBLE);
 	}
 
 	//endregion

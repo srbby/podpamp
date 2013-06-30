@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.serb.podpamp.R;
@@ -38,6 +39,8 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 	FeedsCursorAdapter adapter;
 
 	private FeedsRequestManager requestManager;
+
+	private ProgressBar progressBar;
 
 
 
@@ -70,7 +73,7 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 	RequestManager.RequestListener requestListener = new RequestManager.RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			//listView.onRefreshComplete();
+			progressBar.setVisibility(View.INVISIBLE);
 		}
 
 		@Override
@@ -89,7 +92,7 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 		}
 
 		void showError() {
-			//listView.onRefreshComplete();
+			progressBar.setVisibility(View.INVISIBLE);
 			AlertDialog.Builder builder = new AlertDialog.Builder(FeedsActivity.this);
 			builder.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(getString(R.string.failed_to_add_feed))
@@ -104,6 +107,8 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.feeds);
+
+		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
 		findViewById(R.id.btn_add_feed).setOnClickListener(this);
 
@@ -168,6 +173,7 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 
 
 	private void addFeed(String feed_url) {
+		progressBar.setVisibility(View.VISIBLE);
 		requestManager.execute(RequestFactory.getAddFeedRequest(feed_url), requestListener);
 	}
 

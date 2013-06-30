@@ -26,6 +26,14 @@
 		<item name="android:orientation">horizontal</item>
 	</style>
 
+	<!--ProgressBar-->
+	<style name="ProgressBar">
+		<item name="android:layout_height">32dp</item>
+		<item name="android:layout_width">32dp</item>
+		<item name="android:layout_centerVertical">true</item>
+		<item name="android:visibility">invisible</item>
+	</style>
+
 	<!--Images-->
 	<style name="FeedIcon">
 		<item name="android:layout_width">64dp</item>

@@ -5,6 +5,10 @@
 			  android:orientation="vertical">
 
 	<RelativeLayout style="@style/HorizontalButtonsContainer">
+		<ProgressBar android:id="@+id/progress_bar"
+					 style="@style/ProgressBar"
+					 android:layout_alignParentLeft="true"/>
+
 		<Button android:id="@+id/btn_add_feed"
 				style="@style/Button"
 				android:layout_alignParentRight="true"
