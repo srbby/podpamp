@@ -3,6 +3,7 @@ package com.serb.podpamp.model.managers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 import com.foxykeep.datadroid.exception.DataException;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.utils.Utils;
@@ -240,6 +241,33 @@ public abstract class FeedsManager {
 		}
 
 		updateFeedItem(context, metadata);
+	}
+
+
+
+	public static boolean removeDownload(Context context, long feedItemId, String filePath) {
+		boolean result = false;
+
+		if (!TextUtils.isEmpty(filePath))
+		{
+			File file = new File(filePath);
+			result = file.delete();
+		}
+
+		if (feedItemId > -1)
+		{
+			ContentValues values = new ContentValues();
+			values.put(Contract.FeedItemsColumns.FILE_PATH, (String)null);
+
+			final String selection = Contract.FeedItems._ID + " = ?";
+			final String[] selectionArgs = { String.valueOf(feedItemId) };
+
+			context.getContentResolver().update(Contract.FeedItems.CONTENT_URI, values, selection, selectionArgs);
+
+			result = true;
+		}
+
+		return result;
 	}
 
 	//region Private Methods.

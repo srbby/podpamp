@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/mi_remove_download"
+		  android:icon="@drawable/icon_delete_black"
+		  android:title="@string/mi_remove_download_text" />
+</menu>

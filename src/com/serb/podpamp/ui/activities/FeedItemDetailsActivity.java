@@ -2,11 +2,15 @@ package com.serb.podpamp.ui.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -84,6 +88,44 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		findViewById(R.id.btn_play).setOnClickListener(this);
 
 		requestManager = FeedsRequestManager.from(this);
+	}
+
+
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.feed_item_menu, menu);
+		return true;
+	}
+
+
+
+	@Override
+	public boolean onPrepareOptionsMenu (Menu menu) {
+		menu.getItem(0).setVisible(!TextUtils.isEmpty(filePath));
+		return menu.size() > 0;
+	}
+
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.mi_remove_download:
+				Utils.showConfirmationDialog(this,
+					getResources().getString(R.string.remove_download_dialog_title),
+					getResources().getString(R.string.remove_download_dialog_message),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							if (FeedsManager.removeDownload(FeedItemDetailsActivity.this, itemId, filePath))
+								setupItemInfoPanel();
+						}
+					});
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 
 
