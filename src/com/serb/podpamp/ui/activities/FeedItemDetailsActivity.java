@@ -3,15 +3,10 @@ package com.serb.podpamp.ui.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +18,7 @@ import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.model.request.FeedsRequestManager;
 import com.serb.podpamp.model.request.RequestFactory;
+import com.serb.podpamp.utils.Player;
 import com.serb.podpamp.utils.Utils;
 
 public class FeedItemDetailsActivity extends Activity implements View.OnClickListener {
@@ -86,6 +82,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		findViewById(R.id.btn_mark_listened).setOnClickListener(this);
 		findViewById(R.id.btn_mark_not_listened).setOnClickListener(this);
 		findViewById(R.id.btn_play).setOnClickListener(this);
+		findViewById(R.id.btn_pause).setOnClickListener(this);
 
 		requestManager = FeedsRequestManager.from(this);
 	}
@@ -145,7 +142,10 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				setupItemInfoPanel();
 				break;
 			case R.id.btn_play:
-				playFile();
+				playMedia();
+				break;
+			case R.id.btn_pause:
+				pauseMedia();
 				break;
 		}
 	}
@@ -203,17 +203,17 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 					R.drawable.icon_rss);
 
 				Button downloadButton = (Button) findViewById(R.id.btn_download);
-				Button playButton = (Button) findViewById(R.id.btn_play);
+				ViewGroup playerPanel = (ViewGroup) findViewById(R.id.player_panel);
 
 				if (TextUtils.isEmpty(filePath))
 				{
-					playButton.setVisibility(View.INVISIBLE);
+					playerPanel.setVisibility(View.INVISIBLE);
 					downloadButton.setVisibility(View.VISIBLE);
 				}
 				else
 				{
 					downloadButton.setVisibility(View.INVISIBLE);
-					playButton.setVisibility(View.VISIBLE);
+					playerPanel.setVisibility(View.VISIBLE);
 				}
 
 				Button btnMarkListened = (Button) findViewById(R.id.btn_mark_listened);
@@ -244,27 +244,36 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 
 
-	private void playFile()
-	{
-//		if (!TextUtils.isEmpty(filePath))
-//		{
-//			startService(new Intent(PowerAMPiAPI.ACTION_API_COMMAND)
-//				.putExtra(PowerAMPiAPI.COMMAND, PowerAMPiAPI.Commands.OPEN_TO_PLAY)
-//				//.putExtra(PowerAMPiAPI.Track.POSITION, 10) // Play from 10th second.
-//				.setData(Uri.parse("file://" + filePath)));
-//		}
-		if (!TextUtils.isEmpty(filePath))
+	private void playMedia() {
+		if (Player.play(this, filePath))
 		{
-			startService(new Intent("com.maxmpz.audioplayer.API_COMMAND")
-				.putExtra("cmd", 20)
-				//.putExtra(PowerAMPiAPI.Track.POSITION, 10) // Play from 10th second.
-				.setData(Uri.parse("file://" + filePath)));
+			setPlayerButtonsVisibility(true);
+			//todo Mark an episode as read after receiving the onFinished event from the player
 			if (!isRead)
 			{
 				FeedsManager.markFeedItemAsReadOrUnread(this, itemId, true);
 				setupItemInfoPanel();
 			}
 		}
+	}
+
+
+
+	private void pauseMedia() {
+		if (Player.pause(this))
+		{
+			setPlayerButtonsVisibility(false);
+		}
+	}
+
+
+
+	private void setPlayerButtonsVisibility(boolean isPlaying) {
+		Button playBtn = (Button) findViewById(R.id.btn_play);
+		Button pauseBtn = (Button) findViewById(R.id.btn_pause);
+
+		playBtn.setVisibility(isPlaying ? View.INVISIBLE : View.VISIBLE);
+		pauseBtn.setVisibility(isPlaying ? View.VISIBLE : View.INVISIBLE);
 	}
 
 	//endregion

@@ -27,7 +27,6 @@
 	<string name="mark_listened_btn_text">Mark listened</string>
 	<string name="mark_not_listened_btn_text">Mark not listened</string>
 	<string name="download_btn_text">Download</string>
-	<string name="play_btn_text">Play</string>
 	<string name="download_failed">Unable to download episode</string>
 	<string name="remove_download_dialog_title">Remove download</string>
 	<string name="remove_download_dialog_message">Are you sure you want to remove the downloaded episode?</string>

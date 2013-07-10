@@ -1,63 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  style="@style/PageContainer"
-			  android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				style="@style/PageContainer">
 
-	<RelativeLayout android:layout_width="match_parent"
-					android:layout_height="wrap_content">
-		<ImageView android:id="@+id/img_feed_icon"
-				   style="@style/FeedIcon"/>
+	<RelativeLayout android:id="@+id/player_panel"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentBottom="true"
+					android:layout_centerHorizontal="true">
 
-		<TextView android:id="@+id/txt_feed_item_title"
-				  style="@style/PageTitle"
-				  android:layout_toRightOf="@+id/img_feed_icon"/>
-
-		<TextView android:id="@+id/txt_feed_item_published"
-				  style="@style/AdditionalInfo"
-				  android:layout_toRightOf="@+id/img_feed_icon"
-				  android:layout_below="@+id/txt_feed_item_title"/>
-
-		<TextView android:id="@+id/txt_feed_item_size"
-				  style="@style/AdditionalInfo"
-				  android:layout_alignParentRight="true"
-				  android:layout_below="@+id/txt_feed_item_title"/>
-	</RelativeLayout>
-
-	<RelativeLayout style="@style/HorizontalButtonsContainer"
-					android:layout_marginTop="15dp"
-					android:layout_marginBottom="15dp"
-					android:layout_marginLeft="5dp"
-					android:layout_marginRight="5dp">
-		<Button android:id="@+id/btn_mark_listened"
+		<Button android:id="@+id/btn_prev"
 				style="@style/Button"
+				android:drawableTop="@drawable/icon_previous"
 				android:layout_alignParentLeft="true"
-				android:text="@string/mark_listened_btn_text"
-				android:drawableLeft="@drawable/icon_check"/>
-		<Button android:id="@+id/btn_mark_not_listened"
-				style="@style/Button"
-				android:layout_alignParentLeft="true"
-				android:text="@string/mark_not_listened_btn_text"
-				android:drawableLeft="@drawable/icon_check"
-				android:visibility="invisible"/>
-		<Button android:id="@+id/btn_download"
-				style="@style/Button"
-				android:layout_alignParentRight="true"
-				android:text="@string/download_btn_text"
-				android:drawableLeft="@drawable/icon_download"
-				android:visibility="invisible"/>
+				android:layout_width="80dp"/>
+
 		<Button android:id="@+id/btn_play"
 				style="@style/Button"
+				android:drawableTop="@drawable/icon_play"
+				android:layout_centerInParent="true"
+				android:layout_width="80dp"/>
+
+		<Button android:id="@+id/btn_pause"
+				style="@style/Button"
+				android:drawableTop="@drawable/icon_pause"
+				android:layout_centerInParent="true"
+				android:visibility="invisible"
+				android:layout_width="80dp"/>
+
+		<Button android:id="@+id/btn_next"
+				style="@style/Button"
+				android:drawableTop="@drawable/icon_next"
 				android:layout_alignParentRight="true"
-				android:text="@string/play_btn_text"
-				android:drawableLeft="@drawable/icon_play"
-				android:visibility="invisible"/>
+				android:layout_width="80dp"/>
 	</RelativeLayout>
 
-	<ScrollView android:layout_width="match_parent"
-				android:layout_height="match_parent">
-		<TextView android:id="@+id/txt_feed_item_desc"
-				  style="@style/Description"/>
-	</ScrollView>
+	<LinearLayout android:layout_width="match_parent"
+				  android:layout_height="match_parent"
+				  android:layout_alignParentTop="true"
+				  android:layout_above="@id/player_panel"
+				  android:orientation="vertical">
+		<RelativeLayout android:layout_width="match_parent"
+						android:layout_height="wrap_content">
+			<ImageView android:id="@+id/img_feed_icon"
+					   style="@style/FeedIcon"/>
 
-</LinearLayout>
+			<TextView android:id="@+id/txt_feed_item_title"
+					  style="@style/PageTitle"
+					  android:layout_toRightOf="@+id/img_feed_icon"/>
+
+			<TextView android:id="@+id/txt_feed_item_published"
+					  style="@style/AdditionalInfo"
+					  android:layout_toRightOf="@+id/img_feed_icon"
+					  android:layout_below="@+id/txt_feed_item_title"/>
+
+			<TextView android:id="@+id/txt_feed_item_size"
+					  style="@style/AdditionalInfo"
+					  android:layout_alignParentRight="true"
+					  android:layout_below="@+id/txt_feed_item_title"/>
+		</RelativeLayout>
+
+		<RelativeLayout style="@style/HorizontalButtonsContainer"
+						android:layout_marginTop="15dp"
+						android:layout_marginBottom="15dp"
+						android:layout_marginLeft="5dp"
+						android:layout_marginRight="5dp">
+			<Button android:id="@+id/btn_mark_listened"
+					style="@style/Button"
+					android:layout_alignParentLeft="true"
+					android:text="@string/mark_listened_btn_text"
+					android:drawableLeft="@drawable/icon_check"/>
+			<Button android:id="@+id/btn_mark_not_listened"
+					style="@style/Button"
+					android:layout_alignParentLeft="true"
+					android:text="@string/mark_not_listened_btn_text"
+					android:drawableLeft="@drawable/icon_check"
+					android:visibility="invisible"/>
+			<Button android:id="@+id/btn_download"
+					style="@style/Button"
+					android:layout_alignParentRight="true"
+					android:text="@string/download_btn_text"
+					android:drawableLeft="@drawable/icon_download"
+					android:visibility="invisible"/>
+		</RelativeLayout>
+
+		<ScrollView android:layout_width="match_parent"
+					android:layout_height="match_parent">
+			<TextView android:id="@+id/txt_feed_item_desc"
+					  style="@style/Description"/>
+		</ScrollView>
+	</LinearLayout>
+</RelativeLayout>
