@@ -7,10 +7,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.*;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.serb.podpamp.R;
@@ -26,6 +23,9 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 	String filePath;
 	boolean isRead;
 
+	private ProgressBar progressBar;
+	Button downloadButton;
+
 	private FeedsRequestManager requestManager;
 
 
@@ -33,6 +33,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 	RequestManager.RequestListener requestListener = new RequestManager.RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
+			hideProgress();
 			setupItemInfoPanel();
 			Toast.makeText(FeedItemDetailsActivity.this, "Download complete", Toast.LENGTH_LONG).show();
 		}
@@ -53,6 +54,8 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		}
 
 		void showError() {
+			hideProgress();
+			downloadButton.setVisibility(View.VISIBLE);
 			AlertDialog.Builder builder = new AlertDialog.Builder(FeedItemDetailsActivity.this);
 			builder.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(getString(R.string.download_failed))
@@ -69,6 +72,9 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 		setContentView(R.layout.feed_item_details);
 
+		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+		downloadButton = (Button) findViewById(R.id.btn_download);
+
 		Bundle extras = getIntent().getExtras();
 		if (extras != null)
 			itemId = extras.getLong("item_id");
@@ -78,7 +84,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 			setupItemInfoPanel();
 		}
 
-		findViewById(R.id.btn_download).setOnClickListener(this);
+		downloadButton.setOnClickListener(this);
 		findViewById(R.id.btn_mark_listened).setOnClickListener(this);
 		findViewById(R.id.btn_mark_not_listened).setOnClickListener(this);
 		findViewById(R.id.btn_play).setOnClickListener(this);
@@ -202,7 +208,6 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 					feedId,
 					R.drawable.icon_rss);
 
-				Button downloadButton = (Button) findViewById(R.id.btn_download);
 				ViewGroup playerPanel = (ViewGroup) findViewById(R.id.player_panel);
 
 				if (TextUtils.isEmpty(filePath))
@@ -238,6 +243,8 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 	private void downloadFeed() {
 		if (itemId > -1 && Utils.isNetworkAvailable(this, true))
 		{
+			downloadButton.setVisibility(View.INVISIBLE);
+			showProgress();
 			requestManager.execute(RequestFactory.getDownloadEpisodeRequest(itemId), requestListener);
 		}
 	}
@@ -274,6 +281,18 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 		playBtn.setVisibility(isPlaying ? View.INVISIBLE : View.VISIBLE);
 		pauseBtn.setVisibility(isPlaying ? View.VISIBLE : View.INVISIBLE);
+	}
+
+
+
+	private void showProgress() {
+		progressBar.setVisibility(View.VISIBLE);
+	}
+
+
+
+	private void hideProgress() {
+		progressBar.setVisibility(View.INVISIBLE);
 	}
 
 	//endregion

@@ -82,6 +82,9 @@
 					android:text="@string/download_btn_text"
 					android:drawableLeft="@drawable/icon_download"
 					android:visibility="invisible"/>
+			<ProgressBar android:id="@+id/progress_bar"
+						 style="@style/ProgressBar"
+						 android:layout_alignParentRight="true"/>
 		</RelativeLayout>
 
 		<ScrollView android:layout_width="match_parent"
