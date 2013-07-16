@@ -4,15 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
-import com.foxykeep.datadroid.exception.DataException;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.utils.Utils;
 import org.mcsoxford.rss.Enclosure;
 import org.mcsoxford.rss.RSSItem;
 
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.File;
 
 public abstract class FeedsManager {
 	public static void markFeedItemAsReadOrUnread(Context context, long feedItemId, boolean isRead) {
@@ -197,49 +194,7 @@ public abstract class FeedsManager {
 
 
 	public static void downloadEpisode(Context context, EpisodeMetadata metadata) {
-		try {
-			URL url = new URL(metadata.url);
-
-			URLConnection connection = url.openConnection();
-			connection.connect();
-			// this will be useful so that you can show a typical 0-100% progress bar
-			//int fileLength = connection.getContentLength();
-
-			// download the file
-			InputStream input = new BufferedInputStream(url.openStream());
-
-			if (metadata.file.createNewFile())
-			{
-				OutputStream output = new FileOutputStream(metadata.file);
-
-				byte data[] = new byte[1024];
-				long total = 0;
-				int count;
-				while ((count = input.read(data)) != -1) {
-					total += count;
-					// publishing the progress....
-					//				Bundle resultData = new Bundle();
-					//				resultData.putInt("progress" ,(int) (total * 100 / fileLength));
-					//				receiver.send(UPDATE_PROGRESS, resultData);
-					output.write(data, 0, count);
-				}
-
-				metadata.size = total;
-
-				output.flush();
-				output.close();
-				input.close();
-			}
-			else
-			{
-				throw new DataException("Unable to create a file: " + metadata.fileName);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (DataException e) {
-			e.printStackTrace();
-		}
-
+		DownloadManager.downloadEpisode(metadata);
 		updateFeedItem(context, metadata);
 	}
 

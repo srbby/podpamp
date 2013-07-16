@@ -24,7 +24,7 @@ import com.serb.podpamp.ui.adapters.FeedsCursorAdapter;
 import com.serb.podpamp.utils.Utils;
 
 public class FeedsActivity extends FragmentActivity implements View.OnClickListener,
-		AddFeedDialog.AddFeedDialogListener {
+	AddFeedDialog.AddFeedDialogListener {
 	private static final int LOADER_ID = 0;
 
 	String[] projection = {

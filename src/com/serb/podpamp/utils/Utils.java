@@ -10,44 +10,18 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
 public abstract class Utils {
-	private static final HashMap<Long, byte[]> feed_icons_map = new HashMap<Long, byte[]>();
-
-
-
-	public static byte[] downloadImage(String url) {
-		try {
-			if (url == null || url.length() == 0)
-				return null;
-
-			URL imageUrl = new URL(url);
-			URLConnection conn = imageUrl.openConnection();
-			InputStream is = conn.getInputStream();
-
-			Bitmap bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(is), 128, 128, true);
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-			return stream.toByteArray();
-		} catch (Exception e) {
-			Log.d("Utils", "Error: " + e.toString());
-		}
-		return null;
-	}
+	private static final HashMap<Long, byte[]> feedIconsMap = new HashMap<Long, byte[]>();
 
 
 
@@ -65,11 +39,11 @@ public abstract class Utils {
 
 
 	public static void setImageView(Context context, ImageView imageView, long feed_id, int alt_image) {
-		if (!feed_icons_map.containsKey(feed_id))
+		if (!feedIconsMap.containsKey(feed_id))
 			putFeedIcon(context, feed_id);
 
-		if (feed_icons_map.containsKey(feed_id))
-			setImageView(imageView, feed_icons_map.get(feed_id), alt_image);
+		if (feedIconsMap.containsKey(feed_id))
+			setImageView(imageView, feedIconsMap.get(feed_id), alt_image);
 		else
 			setImageView(imageView, null, alt_image);
 	}
@@ -177,7 +151,7 @@ public abstract class Utils {
 			{
 				byte[] icon = cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON));
 				if (icon != null)
-					feed_icons_map.put(feed_id, icon);
+					feedIconsMap.put(feed_id, icon);
 			}
 			cursor.close();
 		}

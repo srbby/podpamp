@@ -16,7 +16,6 @@
 				android:drawableLeft="@drawable/icon_plus"/>
 	</RelativeLayout>
 
-
 	<ListView android:id="@+id/feeds_list"
 			  style="@style/ListView"/>
 </LinearLayout>
