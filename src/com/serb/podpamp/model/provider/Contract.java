@@ -30,8 +30,11 @@ public class Contract {
 		public static final String MEDIA_URL = "media_url";
 		public static final String FILE_PATH = "file_path";
 		public static final String SIZE = "size";
+		public static final String DOWNLOADED = "downloaded";
 		public static final String IS_READ = "is_read";
 		public static final String DURATION = "duration";
+		public static final String ELAPSED = "elapsed";
+		public static final String IS_STARRED = "is_starred";
 	}
 
 	public static final class Feeds implements BaseColumns, FeedsColumns {

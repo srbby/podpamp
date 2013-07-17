@@ -28,4 +28,16 @@
 			  android:layout_alignParentRight="true"
 			  android:layout_below="@+id/txt_feed_item_desc"/>
 
+	<TextView android:id="@+id/txt_downloaded"
+			  style="@style/AdditionalInfo"
+			  android:layout_toLeftOf="@+id/txt_feed_item_size"
+			  android:visibility="invisible"/>
+
+	<TextView android:id="@+id/txt_waiting_download"
+			  style="@style/AdditionalInfo"
+			  android:layout_alignParentRight="true"
+			  android:layout_below="@+id/txt_feed_item_desc"
+			  android:text="@string/waiting_download"
+			  android:visibility="invisible"/>
+
 </RelativeLayout>

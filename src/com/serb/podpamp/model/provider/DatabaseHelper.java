@@ -32,8 +32,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			Contract.FeedItems.MEDIA_URL + " text, " +
 			Contract.FeedItems.FILE_PATH + " text, " +
 			Contract.FeedItems.SIZE + " integer, " +
+			Contract.FeedItems.DOWNLOADED + " integer, " +
 			Contract.FeedItems.IS_READ + " integer, " +
-			Contract.FeedItems.DURATION + " integer" +
+			Contract.FeedItems.DURATION + " integer," +
+			Contract.FeedItems.ELAPSED + " integer," +
+			Contract.FeedItems.IS_STARRED + " integer" +
 			")";
 		db.execSQL(sql);
 	}

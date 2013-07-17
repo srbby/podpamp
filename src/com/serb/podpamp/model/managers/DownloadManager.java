@@ -10,6 +10,20 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class DownloadManager {
+	//region Private Members.
+
+	private static final int BUFFER_SIZE = 1024;
+	private static final int UPDATE_PERIOD = 512;
+
+	//endregion
+
+	//region Public Interfaces.
+
+	public static interface OnProgressUpdateListener {
+		public void updateProgress(EpisodeMetadata metadata);
+	}
+
+	//endregion
 
 	//region Public Methods.
 
@@ -36,14 +50,14 @@ public class DownloadManager {
 
 
 
-	public static void downloadEpisode(EpisodeMetadata metadata) {
+	public static void downloadEpisode(EpisodeMetadata metadata, OnProgressUpdateListener progressUpdateListener) {
 		try {
 			URL url = new URL(metadata.url);
 			URLConnection conn = getConnection(url);
 			if (conn != null)
 			{
 				// this will be useful so that you can show a typical 0-100% progress bar
-				//int fileLength = connection.getContentLength();
+				metadata.size = conn.getContentLength();
 
 				// download the file
 				InputStream input = new BufferedInputStream(url.openStream());
@@ -52,7 +66,7 @@ public class DownloadManager {
 				{
 					OutputStream output = new FileOutputStream(metadata.file);
 
-					byte data[] = new byte[1024];
+					byte data[] = new byte[BUFFER_SIZE];
 					long total = 0;
 					int count;
 					while ((count = input.read(data)) != -1) {
@@ -62,9 +76,15 @@ public class DownloadManager {
 						//	resultData.putInt("progress" ,(int) (total * 100 / fileLength));
 						//	receiver.send(UPDATE_PROGRESS, resultData);
 						output.write(data, 0, count);
+
+						if (progressUpdateListener != null && (count % UPDATE_PERIOD == 0))
+						{
+							metadata.downloaded = total;
+							progressUpdateListener.updateProgress(metadata);
+						}
 					}
 
-					metadata.size = total;
+					metadata.downloaded = metadata.size;
 
 					output.flush();
 					output.close();

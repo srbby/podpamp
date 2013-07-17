@@ -38,7 +38,9 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 		String desc = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.DESC));
 		long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
 		long size = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.SIZE));
+		long downloaded = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.DOWNLOADED));
 		long feed_id = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
+		//todo long duration = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.DURATION));
 
 		TextView titleView = (TextView) view.findViewById(R.id.txt_feed_item_title);
 		titleView.setText(title);
@@ -50,7 +52,31 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 		publishedView.setText(Utils.getDateText(published));
 
 		TextView sizeView = (TextView) view.findViewById(R.id.txt_feed_item_size);
+		TextView downloadedView = (TextView) view.findViewById(R.id.txt_downloaded);
+		TextView waitingDownloadView = (TextView) view.findViewById(R.id.txt_waiting_download);
+
 		sizeView.setText(Utils.getFileSizeText(size));
+
+		if (downloaded == -1)
+		{
+			sizeView.setVisibility(View.INVISIBLE);
+			downloadedView.setVisibility(View.INVISIBLE);
+			waitingDownloadView.setVisibility(View.VISIBLE);
+		}
+		else if (downloaded > 0 && downloaded < size)
+		{
+			waitingDownloadView.setVisibility(View.INVISIBLE);
+			downloadedView.setVisibility(View.VISIBLE);
+			sizeView.setVisibility(View.VISIBLE);
+
+			downloadedView.setText(Utils.getFileSizeText(downloaded) + "/");
+		}
+		else
+		{
+			waitingDownloadView.setVisibility(View.INVISIBLE);
+			downloadedView.setVisibility(View.INVISIBLE);
+			sizeView.setVisibility(View.VISIBLE);
+		}
 
 		Utils.setImageView(view.getContext(),
 			(ImageView) view.findViewById(R.id.img_feed_icon),

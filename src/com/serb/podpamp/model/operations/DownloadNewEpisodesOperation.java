@@ -32,8 +32,17 @@ public class DownloadNewEpisodesOperation implements RequestService.Operation {
 		{
 			while (cursor.moveToNext())
 			{
+				FeedsManager.waitForDownload(context, FeedsManager.getEpisodeMetadata(cursor));
+			}
+
+			cursor.moveToFirst();
+
+			do
+			{
 				FeedsManager.downloadEpisode(context, FeedsManager.getEpisodeMetadata(cursor));
 			}
+			while (cursor.moveToNext());
+
 			cursor.close();
 		}
 

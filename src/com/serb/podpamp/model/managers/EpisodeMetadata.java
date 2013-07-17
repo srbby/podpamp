@@ -8,4 +8,5 @@ public class EpisodeMetadata {
 	public String fileName;
 	public File file;
 	public long size;
+	public long downloaded;
 }

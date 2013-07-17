@@ -193,9 +193,14 @@ public abstract class FeedsManager {
 
 
 
-	public static void downloadEpisode(Context context, EpisodeMetadata metadata) {
-		DownloadManager.downloadEpisode(metadata);
-		updateFeedItem(context, metadata);
+	public static void downloadEpisode(final Context context, final EpisodeMetadata metadata) {
+		DownloadManager.downloadEpisode(metadata, new DownloadManager.OnProgressUpdateListener() {
+			@Override
+			public void updateProgress(EpisodeMetadata m) {
+				FeedsManager.updateProgress(context, m);
+			}
+		});
+		updateDownloaded(context, metadata);
 	}
 
 
@@ -225,11 +230,36 @@ public abstract class FeedsManager {
 		return result;
 	}
 
+
+
+	public static void waitForDownload(Context context, EpisodeMetadata metadata) {
+		ContentValues values = new ContentValues();
+		values.put(Contract.FeedItemsColumns.DOWNLOADED, -1);
+
+		final String selection = Contract.FeedItems._ID + " = ?";
+		final String[] selectionArgs = { String.valueOf(metadata.feedItemId) };
+
+		context.getContentResolver().update(Contract.FeedItems.CONTENT_URI, values, selection, selectionArgs);
+	}
+
 	//region Private Methods.
 
-	private static void updateFeedItem(Context context, EpisodeMetadata metadata) {
+	private static void updateDownloaded(Context context, EpisodeMetadata metadata) {
 		ContentValues values = new ContentValues();
 		values.put(Contract.FeedItemsColumns.FILE_PATH, metadata.fileName);
+		values.put(Contract.FeedItemsColumns.SIZE, metadata.size);
+
+		final String selection = Contract.FeedItems._ID + " = ?";
+		final String[] selectionArgs = { String.valueOf(metadata.feedItemId) };
+
+		context.getContentResolver().update(Contract.FeedItems.CONTENT_URI, values, selection, selectionArgs);
+	}
+
+
+
+	private static void updateProgress(Context context, EpisodeMetadata metadata) {
+		ContentValues values = new ContentValues();
+		values.put(Contract.FeedItemsColumns.DOWNLOADED, metadata.downloaded);
 		values.put(Contract.FeedItemsColumns.SIZE, metadata.size);
 
 		final String selection = Contract.FeedItems._ID + " = ?";
