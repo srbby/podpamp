@@ -11,7 +11,7 @@ public class FeedsProvider extends ContentProvider {
 	private DatabaseHelper mDBHelper;
 
 	private static final String DB_NAME = Contract.TABLE_FEEDS + ".db";
-	private static final int DB_VERSION = 1;
+	private static final int DB_VERSION = 2;
 
 	private static final UriMatcher sUriMatcher;
 

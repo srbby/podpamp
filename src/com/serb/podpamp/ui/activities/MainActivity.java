@@ -191,7 +191,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 			Contract.FeedItems.DESC,
 			Contract.FeedItems.PUBLISHED,
 			Contract.FeedItems.SIZE,
-			Contract.FeedItems.FEED_ID
+			Contract.FeedItems.DOWNLOADED,
+			Contract.FeedItems.FEED_ID,
+			Contract.FeedItems.DURATION
 		};
 
 		final String selection = Contract.FeedItems.IS_READ + " = ?";

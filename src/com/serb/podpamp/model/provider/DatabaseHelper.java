@@ -34,8 +34,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			Contract.FeedItems.SIZE + " integer, " +
 			Contract.FeedItems.DOWNLOADED + " integer, " +
 			Contract.FeedItems.IS_READ + " integer, " +
-			Contract.FeedItems.DURATION + " integer," +
-			Contract.FeedItems.ELAPSED + " integer," +
+			Contract.FeedItems.DURATION + " integer, " +
+			Contract.FeedItems.ELAPSED + " integer, " +
 			Contract.FeedItems.IS_STARRED + " integer" +
 			")";
 		db.execSQL(sql);
@@ -43,5 +43,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		if (oldVersion < 2)
+		{
+			String template = "alter table " + Contract.TABLE_FEED_ITEMS + " add column %s integer";
+			String sql = String.format(template, Contract.FeedItems.DOWNLOADED);
+			db.execSQL(sql);
+			sql = String.format(template, Contract.FeedItems.ELAPSED);
+			db.execSQL(sql);
+			sql = String.format(template, Contract.FeedItems.IS_STARRED);
+			db.execSQL(sql);
+		}
 	}
 }
