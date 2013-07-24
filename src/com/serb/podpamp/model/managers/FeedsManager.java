@@ -12,6 +12,18 @@ import org.mcsoxford.rss.RSSItem;
 import java.io.File;
 
 public abstract class FeedsManager {
+	public static void updateFeedItemElapsed(Context context, long feedItemId, int elapsed) {
+		ContentValues values = new ContentValues();
+		values.put(Contract.FeedItemsColumns.ELAPSED, elapsed);
+
+		final String selection = Contract.FeedItems._ID + " = ?";
+		final String[] selectionArgs = { String.valueOf(feedItemId) };
+
+		context.getContentResolver().update(Contract.FeedItems.CONTENT_URI, values, selection, selectionArgs);
+	}
+
+
+
 	public static void markFeedItemAsReadOrUnread(Context context, long feedItemId, boolean isRead) {
 		final String[] projection = {
 			Contract.FeedItems.FEED_ID
@@ -177,6 +189,7 @@ public abstract class FeedsManager {
 		EpisodeMetadata result = new EpisodeMetadata();
 		result.feedItemId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems._ID));
 		result.url = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.MEDIA_URL));
+		//todo make filename of first 3 letter of the title + guid
 		//result.fileName = Utils.getDownloadFolder() + cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
 		result.fileName = Utils.getDownloadFolder() + result.feedItemId;
 		result.file = new File(result.fileName);

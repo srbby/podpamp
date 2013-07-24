@@ -22,11 +22,31 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 	private long itemId = -1;
 	String filePath;
 	boolean isRead;
+	int elapsed;
 
 	private ProgressBar progressBar;
 	Button downloadButton;
 
 	private FeedsRequestManager requestManager;
+
+	private Player.PlayerListener playerListener = new Player.PlayerListener() {
+		@Override
+		public void onResumed() {
+			setPlayerButtonsVisibility(true);
+		}
+
+		@Override
+		public void onPaused(int elapsed) {
+			FeedItemDetailsActivity.this.elapsed = elapsed;
+			setPlayerButtonsVisibility(false);
+		}
+
+		@Override
+		public void onFinished() {
+			setPlayerButtonsVisibility(false);
+			setupItemInfoPanel();
+		}
+	};
 
 
 
@@ -148,10 +168,10 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				setupItemInfoPanel();
 				break;
 			case R.id.btn_play:
-				playMedia();
+				Player.play(this, itemId, filePath, elapsed, playerListener);
 				break;
 			case R.id.btn_pause:
-				pauseMedia();
+				Player.pause(this);
 				break;
 		}
 	}
@@ -167,7 +187,8 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 			Contract.FeedItems.PUBLISHED,
 			Contract.FeedItems.SIZE,
 			Contract.FeedItems.IS_READ,
-			Contract.FeedItems.FILE_PATH
+			Contract.FeedItems.FILE_PATH,
+			Contract.FeedItems.ELAPSED
 		};
 
 		final String selection = Contract.FeedItems._ID + " = ?";
@@ -187,6 +208,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				long feedId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
 				filePath = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.FILE_PATH));
 				isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
+				elapsed = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.ELAPSED));
 
 				TextView titleView = (TextView) findViewById(R.id.txt_feed_item_title);
 				titleView.setText(title);
@@ -246,30 +268,6 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 			downloadButton.setVisibility(View.INVISIBLE);
 			showProgress();
 			requestManager.execute(RequestFactory.getDownloadEpisodeRequest(itemId), requestListener);
-		}
-	}
-
-
-
-	private void playMedia() {
-		if (Player.play(this, filePath))
-		{
-			setPlayerButtonsVisibility(true);
-			//todo Mark an episode as read after receiving the onFinished event from the player
-			if (!isRead)
-			{
-				FeedsManager.markFeedItemAsReadOrUnread(this, itemId, true);
-				setupItemInfoPanel();
-			}
-		}
-	}
-
-
-
-	private void pauseMedia() {
-		if (Player.pause(this))
-		{
-			setPlayerButtonsVisibility(false);
 		}
 	}
 
