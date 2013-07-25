@@ -110,6 +110,8 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		findViewById(R.id.btn_mark_not_listened).setOnClickListener(this);
 		findViewById(R.id.btn_play).setOnClickListener(this);
 		findViewById(R.id.btn_pause).setOnClickListener(this);
+		findViewById(R.id.btn_next).setOnClickListener(this);
+		findViewById(R.id.btn_prev).setOnClickListener(this);
 
 		requestManager = FeedsRequestManager.from(this);
 	}
@@ -130,6 +132,9 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		{
 			setupItemInfoPanel();
 		}
+
+		if (Player.isPlaying(itemId))
+			setPlayerButtonsVisibility(true);
 	}
 
 
@@ -191,6 +196,10 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				break;
 			case R.id.btn_pause:
 				Player.pause(this);
+				break;
+			case R.id.btn_next:
+				Player.pause(this);
+				Player.playNext();
 				break;
 		}
 	}

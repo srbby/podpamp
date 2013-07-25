@@ -7,6 +7,11 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.text.TextUtils;
 import com.serb.podpamp.model.managers.FeedsManager;
+import com.serb.podpamp.model.managers.PlaylistManager;
+import com.serb.podpamp.model.managers.domain.FeedItem;
+import com.serb.podpamp.ui.activities.FeedItemDetailsActivity;
+
+import java.util.Queue;
 
 //todo Make an interface IPlayer. Use and instance of IPlayer instead of static members.
 public class Player {
@@ -38,6 +43,8 @@ public class Player {
 	private static long itemId;
 	private static PlayerListener listener;
 
+	private static Queue<FeedItem> playlist;
+
 	private static BroadcastReceiver statusReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -50,13 +57,13 @@ public class Player {
 
 	//region Public Methods.
 
-	/*public static boolean isPlaying(long id) {
+	public static boolean isPlaying(long id) {
 		return id == itemId && playing;
 	}
 
 
 
-	public static void attach(Context c, long id, PlayerListener playerListener) {
+	/*public static void attach(Context c, long id, PlayerListener playerListener) {
 		if (c == null || itemId != id || playerListener == null)
 			return;
 		context = c;
@@ -73,6 +80,9 @@ public class Player {
 		context = c;
 		itemId = id;
 		listener = playerListener;
+
+		if (playlist == null || playlist.size() == 0)
+			playlist = PlaylistManager.getPlaylist(context, itemId);
 
 		registerAndLoadStatus(context);
 
@@ -93,6 +103,22 @@ public class Player {
 	public static boolean pause(Context context) {
 		context.startService(new Intent(ACTION_API_COMMAND).putExtra(COMMAND, PAUSE_COMMAND));
 		return true;
+	}
+
+
+
+	public static void playNext()
+	{
+		if (playlist != null && playlist.size() > 0)
+		{
+			FeedItem item = playlist.poll();
+
+			play(context, item.getId(), item.getFilePath(), item.getElapsed(), listener);
+
+			Intent intent = new Intent(context, FeedItemDetailsActivity.class);
+			intent.putExtra("item_id", item.getId());
+			context.startActivity(intent);
+		}
 	}
 
 	//endregion
@@ -133,6 +159,8 @@ public class Player {
 						FeedsManager.updateFeedItemElapsed(context, itemId, 0);
 						FeedsManager.markFeedItemAsReadOrUnread(context, itemId, true);
 						listener.onFinished();
+
+						playNext();
 					}
 					break;
 			}
