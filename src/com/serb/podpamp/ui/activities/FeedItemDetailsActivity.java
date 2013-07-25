@@ -3,6 +3,7 @@ package com.serb.podpamp.ui.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -111,6 +112,24 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		findViewById(R.id.btn_pause).setOnClickListener(this);
 
 		requestManager = FeedsRequestManager.from(this);
+	}
+
+
+
+	@Override
+	protected void onNewIntent(Intent intent)
+	{
+		super.onNewIntent(intent);
+		setIntent(intent);
+
+		Bundle extras = intent.getExtras();
+		if (extras != null)
+			itemId = extras.getLong("item_id");
+
+		if (itemId > -1)
+		{
+			setupItemInfoPanel();
+		}
 	}
 
 
