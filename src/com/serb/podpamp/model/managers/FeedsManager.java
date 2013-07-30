@@ -164,6 +164,34 @@ public abstract class FeedsManager {
 
 
 
+	public static void refreshIcon(Context context, long feedId) {
+		String[] projection = {
+			Contract.Feeds.ICON_URL
+		};
+
+		final String selection = Contract.Feeds._ID + " = ?";
+		final String[] selectionArgs = { String.valueOf(feedId) };
+
+		Cursor cursor = context.getContentResolver().query(Contract.Feeds.CONTENT_URI,
+			projection, selection, selectionArgs, null);
+
+		if (cursor != null)
+		{
+			if (cursor.moveToNext())
+			{
+				String url = cursor.getString(cursor.getColumnIndex(Contract.Feeds.ICON_URL));
+
+				ContentValues values = new ContentValues();
+				values.put(Contract.FeedsColumns.ICON, DownloadManager.downloadImage(url));
+
+				context.getContentResolver().update(Contract.Feeds.CONTENT_URI, values, selection, selectionArgs);
+			}
+			cursor.close();
+		}
+	}
+
+
+
 	public static EpisodeMetadata getEpisodeMetadata(Context context, long feedItemId)
 	{
 		final String[] projection = {

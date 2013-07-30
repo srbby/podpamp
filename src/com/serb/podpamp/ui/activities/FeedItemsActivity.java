@@ -73,6 +73,13 @@ public class FeedItemsActivity extends FragmentActivity {
 						}
 					});
 				return true;
+			case R.id.mi_refresh_icon:
+				if (Utils.isNetworkAvailable(this, true))
+				{
+					FeedsManager.refreshIcon(this, feedId);
+					setupFeedInfoPanel();
+				}
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}

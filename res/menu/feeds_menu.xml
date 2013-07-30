@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/mi_refresh_icon"
+		  android:icon="@drawable/icon_refresh_black"
+		  android:title="@string/mi_refresh_feed_icon_text" />
 	<item android:id="@+id/mi_delete_feed"
 		  android:icon="@drawable/icon_delete_black"
 		  android:title="@string/mi_delete_feed_text" />
