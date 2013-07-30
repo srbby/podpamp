@@ -69,22 +69,24 @@ public class DownloadManager {
 					byte data[] = new byte[BUFFER_SIZE];
 					long total = 0;
 					int count;
+					int updateProgressCounter = 0;
 					while ((count = input.read(data)) != -1) {
 						total += count;
-						// publishing the progress....
-						//	Bundle resultData = new Bundle();
-						//	resultData.putInt("progress" ,(int) (total * 100 / fileLength));
-						//	receiver.send(UPDATE_PROGRESS, resultData);
+
 						output.write(data, 0, count);
 
-						if (progressUpdateListener != null && (count % UPDATE_PERIOD == 0))
+						if (updateProgressCounter == UPDATE_PERIOD && progressUpdateListener != null)
 						{
+							updateProgressCounter = 0;
 							metadata.downloaded = total;
 							progressUpdateListener.updateProgress(metadata);
 						}
+						updateProgressCounter++;
 					}
 
-					metadata.downloaded = metadata.size;
+					metadata.downloaded = total;
+					if (progressUpdateListener != null)
+						progressUpdateListener.updateProgress(metadata);
 
 					output.flush();
 					output.close();

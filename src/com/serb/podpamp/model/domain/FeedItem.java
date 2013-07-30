@@ -1,4 +1,4 @@
-package com.serb.podpamp.model.managers.domain;
+package com.serb.podpamp.model.domain;
 
 public class FeedItem {
 	private long id;

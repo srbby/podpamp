@@ -8,7 +8,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.managers.PlaylistManager;
-import com.serb.podpamp.model.managers.domain.FeedItem;
+import com.serb.podpamp.model.domain.FeedItem;
 import com.serb.podpamp.ui.activities.FeedItemDetailsActivity;
 
 import java.util.Queue;

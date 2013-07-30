@@ -35,11 +35,13 @@ public class DownloadNewEpisodesOperation implements RequestService.Operation {
 				FeedsManager.waitForDownload(context, FeedsManager.getEpisodeMetadata(cursor));
 			}
 
+			int index = 1;
 			cursor.moveToFirst();
 
 			do
 			{
-				FeedsManager.downloadEpisode(context, FeedsManager.getEpisodeMetadata(cursor));
+				FeedsManager.downloadEpisode(context, FeedsManager.getEpisodeMetadata(cursor), index, cursor.getCount());
+				index++;
 			}
 			while (cursor.moveToNext());
 

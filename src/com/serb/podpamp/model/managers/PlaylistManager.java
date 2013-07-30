@@ -3,7 +3,7 @@ package com.serb.podpamp.model.managers;
 import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
-import com.serb.podpamp.model.managers.domain.FeedItem;
+import com.serb.podpamp.model.domain.FeedItem;
 import com.serb.podpamp.model.provider.Contract;
 
 import java.util.LinkedList;
