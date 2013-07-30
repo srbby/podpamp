@@ -102,6 +102,7 @@ public class Player {
 
 	public static boolean pause(Context context) {
 		context.startService(new Intent(ACTION_API_COMMAND).putExtra(COMMAND, PAUSE_COMMAND));
+		unregister();
 		return true;
 	}
 
@@ -118,6 +119,18 @@ public class Player {
 			Intent intent = new Intent(context, FeedItemDetailsActivity.class);
 			intent.putExtra("item_id", item.getId());
 			context.startActivity(intent);
+		}
+		else
+			unregister();
+	}
+
+
+
+	public static void unregister() {
+		if(statusReceiver != null) {
+			try {
+				context.unregisterReceiver(statusReceiver);
+			} catch(Exception ignored){}
 		}
 	}
 

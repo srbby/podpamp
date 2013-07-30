@@ -37,6 +37,7 @@ public abstract class PlaylistManager {
 						cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.ELAPSED))));
 				}
 			}
+			cursor.close();
 		}
 
 		return result;

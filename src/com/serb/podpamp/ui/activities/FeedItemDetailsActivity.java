@@ -204,6 +204,14 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		}
 	}
 
+
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Player.unregister();
+	}
+
 	//region Private Methods.
 
 	private void setupItemInfoPanel() {
