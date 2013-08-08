@@ -30,6 +30,7 @@ public class PlayerService extends Service {
 	private static final int TRACK_ENDED = 2;
 	private static final int PLAYING_ENDED = 3;
 
+	private static final int TOGGLE_PLAY_PAUSE = 1;
 	private static final int PLAY_COMMAND = 20;
 	private static final int PAUSE_COMMAND = 2;
 
@@ -109,6 +110,11 @@ public class PlayerService extends Service {
 
 		if (playlist == null || playlist.size() == 0)
 			playlist = PlaylistManager.getPlaylist(this, itemId);
+
+		if (itemId == id && paused) {
+			startService(new Intent(ACTION_API_COMMAND).putExtra(COMMAND, TOGGLE_PLAY_PAUSE));
+			return;
+		}
 
 		itemId = id;
 
@@ -190,6 +196,7 @@ public class PlayerService extends Service {
 					paused = statusIntent.getBooleanExtra(PAUSED, false);
 					if (paused)
 					{
+						//Log.e("PLAYER_SERVICE", "PAUSED");
 						playing = false;
 						int elapsed = statusIntent.getIntExtra(POSITION, -1);
 						FeedsManager.updateFeedItemElapsed(this, itemId, elapsed);
@@ -199,6 +206,7 @@ public class PlayerService extends Service {
 					}
 					else
 					{
+						//Log.e("PLAYER_SERVICE", "PLAYING");
 						playing = true;
 						for (PlayerListener client : clients) {
 							client.onResumed();
@@ -206,6 +214,7 @@ public class PlayerService extends Service {
 					}
 					break;
 				case TRACK_ENDED:
+					//Log.e("PLAYER_SERVICE", "TRACK_ENDED");
 					if (!paused && playing)
 					{
 						playing = false;
@@ -220,6 +229,9 @@ public class PlayerService extends Service {
 					}
 					break;
 				case PLAYING_ENDED:
+					//Log.e("PLAYER_SERVICE", "PLAYING_ENDED");
+					paused = false;
+					playing = false;
 					break;
 			}
 		}
