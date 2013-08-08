@@ -25,12 +25,12 @@
 				  android:launchMode="singleTask"/>
 		<activity android:name=".ui.activities.SettingsActivity"
 				  android:label="@string/settings_title"/>
-		<provider
-				android:name="com.serb.podpamp.model.provider.FeedsProvider"
-				android:authorities="com.serb.podpamp"
-				android:exported="false"/>
-		<service
-				android:name="com.serb.podpamp.model.request.FeedsService"
-				android:exported="false"/>
+		<provider android:name="com.serb.podpamp.model.provider.FeedsProvider"
+				  android:authorities="com.serb.podpamp"
+				  android:exported="false"/>
+		<service android:name="com.serb.podpamp.model.request.FeedsService"
+				 android:exported="false"/>
+		<service android:name=".utils.PlayerService"
+				 android:exported="false"/>
 	</application>
 </manifest>

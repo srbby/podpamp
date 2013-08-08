@@ -2,10 +2,10 @@ package com.serb.podpamp.ui.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.*;
 import android.widget.*;
@@ -16,7 +16,7 @@ import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.model.request.FeedsRequestManager;
 import com.serb.podpamp.model.request.RequestFactory;
-import com.serb.podpamp.utils.Player;
+import com.serb.podpamp.utils.PlayerService;
 import com.serb.podpamp.utils.Utils;
 
 public class FeedItemDetailsActivity extends Activity implements View.OnClickListener {
@@ -30,7 +30,11 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 	private FeedsRequestManager requestManager;
 
-	private Player.PlayerListener playerListener = new Player.PlayerListener() {
+	private PlayerService player;
+	private boolean isPlayerBound = false;
+
+
+	private PlayerService.PlayerListener playerListener = new PlayerService.PlayerListener() {
 		@Override
 		public void onResumed() {
 			setPlayerButtonsVisibility(true);
@@ -48,6 +52,25 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 			setupItemInfoPanel();
 		}
 	};
+
+	/** Defines callbacks for service binding, passed to bindService() */
+	private ServiceConnection mConnection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			PlayerService.LocalBinder binder = (PlayerService.LocalBinder) service;
+			player = binder.getService();
+			isPlayerBound = true;
+			setPlayerButtonsVisibility(player.isPlaying());
+			player.registerClient(playerListener);
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			isPlayerBound = false;
+			setPlayerButtonsVisibility(false);
+		}
+	};
+
 
 
 
@@ -114,6 +137,8 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		findViewById(R.id.btn_prev).setOnClickListener(this);
 
 		requestManager = FeedsRequestManager.from(this);
+
+		startService(new Intent(this, PlayerService.class));
 	}
 
 
@@ -132,9 +157,6 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		{
 			setupItemInfoPanel();
 		}
-
-		if (Player.isPlaying(itemId))
-			setPlayerButtonsVisibility(true);
 	}
 
 
@@ -192,14 +214,18 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				setupItemInfoPanel();
 				break;
 			case R.id.btn_play:
-				Player.play(this, itemId, filePath, elapsed, playerListener);
+				if (isPlayerBound)
+					player.play(itemId, filePath, elapsed);
 				break;
 			case R.id.btn_pause:
-				Player.pause(this);
+				if (isPlayerBound)
+					player.pause();
 				break;
 			case R.id.btn_next:
-				Player.pause(this);
-				Player.playNext();
+				if (isPlayerBound) {
+					player.pause();
+					player.playNext();
+				}
 				break;
 		}
 	}
@@ -207,9 +233,22 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-		Player.unregister();
+	protected void onStart() {
+		super.onStart();
+		Intent intent = new Intent(this, PlayerService.class);
+		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+	}
+
+
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		if (isPlayerBound) {
+			player.unregisterClient(playerListener);
+			unbindService(mConnection);
+			isPlayerBound = false;
+		}
 	}
 
 	//region Private Methods.
