@@ -21,8 +21,7 @@
 		<activity android:name=".ui.activities.FeedItemsActivity"
 				  android:theme="@android:style/Theme.NoTitleBar"/>
 		<activity android:name=".ui.activities.FeedItemDetailsActivity"
-				  android:theme="@android:style/Theme.NoTitleBar"
-				  android:launchMode="singleTask"/>
+				  android:theme="@android:style/Theme.NoTitleBar"/>
 		<activity android:name=".ui.activities.SettingsActivity"
 				  android:label="@string/settings_title"/>
 		<provider android:name="com.serb.podpamp.model.provider.FeedsProvider"

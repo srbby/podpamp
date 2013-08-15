@@ -51,6 +51,16 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 			setPlayerButtonsVisibility(false);
 			setupItemInfoPanel();
 		}
+
+		@Override
+		public void onPlayNext(long newItemId) {
+			if (newItemId > -1)
+			{
+				itemId = newItemId;
+				setupItemInfoPanel();
+				setPlayerButtonsVisibility(true);
+			}
+		}
 	};
 
 	/** Defines callbacks for service binding, passed to bindService() */
@@ -139,24 +149,6 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		requestManager = FeedsRequestManager.from(this);
 
 		startService(new Intent(this, PlayerService.class));
-	}
-
-
-
-	@Override
-	protected void onNewIntent(Intent intent)
-	{
-		super.onNewIntent(intent);
-		setIntent(intent);
-
-		Bundle extras = intent.getExtras();
-		if (extras != null)
-			itemId = extras.getLong("item_id");
-
-		if (itemId > -1)
-		{
-			setupItemInfoPanel();
-		}
 	}
 
 

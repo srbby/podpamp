@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import com.serb.podpamp.model.domain.FeedItem;
 import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.managers.PlaylistManager;
-import com.serb.podpamp.ui.activities.FeedItemDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.Queue;
@@ -143,9 +142,9 @@ public class PlayerService extends Service {
 
 			play(item.getId(), item.getFilePath(), item.getElapsed());
 
-			Intent intent = new Intent(this, FeedItemDetailsActivity.class);
-			intent.putExtra("item_id", item.getId());
-			startActivity(intent);
+			for (PlayerListener client : clients) {
+				client.onPlayNext(item.getId());
+			}
 		}
 		else
 			if (clients.size() == 0)
@@ -213,6 +212,7 @@ public class PlayerService extends Service {
 						}
 					}
 					break;
+				case PLAYING_ENDED:
 				case TRACK_ENDED:
 					//Log.e("PLAYER_SERVICE", "TRACK_ENDED");
 					if (!paused && playing)
@@ -228,11 +228,6 @@ public class PlayerService extends Service {
 						playNext();
 					}
 					break;
-				case PLAYING_ENDED:
-					//Log.e("PLAYER_SERVICE", "PLAYING_ENDED");
-					paused = false;
-					playing = false;
-					break;
 			}
 		}
 	}
@@ -245,6 +240,8 @@ public class PlayerService extends Service {
 		void onResumed();
 
 		void onPaused(int elapsed);
+
+		void onPlayNext(long itemId);
 
 		void onFinished();
 	}
