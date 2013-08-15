@@ -275,7 +275,7 @@ public abstract class FeedsManager {
 			public void updateProgress(EpisodeMetadata m) {
 				NumberFormat percentFormat = NumberFormat.getPercentInstance();
 				percentFormat.setMaximumFractionDigits(1);
-				String percent = percentFormat.format((float)metadata.downloaded / (float)metadata.size);
+				String percent = percentFormat.format((float)metadata.downloaded / (float)metadata.size) + " of " + Utils.getFileSizeText(metadata.size);
 				notifyBuilder.setContentText(percent);
 				notificationManager.notify(
 					NOTIFICATION_ID,
