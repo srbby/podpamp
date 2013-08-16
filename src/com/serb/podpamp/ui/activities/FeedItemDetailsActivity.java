@@ -215,8 +215,9 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				break;
 			case R.id.btn_next:
 				if (isPlayerBound) {
-					player.pause();
-					player.playNext();
+					//todo
+//					player.pause();
+//					player.playNext();
 				}
 				break;
 		}

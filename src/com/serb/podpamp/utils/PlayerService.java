@@ -70,6 +70,7 @@ public class PlayerService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		//Log.e("PLAYER_SERVICE", "onStartCommand");
 		// If we get killed, after returning from here, don't restart
 		return START_NOT_STICKY;
 	}
@@ -78,6 +79,7 @@ public class PlayerService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
+		//Log.e("PLAYER_SERVICE", "onBind");
 		return binder;
 	}
 
@@ -85,6 +87,7 @@ public class PlayerService extends Service {
 
 	@Override
 	public void onCreate() {
+		//Log.e("PLAYER_SERVICE", "onCreate");
 		registerAndLoadStatus();
 	}
 
@@ -92,6 +95,7 @@ public class PlayerService extends Service {
 
 	@Override
 	public void onDestroy() {
+		//Log.e("PLAYER_SERVICE", "onDestroy");
 		unregister();
 	}
 
@@ -104,6 +108,7 @@ public class PlayerService extends Service {
 
 
 	public void play(long id, String filePath, int position) {
+		//Log.e("PLAYER_SERVICE", "PLAY");
 		if (id < 0 || TextUtils.isEmpty(filePath))
 			return;
 
@@ -130,12 +135,14 @@ public class PlayerService extends Service {
 
 
 	public void pause() {
+		//Log.e("PLAYER_SERVICE", "PAUSE");
 		startService(new Intent(ACTION_API_COMMAND).putExtra(COMMAND, PAUSE_COMMAND));
 	}
 
 
 
 	public void playNext() {
+		//Log.e("PLAYER_SERVICE", "PLAY_NEXT");
 		if (playlist != null && playlist.size() > 0)
 		{
 			FeedItem item = playlist.poll();
@@ -148,12 +155,16 @@ public class PlayerService extends Service {
 		}
 		else
 			if (clients.size() == 0)
-				stopSelf();
+			{
+				//Log.e("PLAYER_SERVICE", "--STOP_SELF");
+				stop();
+			}
 	}
 
 
 
 	public void registerClient(PlayerListener listener) {
+		//Log.e("PLAYER_SERVICE", "REGISTER_CLIENT");
 		if (!clients.contains(listener))
 			clients.add(listener);
 	}
@@ -161,9 +172,13 @@ public class PlayerService extends Service {
 
 
 	public void unregisterClient(PlayerListener listener) {
+		//Log.e("PLAYER_SERVICE", "UNREGISTER_CLIENT");
 		clients.remove(listener);
 		if (!playing && clients.size() == 0)
-			stopSelf();
+		{
+			//Log.e("PLAYER_SERVICE", "--STOP_SELF");
+			stop();
+		}
 	}
 
 	//endregion
@@ -171,12 +186,14 @@ public class PlayerService extends Service {
 	//region Private Methods.
 
 	private void registerAndLoadStatus() {
+		//Log.e("PLAYER_SERVICE", "REGISTER");
 		statusIntent = registerReceiver(statusReceiver, new IntentFilter(ACTION_STATUS_CHANGED));
 	}
 
 
 
 	private void unregister() {
+		//Log.e("PLAYER_SERVICE", "UNREGISTER");
 		if(statusReceiver != null) {
 			try {
 				unregisterReceiver(statusReceiver);
@@ -198,9 +215,12 @@ public class PlayerService extends Service {
 						//Log.e("PLAYER_SERVICE", "PAUSED");
 						playing = false;
 						int elapsed = statusIntent.getIntExtra(POSITION, -1);
-						FeedsManager.updateFeedItemElapsed(this, itemId, elapsed);
-						for (PlayerListener client : clients) {
-							client.onPaused(elapsed);
+						if (elapsed > 0)
+						{
+							FeedsManager.updateFeedItemElapsed(this, itemId, elapsed);
+							for (PlayerListener client : clients) {
+								client.onPaused(elapsed);
+							}
 						}
 					}
 					else
@@ -212,11 +232,11 @@ public class PlayerService extends Service {
 						}
 					}
 					break;
-				case PLAYING_ENDED:
 				case TRACK_ENDED:
 					//Log.e("PLAYER_SERVICE", "TRACK_ENDED");
 					if (!paused && playing)
 					{
+						//Log.e("PLAYER_SERVICE", "--TRACK_ENDED");
 						playing = false;
 						FeedsManager.updateFeedItemElapsed(this, itemId, 0);
 						FeedsManager.markFeedItemAsReadOrUnread(this, itemId, true);
@@ -228,8 +248,39 @@ public class PlayerService extends Service {
 						playNext();
 					}
 					break;
+				case PLAYING_ENDED:
+					//Log.e("PLAYER_SERVICE", "PLAYING_ENDED");
+					if (!paused && playing)
+					{
+						//Log.e("PLAYER_SERVICE", "--PLAYING_ENDED");
+						playing = false;
+						FeedsManager.updateFeedItemElapsed(this, itemId, 0);
+						FeedsManager.markFeedItemAsReadOrUnread(this, itemId, true);
+
+						for (PlayerListener client : clients) {
+							client.onFinished();
+						}
+
+						playNext();
+					}
+					else if (paused)
+					{
+						if (clients.size() == 0)
+						{
+							//Log.e("PLAYER_SERVICE", "--STOP_SELF");
+							stop();
+						}
+						paused = false;
+					}
+					break;
 			}
 		}
+	}
+
+	private void stop() {
+		playing = false;
+		paused = false;
+		stopSelf();
 	}
 
 	//endregion
