@@ -20,7 +20,7 @@ public abstract class PlaylistManager {
 		final String selection = Contract.FeedItems.IS_READ + " = ? and " + Contract.FeedItems._ID + " != ?";
 		final String[] selectionArgs = { "0", String.valueOf(feedItemId) };
 
-		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc";
+		final String sortOrder = Contract.FeedItems.PUBLISHED;
 
 		Queue<FeedItem> result = new LinkedList<FeedItem>();
 

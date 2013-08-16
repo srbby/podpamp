@@ -78,6 +78,8 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 			sizeView.setVisibility(View.VISIBLE);
 		}
 
+		sizeView.setTextColor(context.getResources().getColor(downloaded == size ? R.color.unread_item_color : R.color.read_item_color));
+
 		Utils.setImageView(view.getContext(),
 			(ImageView) view.findViewById(R.id.img_feed_icon),
 			feed_id,

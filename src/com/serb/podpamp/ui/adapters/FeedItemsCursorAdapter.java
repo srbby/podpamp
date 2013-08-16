@@ -38,6 +38,7 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 		long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
 		long size = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.SIZE));
 		boolean isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
+		long downloaded = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.DOWNLOADED));
 
 		TextView titleView = (TextView) view.findViewById(R.id.txt_feed_item_title);
 		titleView.setText(title);
@@ -51,8 +52,16 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 		publishedView.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
 		TextView sizeView = (TextView) view.findViewById(R.id.txt_feed_item_size);
-		sizeView.setText(Utils.getFileSizeText(size));
-		sizeView.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
+		if (downloaded == 0)
+		{
+			sizeView.setVisibility(View.VISIBLE);
+			sizeView.setText(Utils.getFileSizeText(size));
+			sizeView.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
+		}
+		else
+		{
+			sizeView.setVisibility(View.INVISIBLE);
+		}
 
 		return(view);
 	}

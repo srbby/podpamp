@@ -105,8 +105,8 @@ public class FeedItemsActivity extends FragmentActivity {
 			if (cursor.moveToNext())
 			{
 				Utils.setImageView((ImageView) findViewById(R.id.img_feed_icon),
-						cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON)),
-						R.drawable.icon_rss);
+					cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON)),
+					R.drawable.icon_rss);
 
 				TextView title_view = (TextView) findViewById(R.id.txt_feed_title);
 				title_view.setText(cursor.getString(cursor.getColumnIndex(Contract.Feeds.TITLE)));
@@ -128,12 +128,13 @@ public class FeedItemsActivity extends FragmentActivity {
 			Contract.FeedItems.DESC,
 			Contract.FeedItems.PUBLISHED,
 			Contract.FeedItems.SIZE,
-			Contract.FeedItems.IS_READ
+			Contract.FeedItems.IS_READ,
+			Contract.FeedItems.DOWNLOADED
 		};
 
 		final String selection = Contract.FeedItems.FEED_ID + " = ?";
 		final String[] selectionArgs = { String.valueOf(feedId) };
-		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc";
+		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc Limit 50";
 
 		final FeedItemsCursorAdapter adapter = new FeedItemsCursorAdapter(
 			this, // Context.
