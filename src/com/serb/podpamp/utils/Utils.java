@@ -120,6 +120,13 @@ public abstract class Utils {
 
 
 
+	public static int getEpisodeKeepDays(Context context) {
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+		return Integer.parseInt(settings.getString("pref_episode_keep_time", "14"));
+	}
+
+
+
 	public static void showConfirmationDialog(Context context, String title, String message, DialogInterface.OnClickListener okClickListener) {
 		if (okClickListener == null)
 			return;

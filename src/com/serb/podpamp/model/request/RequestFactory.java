@@ -7,6 +7,7 @@ public class RequestFactory {
 	public static final int REQUEST_DOWNLOAD_EPISODE = 2;
 	public static final int REQUEST_REFRESH_FEEDS = 3;
 	public static final int REQUEST_DOWNLOAD_NEW_EPISODES = 4;
+	public static final int REQUEST_CLEANUP = 5;
 
 	public static final String FEED_URL = "feed_url";
 	public static final String FEED_ITEM_ID = "feed_item_id";

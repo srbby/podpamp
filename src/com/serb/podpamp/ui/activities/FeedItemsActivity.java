@@ -134,7 +134,7 @@ public class FeedItemsActivity extends FragmentActivity {
 
 		final String selection = Contract.FeedItems.FEED_ID + " = ?";
 		final String[] selectionArgs = { String.valueOf(feedId) };
-		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc Limit 50";
+		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc limit 50";
 
 		final FeedItemsCursorAdapter adapter = new FeedItemsCursorAdapter(
 			this, // Context.

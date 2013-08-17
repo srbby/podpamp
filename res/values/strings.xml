@@ -12,6 +12,7 @@
 	<string name="refresh_btn_text">Refresh</string>
 	<string name="refresh_failed">Unable to refresh feeds</string>
 	<string name="download_new_episodes_failed">Unable to download episode</string>
+	<string name="cleanup_failed">Unable to remove read episodes</string>
 
 	<!--FeedsActivity-->
 	<string name="add_feed_text">Subscribe</string>
@@ -45,9 +46,12 @@
 	<string name="pref_keep_unread_count">New feed unread count</string>
 	<string name="pref_instant_download_on_refresh">Instantly download fresh episodes</string>
 	<string name="pref_instant_download_on_refresh_summary">Download new episodes during refreshing feeds</string>
+	<string name="pref_episode_keep_time">Keep read episodes for</string>
+	<string name="pref_episode_keep_time_summary">Read episodes published earlier than this amount of days before now will be cleaned up</string>
 
 	<!--Main Menu-->
 	<string name="mi_settings_text">Settings</string>
+	<string name="mi_cleanup_text">Clean Up</string>
 
 	<!--Feeds Menu-->
 	<string name="mi_mark_all_listened_text">Mark all listened</string>

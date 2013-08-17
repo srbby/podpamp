@@ -103,6 +103,41 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
 
+	RequestManager.RequestListener cleanUpRequestListener = new RequestManager.RequestListener() {
+		@Override
+		public void onRequestFinished(Request request, Bundle resultData) {
+			String text = "Clean up complete.";
+			if (resultData != null)
+				text += " " + String.valueOf(resultData.getInt("count")) + " episodes have been deleted";
+			Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
+		}
+
+		@Override
+		public void onRequestDataError(Request request) {
+			showError();
+		}
+
+		@Override
+		public void onRequestCustomError(Request request, Bundle resultData) {
+			showError();
+		}
+
+		@Override
+		public void onRequestConnectionError(Request request, int statusCode) {
+			showError();
+		}
+
+		void showError() {
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+			builder.setTitle(android.R.string.dialog_alert_title)
+				.setMessage(getString(R.string.cleanup_failed))
+				.create()
+				.show();
+		}
+	};
+
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -150,6 +185,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 			case R.id.mi_settings:
 				showSettings();
 				return true;
+			case R.id.mi_cleanup:
+				cleanUp();
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -180,6 +218,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 			showProgress();
 			requestManager.execute(RequestFactory.getDownloadNewEpisodesRequest(), downloadRequestListener);
 		}
+	}
+
+
+
+	private void cleanUp() {
+		requestManager.execute(new Request(RequestFactory.REQUEST_CLEANUP), cleanUpRequestListener);
 	}
 
 

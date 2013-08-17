@@ -17,6 +17,7 @@ import org.mcsoxford.rss.RSSItem;
 
 import java.io.File;
 import java.text.NumberFormat;
+import java.util.Date;
 
 public abstract class FeedsManager {
 	private static final int NOTIFICATION_ID = 43287;
@@ -273,13 +274,13 @@ public abstract class FeedsManager {
 		DownloadManager.downloadEpisode(metadata, new DownloadManager.OnProgressUpdateListener() {
 			@Override
 			public void updateProgress(EpisodeMetadata m) {
-				NumberFormat percentFormat = NumberFormat.getPercentInstance();
-				percentFormat.setMaximumFractionDigits(1);
-				String percent = percentFormat.format((float)metadata.downloaded / (float)metadata.size) + " of " + Utils.getFileSizeText(metadata.size);
-				notifyBuilder.setContentText(percent);
-				notificationManager.notify(
-					NOTIFICATION_ID,
-					notifyBuilder.build());
+			NumberFormat percentFormat = NumberFormat.getPercentInstance();
+			percentFormat.setMaximumFractionDigits(1);
+			String percent = percentFormat.format((float)metadata.downloaded / (float)metadata.size) + " of " + Utils.getFileSizeText(metadata.size);
+			notifyBuilder.setContentText(percent);
+			notificationManager.notify(
+				NOTIFICATION_ID,
+				notifyBuilder.build());
 
 			}
 		});
@@ -325,6 +326,41 @@ public abstract class FeedsManager {
 		final String[] selectionArgs = { String.valueOf(metadata.feedItemId) };
 
 		context.getContentResolver().update(Contract.FeedItems.CONTENT_URI, values, selection, selectionArgs);
+	}
+
+
+
+	public static int cleanUp(Context context) {
+		final String[] projection = {
+			Contract.FeedItems._ID,
+			Contract.FeedItems.FILE_PATH
+		};
+
+		final String selection = Contract.FeedItems.IS_READ + " = 1 and " +
+			"ifnull(" + Contract.FeedItems.IS_STARRED + ", 0) = 0 and " +
+			Contract.FeedItems.PUBLISHED + " < ? and " +
+			Contract.FeedItems.FILE_PATH + " is not null";
+		final String[] selectionArgs = { String.valueOf(new Date().getTime() - Utils.getEpisodeKeepDays(context) * 1000 * 60 * 60 * 24) };
+
+		Cursor cursor = context.getContentResolver().query(Contract.FeedItems.CONTENT_URI,
+			projection, selection, selectionArgs, null);
+
+		int result = 0;
+
+		if (cursor != null)
+		{
+			while (cursor.moveToNext())
+			{
+				long id = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems._ID));
+				String filePath = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.FILE_PATH));
+
+				if (removeDownload(context, id, filePath))
+					result++;
+			}
+			cursor.close();
+		}
+
+		return result;
 	}
 
 	//region Private Methods.
