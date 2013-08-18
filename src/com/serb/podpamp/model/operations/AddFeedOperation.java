@@ -25,6 +25,9 @@ public class AddFeedOperation implements RequestService.Operation {
 		throws ConnectionException, DataException, CustomRequestException {
 		String url = request.getString(RequestFactory.FEED_URL);
 
+		if (FeedsManager.isFeedAdded(context, url))
+			return null;
+
 		RSSReader reader = new RSSReader();
 
 		try {

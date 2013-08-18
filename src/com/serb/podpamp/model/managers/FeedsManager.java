@@ -363,6 +363,27 @@ public abstract class FeedsManager {
 		return result;
 	}
 
+
+
+	public static boolean isFeedAdded(Context context, String feedUrl) {
+		String[] projection = {
+			Contract.Feeds._ID
+		};
+
+		final String selection = Contract.Feeds.URL + " = ?";
+		final String[] selectionArgs = { feedUrl };
+
+		Cursor cursor = context.getContentResolver().query(Contract.Feeds.CONTENT_URI,
+			projection, selection, selectionArgs, null);
+
+		if (cursor == null)
+			return false;
+
+		boolean result = cursor.getCount() > 0;
+		cursor.close();
+		return result;
+	}
+
 	//region Private Methods.
 
 	private static void updateDownloaded(Context context, EpisodeMetadata metadata) {

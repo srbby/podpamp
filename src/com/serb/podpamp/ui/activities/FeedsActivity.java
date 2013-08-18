@@ -131,9 +131,9 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 
 
 	@Override
-	public void onDialogPositiveClick(String feed_url) {
-		if (feed_url.length() > 0 && feed_url.startsWith("http"))
-			addFeed(feed_url);
+	public void onDialogPositiveClick(String feedUrl) {
+		if (feedUrl.length() > 0 && feedUrl.startsWith("http"))
+			addFeed(feedUrl);
 	}
 
 	//region Private Methods.
