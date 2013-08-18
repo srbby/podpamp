@@ -232,7 +232,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		final String[] projection = {
 			Contract.FeedItems._ID,
 			Contract.FeedItems.TITLE,
-			Contract.FeedItems.DESC,
 			Contract.FeedItems.PUBLISHED,
 			Contract.FeedItems.SIZE,
 			Contract.FeedItems.DOWNLOADED,

@@ -35,7 +35,6 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 		cursor.moveToPosition(pos);
 
 		String title = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
-		String desc = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.DESC));
 		long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
 		long size = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.SIZE));
 		long downloaded = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.DOWNLOADED));
@@ -44,9 +43,6 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 
 		TextView titleView = (TextView) view.findViewById(R.id.txt_feed_item_title);
 		titleView.setText(title);
-
-		TextView descView = (TextView) view.findViewById(R.id.txt_feed_item_desc);
-		descView.setText(desc);
 
 		TextView publishedView = (TextView) view.findViewById(R.id.txt_feed_item_published);
 		publishedView.setText(Utils.getDateText(published));
