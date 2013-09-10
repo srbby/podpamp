@@ -396,6 +396,32 @@ public abstract class FeedsManager {
 		return result;
 	}
 
+
+
+	public static int getStarredItemsCount(Context context, long feedId) {
+		final String[] projection = {
+			Contract.FeedItems._ID
+		};
+		String selection = Contract.FeedItems.FEED_ID + " = ? and " + Contract.FeedItems.IS_STARRED + " = 1";
+		String[] selectionArgs = { String.valueOf(feedId) };
+
+		Cursor cursor = context.getContentResolver().query(
+			Contract.FeedItems.CONTENT_URI,
+			projection,
+			selection,
+			selectionArgs,
+			null
+		);
+
+		if (cursor != null)
+		{
+			int result =  cursor.getCount();
+			cursor.close();
+			return result;
+		}
+		return 0;
+	}
+
 	//region Private Methods.
 
 	private static void updateDownloaded(Context context, EpisodeMetadata metadata) {

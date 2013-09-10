@@ -15,4 +15,11 @@
 			  android:layout_toRightOf="@+id/img_feed_icon"
 			  android:layout_alignBottom="@+id/img_feed_icon"/>
 
+	<TextView android:id="@+id/txt_starred_items_count"
+			  style="@style/AdditionalInfo"
+			  android:drawableRight="@drawable/icon_star_small"
+			  android:layout_alignParentRight="true"
+			  android:layout_alignBottom="@+id/img_feed_icon"
+			  android:drawablePadding="3dp"/>
+
 </RelativeLayout>

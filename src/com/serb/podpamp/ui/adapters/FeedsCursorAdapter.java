@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.serb.podpamp.R;
+import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.utils.Utils;
 
@@ -57,6 +58,19 @@ public class FeedsCursorAdapter extends SimpleCursorAdapter {
 		Utils.setImageView((ImageView) view.findViewById(R.id.img_feed_icon),
 			feed_icon,
 			R.drawable.icon_rss);
+
+		TextView txtStarredItemsCount = (TextView) view.findViewById(R.id.txt_starred_items_count);
+		long feedId = cursor.getLong(cursor.getColumnIndex(Contract.Feeds._ID));
+		int starredCount = FeedsManager.getStarredItemsCount(context, feedId);
+		if (starredCount > 0)
+		{
+			txtStarredItemsCount.setText(String.valueOf(starredCount));
+			txtStarredItemsCount.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			txtStarredItemsCount.setVisibility(View.INVISIBLE);
+		}
 
 		return(view);
 	}
