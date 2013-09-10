@@ -16,8 +16,8 @@
 	<style name="ButtonsContainer">
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_marginTop">10dp</item>
-		<item name="android:layout_marginBottom">10dp</item>
+		<item name="android:layout_marginTop">3dp</item>
+		<item name="android:layout_marginBottom">3dp</item>
 		<item name="android:layout_marginLeft">10dp</item>
 		<item name="android:layout_marginRight">10dp</item>
 	</style>
@@ -45,6 +45,19 @@
 		<item name="android:layout_alignParentTop">true</item>
 		<item name="android:layout_marginRight">8dp</item>
 		<item name="android:layout_marginBottom">5dp</item>
+	</style>
+
+	<style name="StarIcon">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:contentDescription">@string/star_desc</item>
+		<item name="android:layout_marginTop">3dp</item>
+		<item name="android:adjustViewBounds">true</item>
+		<item name="android:layout_alignParentRight">true</item>
+		<item name="android:layout_alignParentTop">true</item>
+		<item name="android:layout_centerInParent">true</item>
+		<item name="android:src">@drawable/icon_star_small</item>
+		<item name="android:visibility">invisible</item>
 	</style>
 
 	<!--Buttons-->

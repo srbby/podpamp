@@ -129,7 +129,8 @@ public class FeedItemsActivity extends FragmentActivity {
 			Contract.FeedItems.PUBLISHED,
 			Contract.FeedItems.SIZE,
 			Contract.FeedItems.IS_READ,
-			Contract.FeedItems.DOWNLOADED
+			Contract.FeedItems.DOWNLOADED,
+			Contract.FeedItems.IS_STARRED
 		};
 
 		final String selection = Contract.FeedItems.FEED_ID + " = ?";

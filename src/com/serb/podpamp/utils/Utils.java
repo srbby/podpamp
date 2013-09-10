@@ -67,7 +67,7 @@ public abstract class Utils {
 		if (date_in_milliseconds > 0)
 		{
 			Date pub_date = new Date(date_in_milliseconds);
-			return new SimpleDateFormat("MMM dd, yyyy HH:mm").format(pub_date);
+			return new SimpleDateFormat("MMM dd, yyyy").format(pub_date);
 		}
 		return "";
 	}

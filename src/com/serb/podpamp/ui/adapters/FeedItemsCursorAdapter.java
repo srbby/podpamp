@@ -6,6 +6,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
@@ -39,6 +40,7 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 		long size = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.SIZE));
 		boolean isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
 		long downloaded = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.DOWNLOADED));
+		boolean isStarred = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_STARRED)) > 0;
 
 		TextView titleView = (TextView) view.findViewById(R.id.txt_feed_item_title);
 		titleView.setText(title);
@@ -62,6 +64,9 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 		{
 			sizeView.setVisibility(View.INVISIBLE);
 		}
+
+		ImageView starView = (ImageView) view.findViewById(R.id.img_star);
+		starView.setVisibility(isStarred ? View.VISIBLE : View.INVISIBLE);
 
 		return(view);
 	}

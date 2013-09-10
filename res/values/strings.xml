@@ -35,6 +35,7 @@
 	<!--Common-->
 	<string name="cancel_btn_text">Cancel</string>
 	<string name="icon_desc">Icon</string>
+	<string name="star_desc">Star</string>
 	<string name="no_new_episodes">No new episodes</string>
 	<string name="no_connection">No network connection</string>
 	<string name="waiting_download">Waiting</string>

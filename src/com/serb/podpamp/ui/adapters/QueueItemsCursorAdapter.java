@@ -39,6 +39,7 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 		long size = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.SIZE));
 		long downloaded = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.DOWNLOADED));
 		long feed_id = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
+		boolean isStarred = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_STARRED)) > 0;
 		//todo long duration = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.DURATION));
 
 		TextView titleView = (TextView) view.findViewById(R.id.txt_feed_item_title);
@@ -50,6 +51,7 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 		TextView sizeView = (TextView) view.findViewById(R.id.txt_feed_item_size);
 		TextView downloadedView = (TextView) view.findViewById(R.id.txt_downloaded);
 		TextView waitingDownloadView = (TextView) view.findViewById(R.id.txt_waiting_download);
+		ImageView starView = (ImageView) view.findViewById(R.id.img_star);
 
 		sizeView.setText(Utils.getFileSizeText(size));
 
@@ -75,6 +77,8 @@ public class QueueItemsCursorAdapter extends SimpleCursorAdapter {
 		}
 
 		sizeView.setTextColor(context.getResources().getColor(downloaded == size ? R.color.unread_item_color : R.color.read_item_color));
+
+		starView.setVisibility(isStarred ? View.VISIBLE : View.INVISIBLE);
 
 		Utils.setImageView(view.getContext(),
 			(ImageView) view.findViewById(R.id.img_feed_icon),
