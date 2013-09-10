@@ -19,6 +19,7 @@ public class Contract {
 		public static final String ICON_URL = "icon_url";
 		public static final String ICON = "icon";
 		public static final String UNREAD_ITEMS_COUNT = "new_items_count";
+		public static final String STARRED_ITEMS_COUNT = "starred_items_count";
 	}
 
 	public interface FeedItemsColumns {

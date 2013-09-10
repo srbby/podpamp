@@ -35,24 +35,10 @@ public abstract class FeedsManager {
 
 
 	public static void markFeedItemAsReadOrUnread(Context context, long feedItemId, boolean isRead) {
-		final String[] projection = {
-			Contract.FeedItems.FEED_ID
-		};
-
-		final String selection = Contract.FeedItems._ID + " = ?";
-		final String[] selectionArgs = { String.valueOf(feedItemId) };
-
-		Cursor cursor = context.getContentResolver().query(Contract.FeedItems.CONTENT_URI,
-			projection, selection, selectionArgs, null);
-
-		if (cursor != null)
+		long feedId = getFeedId(context, feedItemId);
+		if (feedId > -1)
 		{
-			if (cursor.moveToNext())
-			{
-				long feedId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
-				markFeedItemAsReadOrUnread(context, feedId, feedItemId, isRead);
-			}
-			cursor.close();
+			markFeedItemAsReadOrUnread(context, feedId, feedItemId, isRead);
 		}
 	}
 
@@ -86,7 +72,7 @@ public abstract class FeedsManager {
 
 
 
-	public static void star(Context context, long feedItemId, boolean isStarred) {
+	public static void star(Context context, long feedItemId, boolean isStarred, long feedId) {
 		ContentValues values = new ContentValues();
 		values.put(Contract.FeedItemsColumns.IS_STARRED, isStarred);
 
@@ -94,6 +80,47 @@ public abstract class FeedsManager {
 		final String[] selectionArgs = { String.valueOf(feedItemId) };
 
 		context.getContentResolver().update(Contract.FeedItems.CONTENT_URI, values, selection, selectionArgs);
+
+		if (feedId > -1)
+		{
+			updateStarredFeedItemsCount(context, feedId, isStarred ? 1 : -1);
+		}
+	}
+
+
+
+	public static void updateStarredFeedItemsCount(Context context, long feedId, int diff)
+	{
+		int starredItemsCount = diff;
+		if (diff != 0)
+		{
+			String[] projection = {
+				Contract.Feeds.STARRED_ITEMS_COUNT
+			};
+
+			String selection = Contract.Feeds._ID + " = ?";
+			String[] selectionArgs = { String.valueOf(feedId) };
+
+			Cursor cursor = context.getContentResolver().query(Contract.Feeds.CONTENT_URI,
+				projection, selection, selectionArgs, null);
+
+			if (cursor != null)
+			{
+				if (cursor.moveToNext())
+				{
+					starredItemsCount = cursor.getInt(cursor.getColumnIndex(Contract.Feeds.STARRED_ITEMS_COUNT)) + diff;
+				}
+				cursor.close();
+			}
+		}
+
+		ContentValues values = new ContentValues();
+		values.put(Contract.FeedsColumns.STARRED_ITEMS_COUNT, starredItemsCount);
+
+		final String selection = Contract.Feeds._ID + " = ?";
+		final String[] selectionArgs = { String.valueOf(feedId) };
+
+		context.getContentResolver().update(Contract.Feeds.CONTENT_URI, values, selection, selectionArgs);
 	}
 
 
@@ -396,32 +423,6 @@ public abstract class FeedsManager {
 		return result;
 	}
 
-
-
-	public static int getStarredItemsCount(Context context, long feedId) {
-		final String[] projection = {
-			Contract.FeedItems._ID
-		};
-		String selection = Contract.FeedItems.FEED_ID + " = ? and " + Contract.FeedItems.IS_STARRED + " = 1";
-		String[] selectionArgs = { String.valueOf(feedId) };
-
-		Cursor cursor = context.getContentResolver().query(
-			Contract.FeedItems.CONTENT_URI,
-			projection,
-			selection,
-			selectionArgs,
-			null
-		);
-
-		if (cursor != null)
-		{
-			int result =  cursor.getCount();
-			cursor.close();
-			return result;
-		}
-		return 0;
-	}
-
 	//region Private Methods.
 
 	private static void updateDownloaded(Context context, EpisodeMetadata metadata) {
@@ -434,6 +435,32 @@ public abstract class FeedsManager {
 		final String[] selectionArgs = { String.valueOf(metadata.feedItemId) };
 
 		context.getContentResolver().update(Contract.FeedItems.CONTENT_URI, values, selection, selectionArgs);
+	}
+
+
+
+	private static long getFeedId(Context context, long feedItemId) {
+		final String[] projection = {
+			Contract.FeedItems.FEED_ID
+		};
+
+		final String selection = Contract.FeedItems._ID + " = ?";
+		final String[] selectionArgs = { String.valueOf(feedItemId) };
+
+		Cursor cursor = context.getContentResolver().query(Contract.FeedItems.CONTENT_URI,
+			projection, selection, selectionArgs, null);
+
+		long result = -1;
+
+		if (cursor != null)
+		{
+			if (cursor.moveToNext())
+			{
+				result = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
+			}
+			cursor.close();
+		}
+		return result;
 	}
 
 	//endregion

@@ -2,14 +2,13 @@ package com.serb.podpamp.ui.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.serb.podpamp.R;
-import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.utils.Utils;
 
@@ -36,17 +35,18 @@ public class FeedsCursorAdapter extends SimpleCursorAdapter {
 		cursor.moveToPosition(pos);
 
 		String feed_title = cursor.getString(cursor.getColumnIndex(Contract.Feeds.TITLE));
-		int feeds_count = cursor.getInt(cursor.getColumnIndex(Contract.Feeds.UNREAD_ITEMS_COUNT));
-		byte[] feed_icon = cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON));
+		int feedsCount = cursor.getInt(cursor.getColumnIndex(Contract.Feeds.UNREAD_ITEMS_COUNT));
+		int starredCount = cursor.getInt(cursor.getColumnIndex(Contract.Feeds.STARRED_ITEMS_COUNT));
+		byte[] feedIcon = cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON));
 
 		TextView title_view = (TextView) view.findViewById(R.id.txt_feed_title);
 		title_view.setText(feed_title);
 
 		TextView count_view = (TextView) view.findViewById(R.id.txt_new_feeds_count);
-		if (feeds_count > 0)
+		if (feedsCount > 0)
 		{
-			count_view.setText(String.valueOf(feeds_count) + " " +
-				view.getResources().getText(feeds_count > 1 ? R.string.episodes_count_text : R.string.one_episodes_text));
+			count_view.setText(String.valueOf(feedsCount) + " " +
+				view.getResources().getText(feedsCount > 1 ? R.string.episodes_count_text : R.string.one_episodes_text));
 			count_view.setTextColor(context.getResources().getColor(R.color.unread_item_color));
 		}
 		else
@@ -56,12 +56,10 @@ public class FeedsCursorAdapter extends SimpleCursorAdapter {
 		}
 
 		Utils.setImageView((ImageView) view.findViewById(R.id.img_feed_icon),
-			feed_icon,
+			feedIcon,
 			R.drawable.icon_rss);
 
 		TextView txtStarredItemsCount = (TextView) view.findViewById(R.id.txt_starred_items_count);
-		long feedId = cursor.getLong(cursor.getColumnIndex(Contract.Feeds._ID));
-		int starredCount = FeedsManager.getStarredItemsCount(context, feedId);
 		if (starredCount > 0)
 		{
 			txtStarredItemsCount.setText(String.valueOf(starredCount));

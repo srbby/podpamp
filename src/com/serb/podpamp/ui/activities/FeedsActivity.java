@@ -31,7 +31,8 @@ public class FeedsActivity extends FragmentActivity implements View.OnClickListe
 		Contract.Feeds._ID,
 		Contract.Feeds.ICON,
 		Contract.Feeds.TITLE,
-		Contract.Feeds.UNREAD_ITEMS_COUNT
+		Contract.Feeds.UNREAD_ITEMS_COUNT,
+		Contract.Feeds.STARRED_ITEMS_COUNT
 	};
 
 	String sortOrder = Contract.Feeds.TITLE;

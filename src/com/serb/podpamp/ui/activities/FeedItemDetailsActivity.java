@@ -21,6 +21,7 @@ import com.serb.podpamp.utils.Utils;
 
 public class FeedItemDetailsActivity extends Activity implements View.OnClickListener {
 	private long itemId = -1;
+	private long feedId;
 	String filePath;
 	boolean isRead;
 	int elapsed;
@@ -229,12 +230,12 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				break;
 			case R.id.btn_star:
 				isStarred = true;
-				FeedsManager.star(this, itemId, isStarred);
+				FeedsManager.star(this, itemId, isStarred, feedId);
 				setStarVisibility(true);
 				break;
 			case R.id.btn_clear_star:
 				isStarred = false;
-				FeedsManager.star(this, itemId, isStarred);
+				FeedsManager.star(this, itemId, isStarred, feedId);
 				setStarVisibility(true);
 				break;
 		}
@@ -291,7 +292,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				String desc = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.DESC));
 				long published = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.PUBLISHED));
 				long size = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.SIZE));
-				long feedId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
+				feedId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
 				filePath = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.FILE_PATH));
 				isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
 				elapsed = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.ELAPSED));
