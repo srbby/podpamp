@@ -112,15 +112,15 @@ public class PlayerService extends Service {
 		if (id < 0 || TextUtils.isEmpty(filePath))
 			return;
 
-		if (playlist == null || playlist.size() == 0)
-			playlist = PlaylistManager.getPlaylist(this, itemId);
-
 		if (itemId == id && paused) {
 			startService(new Intent(ACTION_API_COMMAND).putExtra(COMMAND, TOGGLE_PLAY_PAUSE));
 			return;
 		}
 
 		itemId = id;
+
+		if (playlist == null || playlist.size() == 0)
+			playlist = PlaylistManager.getPlaylist(this, itemId);
 
 		Intent intent = new Intent(ACTION_API_COMMAND)
 			.putExtra(COMMAND, PLAY_COMMAND)
