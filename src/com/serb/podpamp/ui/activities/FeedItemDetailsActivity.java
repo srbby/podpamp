@@ -24,9 +24,12 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 	String filePath;
 	boolean isRead;
 	int elapsed;
+	boolean isStarred;
 
 	private ProgressBar progressBar;
 	Button downloadButton;
+	Button starButton;
+	Button clearStarButton;
 
 	private FeedsRequestManager requestManager;
 
@@ -128,6 +131,8 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 		downloadButton = (Button) findViewById(R.id.btn_download);
+		starButton = (Button) findViewById(R.id.btn_star);
+		clearStarButton = (Button) findViewById(R.id.btn_clear_star);
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null)
@@ -145,6 +150,8 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		findViewById(R.id.btn_pause).setOnClickListener(this);
 		findViewById(R.id.btn_next).setOnClickListener(this);
 		findViewById(R.id.btn_prev).setOnClickListener(this);
+		starButton.setOnClickListener(this);
+		clearStarButton.setOnClickListener(this);
 
 		requestManager = FeedsRequestManager.from(this);
 
@@ -220,6 +227,16 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 //					player.playNext();
 				}
 				break;
+			case R.id.btn_star:
+				isStarred = true;
+				FeedsManager.star(this, itemId, isStarred);
+				setStarVisibility(true);
+				break;
+			case R.id.btn_clear_star:
+				isStarred = false;
+				FeedsManager.star(this, itemId, isStarred);
+				setStarVisibility(true);
+				break;
 		}
 	}
 
@@ -256,7 +273,8 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 			Contract.FeedItems.SIZE,
 			Contract.FeedItems.IS_READ,
 			Contract.FeedItems.FILE_PATH,
-			Contract.FeedItems.ELAPSED
+			Contract.FeedItems.ELAPSED,
+			Contract.FeedItems.IS_STARRED
 		};
 
 		final String selection = Contract.FeedItems._ID + " = ?";
@@ -277,6 +295,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				filePath = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.FILE_PATH));
 				isRead = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_READ)) > 0;
 				elapsed = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.ELAPSED));
+				isStarred = cursor.getInt(cursor.getColumnIndex(Contract.FeedItems.IS_STARRED)) > 0;
 
 				TextView titleView = (TextView) findViewById(R.id.txt_feed_item_title);
 				titleView.setText(title);
@@ -304,11 +323,13 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				{
 					playerPanel.setVisibility(View.INVISIBLE);
 					downloadButton.setVisibility(View.VISIBLE);
+					setStarVisibility(false);
 				}
 				else
 				{
 					downloadButton.setVisibility(View.INVISIBLE);
 					playerPanel.setVisibility(View.VISIBLE);
+					setStarVisibility(true);
 				}
 
 				Button btnMarkListened = (Button) findViewById(R.id.btn_mark_listened);
@@ -325,6 +346,21 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				}
 			}
 			cursor.close();
+		}
+	}
+
+
+
+	private void setStarVisibility(boolean isVisible) {
+		if (isVisible)
+		{
+			starButton.setVisibility(isStarred ? View.INVISIBLE : View.VISIBLE);
+			clearStarButton.setVisibility(isStarred ? View.VISIBLE : View.INVISIBLE);
+		}
+		else
+		{
+			starButton.setVisibility(View.INVISIBLE);
+			clearStarButton.setVisibility(View.INVISIBLE);
 		}
 	}
 

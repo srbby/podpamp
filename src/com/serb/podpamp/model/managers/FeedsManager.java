@@ -86,6 +86,18 @@ public abstract class FeedsManager {
 
 
 
+	public static void star(Context context, long feedItemId, boolean isStarred) {
+		ContentValues values = new ContentValues();
+		values.put(Contract.FeedItemsColumns.IS_STARRED, isStarred);
+
+		final String selection = Contract.FeedItems._ID + " = ?";
+		final String[] selectionArgs = { String.valueOf(feedItemId) };
+
+		context.getContentResolver().update(Contract.FeedItems.CONTENT_URI, values, selection, selectionArgs);
+	}
+
+
+
 	public static void deleteFeed(Context context, long feedId) {
 		String selection = Contract.FeedItems.FEED_ID + " = ?";
 		String[] selectionArgs = { String.valueOf(feedId) };
