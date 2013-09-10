@@ -12,20 +12,25 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
+import com.serb.podpamp.ui.FeedItemFilter;
 import com.serb.podpamp.ui.adapters.FeedItemsCursorAdapter;
 import com.serb.podpamp.utils.Utils;
 
-public class FeedItemsActivity extends FragmentActivity {
+public class FeedItemsActivity extends FragmentActivity implements View.OnClickListener {
 	private static final int LOADER_ID = 0;
 
 	private long feedId = -1;
+
+	Button btnFilterStarred;
+	Button btnClearFilterStarred;
+
+	private final FeedItemFilter filter = new FeedItemFilter();
+
+	private FeedItemsCursorAdapter adapter;
 
 
 
@@ -33,6 +38,12 @@ public class FeedItemsActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.feed_items);
+
+		btnFilterStarred = (Button) findViewById(R.id.btn_filter_starred);
+		btnClearFilterStarred = (Button) findViewById(R.id.btn_clear_filter_starred);
+
+		btnFilterStarred.setOnClickListener(this);
+		btnClearFilterStarred.setOnClickListener(this);
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null)
@@ -85,6 +96,20 @@ public class FeedItemsActivity extends FragmentActivity {
 		}
 	}
 
+
+
+	@Override
+	public void onClick(View view) {
+		switch(view.getId()) {
+			case R.id.btn_filter_starred:
+				switchFilterStarred(true);
+				break;
+			case R.id.btn_clear_filter_starred:
+				switchFilterStarred(false);
+				break;
+		}
+	}
+
 	//region Private Methods.
 
 	private void setupFeedInfoPanel() {
@@ -122,6 +147,31 @@ public class FeedItemsActivity extends FragmentActivity {
 
 	private void setupFeedItemsList()
 	{
+		adapter = new FeedItemsCursorAdapter(
+			this, // Context.
+			R.layout.feed_items_list_item,
+			null,
+			new String[] {},
+			new int[] {},
+			0);
+
+		ListView listView = (ListView)findViewById(R.id.feed_items_list);
+
+		listView.setAdapter(adapter);
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView parent, View view, int position, long id) {
+				showFeedItemDetails(id);
+			}
+		});
+
+		updateList();
+	}
+
+
+
+	private void updateList()
+	{
 		final String[] projection = {
 			Contract.FeedItems._ID,
 			Contract.FeedItems.TITLE,
@@ -133,28 +183,20 @@ public class FeedItemsActivity extends FragmentActivity {
 			Contract.FeedItems.IS_STARRED
 		};
 
-		final String selection = Contract.FeedItems.FEED_ID + " = ?";
+		final String selection = filter.setupSelection(Contract.FeedItems.FEED_ID + " = ?");
 		final String[] selectionArgs = { String.valueOf(feedId) };
 		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc limit 50";
-
-		final FeedItemsCursorAdapter adapter = new FeedItemsCursorAdapter(
-			this, // Context.
-			R.layout.feed_items_list_item,
-			null,
-			new String[] {},
-			new int[] {},
-			0);
 
 		LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
 			@Override
 			public Loader<Cursor> onCreateLoader(int loaderId, Bundle arg1) {
 				return new CursorLoader(
-					FeedItemsActivity.this,
-					Contract.FeedItems.CONTENT_URI,
-					projection,
-					selection,
-					selectionArgs,
-					sortOrder
+						FeedItemsActivity.this,
+						Contract.FeedItems.CONTENT_URI,
+						projection,
+						selection,
+						selectionArgs,
+						sortOrder
 				);
 			}
 
@@ -169,17 +211,7 @@ public class FeedItemsActivity extends FragmentActivity {
 			}
 		};
 
-		ListView listView = (ListView)findViewById(R.id.feed_items_list);
-
-		listView.setAdapter(adapter);
-
-		getSupportLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
-
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView parent, View view, int position, long id) {
-				showFeedItemDetails(id);
-			}
-		});
+		getSupportLoaderManager().restartLoader(LOADER_ID, null, loaderCallbacks);
 	}
 
 
@@ -188,6 +220,17 @@ public class FeedItemsActivity extends FragmentActivity {
 		Intent intent = new Intent(this, FeedItemDetailsActivity.class);
 		intent.putExtra("item_id", itemId);
 		startActivity(intent);
+	}
+
+
+
+	private void switchFilterStarred(boolean isStarred) {
+		filter.setShowStarred(isStarred);
+
+		btnFilterStarred.setVisibility(isStarred ? View.INVISIBLE : View.VISIBLE);
+		btnClearFilterStarred.setVisibility(isStarred ? View.VISIBLE : View.INVISIBLE);
+
+		updateList();
 	}
 
 	//endregion
