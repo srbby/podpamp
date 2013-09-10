@@ -19,6 +19,7 @@ import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.model.request.FeedsRequestManager;
 import com.serb.podpamp.model.request.RequestFactory;
+import com.serb.podpamp.ui.FeedItemFilter;
 import com.serb.podpamp.ui.adapters.QueueItemsCursorAdapter;
 import com.serb.podpamp.utils.Utils;
 
@@ -30,8 +31,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 	private ProgressBar progressBar;
 
 	private Button btnRefresh;
+	Button btnFilterStarred;
+	Button btnClearFilterStarred;
 
+	private final FeedItemFilter filter = new FeedItemFilter();
 
+	private QueueItemsCursorAdapter adapter;
 
 	RequestManager.RequestListener refreshRequestListener = new RequestManager.RequestListener() {
 		@Override
@@ -145,9 +150,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 		btnRefresh = (Button) findViewById(R.id.btn_refresh);
+		btnFilterStarred = (Button) findViewById(R.id.btn_filter_starred);
+		btnClearFilterStarred = (Button) findViewById(R.id.btn_clear_filter_starred);
 
 		btnRefresh.setOnClickListener(this);
 		findViewById(R.id.btn_feeds).setOnClickListener(this);
+		btnFilterStarred.setOnClickListener(this);
+		btnClearFilterStarred.setOnClickListener(this);
 
 		setupQueueList();
 
@@ -164,6 +173,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 				break;
 			case R.id.btn_refresh:
 				refreshFeeds();
+				break;
+			case R.id.btn_filter_starred:
+				switchFilterStarred(true);
+				break;
+			case R.id.btn_clear_filter_starred:
+				switchFilterStarred(false);
 				break;
 		}
 	}
@@ -229,29 +244,46 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
 	private void setupQueueList() {
-		final String[] projection = {
-			Contract.FeedItems._ID,
-			Contract.FeedItems.TITLE,
-			Contract.FeedItems.PUBLISHED,
-			Contract.FeedItems.SIZE,
-			Contract.FeedItems.DOWNLOADED,
-			Contract.FeedItems.FEED_ID,
-			Contract.FeedItems.DURATION,
-			Contract.FeedItems.IS_STARRED
-		};
-
-		final String selection = Contract.FeedItems.IS_READ + " = ?";
-		final String[] selectionArgs = { "0" };
-
-		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc";
-
-		final QueueItemsCursorAdapter adapter = new QueueItemsCursorAdapter(
+		adapter = new QueueItemsCursorAdapter(
 			this,
 			R.layout.queue_list_item,
 			null,
 			new String[] {},
 			new int[] {},
 			0);
+
+		ListView listView = (ListView)findViewById(R.id.feed_queue_list);
+
+		listView.setAdapter(adapter);
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView parent, View view, int position, long id) {
+				showFeedItemDetails(id);
+			}
+		});
+
+		updateQueueList();
+	}
+
+
+
+	private void updateQueueList() {
+		final String[] projection = {
+				Contract.FeedItems._ID,
+				Contract.FeedItems.TITLE,
+				Contract.FeedItems.PUBLISHED,
+				Contract.FeedItems.SIZE,
+				Contract.FeedItems.DOWNLOADED,
+				Contract.FeedItems.FEED_ID,
+				Contract.FeedItems.DURATION,
+				Contract.FeedItems.IS_STARRED
+		};
+
+		final String selection = filter.setupSelection(Contract.FeedItems.IS_READ + " = ? ");
+
+		final String[] selectionArgs = { "0" };
+
+		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc";
 
 		LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
 			@Override
@@ -277,17 +309,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 			}
 		};
 
-		ListView listView = (ListView)findViewById(R.id.feed_queue_list);
-
-		listView.setAdapter(adapter);
-
-		getSupportLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
-
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView parent, View view, int position, long id) {
-				showFeedItemDetails(id);
-			}
-		});
+		getSupportLoaderManager().restartLoader(LOADER_ID, null, loaderCallbacks);
 	}
 
 
@@ -317,6 +339,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 	private void hideProgress() {
 		progressBar.setVisibility(View.INVISIBLE);
 		btnRefresh.setVisibility(View.VISIBLE);
+	}
+
+
+
+	private void switchFilterStarred(boolean isStarred) {
+		filter.setShowStarred(isStarred);
+
+		btnFilterStarred.setVisibility(isStarred ? View.INVISIBLE : View.VISIBLE);
+		btnClearFilterStarred.setVisibility(isStarred ? View.VISIBLE : View.INVISIBLE);
+
+		updateQueueList();
 	}
 
 	//endregion

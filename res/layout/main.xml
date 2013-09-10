@@ -8,9 +8,20 @@
 					 style="@style/ProgressBar"
 					 android:layout_alignParentRight="true"/>
 
-		<Button android:id="@+id/btn_feeds"
+		<Button android:id="@+id/btn_clear_filter_starred"
 				style="@style/Button"
 				android:layout_alignParentLeft="true"
+				android:drawableLeft="@drawable/icon_star"
+				android:visibility="invisible"/>
+
+		<Button android:id="@+id/btn_filter_starred"
+				style="@style/Button"
+				android:layout_alignParentLeft="true"
+				android:drawableLeft="@drawable/icon_star_empty"/>
+
+		<Button android:id="@+id/btn_feeds"
+				style="@style/Button"
+				android:layout_toLeftOf="@+id/btn_refresh"
 				android:text="@string/feeds_btn_text"
 				android:drawableLeft="@drawable/icon_rss"/>
 
