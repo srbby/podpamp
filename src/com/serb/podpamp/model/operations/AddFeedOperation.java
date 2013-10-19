@@ -39,8 +39,14 @@ public class AddFeedOperation implements RequestService.Operation {
 			ContentValues values = new ContentValues();
 			values.put(Contract.FeedsColumns.TITLE, rss_feed.getTitle());
 			values.put(Contract.FeedsColumns.SUBTITLE, rss_feed.getSubtitle());
-			values.put(Contract.FeedsColumns.ICON_URL, rss_feed.getIconUrl().toString());
-			values.put(Contract.FeedsColumns.ICON, DownloadManager.downloadImage(rss_feed.getIconUrl().toString()));
+
+			Uri iconUri = rss_feed.getIconUrl();
+			if (iconUri != null)
+			{
+				values.put(Contract.FeedsColumns.ICON_URL, iconUri.toString());
+				values.put(Contract.FeedsColumns.ICON, DownloadManager.downloadImage(iconUri.toString()));
+			}
+
 			values.put(Contract.FeedsColumns.URL, url);
 			values.put(Contract.FeedsColumns.UNREAD_ITEMS_COUNT, items.size() < unreadCount ? items.size() : unreadCount);
 

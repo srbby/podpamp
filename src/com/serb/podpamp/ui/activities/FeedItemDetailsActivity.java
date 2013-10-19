@@ -6,6 +6,7 @@ import android.content.*;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.*;
 import android.widget.*;
@@ -309,8 +310,11 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				titleView.setText(title);
 				titleView.setTextColor(getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
-				TextView descView = (TextView) findViewById(R.id.txt_feed_item_desc);
-				descView.setText(desc);
+				if (!TextUtils.isEmpty(desc))
+				{
+					TextView descView = (TextView) findViewById(R.id.txt_feed_item_desc);
+					descView.setText(Html.fromHtml(desc));
+				}
 
 				TextView publishedView = (TextView) findViewById(R.id.txt_feed_item_published);
 				publishedView.setText(Utils.getDateText(published));

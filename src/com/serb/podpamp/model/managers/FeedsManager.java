@@ -269,7 +269,7 @@ public abstract class FeedsManager {
 		result.url = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.MEDIA_URL));
 		//todo make filename of first 3 letter of the title + guid
 		//result.fileName = Utils.getDownloadFolder() + cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
-		result.fileName = Utils.getDownloadFolder() + result.feedItemId;
+		result.fileName = Utils.getDownloadFolder() + result.feedItemId + ".mp3";
 		result.file = new File(result.fileName);
 		return result;
 	}
