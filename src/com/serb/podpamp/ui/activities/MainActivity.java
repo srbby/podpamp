@@ -269,18 +269,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 	private void updateQueueList() {
 		final String[] projection = {
-				Contract.FeedItems._ID,
-				Contract.FeedItems.TITLE,
-				Contract.FeedItems.PUBLISHED,
-				Contract.FeedItems.SIZE,
-				Contract.FeedItems.DOWNLOADED,
-				Contract.FeedItems.FEED_ID,
-				Contract.FeedItems.DURATION,
-				Contract.FeedItems.IS_STARRED
+			Contract.FeedItems._ID,
+			Contract.FeedItems.TITLE,
+			Contract.FeedItems.PUBLISHED,
+			Contract.FeedItems.SIZE,
+			Contract.FeedItems.DOWNLOADED,
+			Contract.FeedItems.FEED_ID,
+			Contract.FeedItems.DURATION,
+			Contract.FeedItems.IS_STARRED
 		};
 
-		final String selection = filter.setupSelection(!filter.isShowStarred() ?
-			Contract.FeedItems.IS_READ + " = 0 " : "");
+		filter.setShowUnreadOnly(!filter.isShowStarred());
+		final String selection = filter.setupSelection("");
 
 		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc";
 
@@ -316,6 +316,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 	private void showFeedItemDetails(long item_id) {
 		Intent intent = new Intent(this, FeedItemDetailsActivity.class);
 		intent.putExtra("item_id", item_id);
+		intent.putExtra("filter", filter);
 		startActivity(intent);
 	}
 

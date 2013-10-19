@@ -3,20 +3,30 @@ package com.serb.podpamp.ui;
 import android.text.TextUtils;
 import com.serb.podpamp.model.provider.Contract;
 
-public class FeedItemFilter {
+import java.io.Serializable;
+
+public class FeedItemFilter implements Serializable {
 	//region Private Members.
 
 	private String selection;
 
+	private long feedId = -1;
+
 	private boolean showStarred;
-	private boolean showRead;
-	private boolean showUnread;
-	private boolean showDownloaded;
-	private boolean showNotDownloaded;
+	private boolean showUnreadOnly;
+	private boolean showDownloadedOnly;
 
 	//endregion
 
 	//region Getters/Setters.
+
+	public long getFeedId() {
+		return feedId;
+	}
+
+	public void setFeedId(long feedId) {
+		this.feedId = feedId;
+	}
 
 	public String getSelection()
 	{
@@ -31,36 +41,20 @@ public class FeedItemFilter {
 		this.showStarred = showStarred;
 	}
 
-	public boolean isShowRead() {
-		return showRead;
+	public boolean isShowUnreadOnly() {
+		return showUnreadOnly;
 	}
 
-	public void setShowRead(boolean showRead) {
-		this.showRead = showRead;
+	public void setShowUnreadOnly(boolean showUnreadOnly) {
+		this.showUnreadOnly = showUnreadOnly;
 	}
 
-	public boolean isShowUnread() {
-		return showUnread;
+	public boolean isShowDownloadedOnly() {
+		return showDownloadedOnly;
 	}
 
-	public void setShowUnread(boolean showUnread) {
-		this.showUnread = showUnread;
-	}
-
-	public boolean isShowDownloaded() {
-		return showDownloaded;
-	}
-
-	public void setShowDownloaded(boolean showDownloaded) {
-		this.showDownloaded = showDownloaded;
-	}
-
-	public boolean isShowNotDownloaded() {
-		return showNotDownloaded;
-	}
-
-	public void setShowNotDownloaded(boolean showNotDownloaded) {
-		this.showNotDownloaded = showNotDownloaded;
+	public void setShowDownloadedOnly(boolean showDownloadedOnly) {
+		this.showDownloadedOnly = showDownloadedOnly;
 	}
 
 	//endregion
@@ -69,9 +63,19 @@ public class FeedItemFilter {
 
 	public String setupSelection(String initialSelection) {
 		selection = initialSelection;
+		if (getFeedId() > -1)
+			selection = updateSelection(getSelection(), Contract.FeedItems.FEED_ID + " = " + String.valueOf(getFeedId()));
 		if (isShowStarred())
 		{
-			selection = updateSelection(selection, Contract.FeedItems.IS_STARRED + " = 1 ");
+			selection = updateSelection(getSelection(), Contract.FeedItems.IS_STARRED + " = 1 ");
+		}
+		if (isShowDownloadedOnly())
+		{
+			selection = updateSelection(getSelection(), Contract.FeedItems.DOWNLOADED + " >= " + Contract.FeedItems.SIZE);
+		}
+		if (isShowUnreadOnly())
+		{
+			selection = updateSelection(getSelection(), Contract.FeedItems.IS_READ + " = 0 ");
 		}
 		return selection;
 	}

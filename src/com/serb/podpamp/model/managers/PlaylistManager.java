@@ -5,20 +5,21 @@ import android.database.Cursor;
 import android.text.TextUtils;
 import com.serb.podpamp.model.domain.FeedItem;
 import com.serb.podpamp.model.provider.Contract;
+import com.serb.podpamp.ui.FeedItemFilter;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class PlaylistManager {
-	public static Queue<FeedItem> getPlaylist(Context context, long feedItemId) {
+	public static Queue<FeedItem> getPlaylist(Context context, long feedItemId, FeedItemFilter filter) {
 		final String[] projection = {
 			Contract.FeedItems._ID,
 			Contract.FeedItems.FILE_PATH,
 			Contract.FeedItems.ELAPSED
 		};
 
-		final String selection = Contract.FeedItems.IS_READ + " = ? and " + Contract.FeedItems._ID + " != ?";
-		final String[] selectionArgs = { "0", String.valueOf(feedItemId) };
+		final String selection = filter.setupSelection(Contract.FeedItems._ID + " != ?");
+		final String[] selectionArgs = { String.valueOf(feedItemId) };
 
 		final String sortOrder = Contract.FeedItems.PUBLISHED;
 

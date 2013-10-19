@@ -47,7 +47,10 @@ public class FeedItemsActivity extends FragmentActivity implements View.OnClickL
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null)
+		{
 			feedId = extras.getLong("feed_id");
+			filter.setFeedId(feedId);
+		}
 
 		if (feedId > -1)
 		{
@@ -219,6 +222,7 @@ public class FeedItemsActivity extends FragmentActivity implements View.OnClickL
 	private void showFeedItemDetails(long itemId) {
 		Intent intent = new Intent(this, FeedItemDetailsActivity.class);
 		intent.putExtra("item_id", itemId);
+		intent.putExtra("filter", filter);
 		startActivity(intent);
 	}
 

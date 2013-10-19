@@ -16,6 +16,7 @@ import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.model.request.FeedsRequestManager;
 import com.serb.podpamp.model.request.RequestFactory;
+import com.serb.podpamp.ui.FeedItemFilter;
 import com.serb.podpamp.utils.PlayerService;
 import com.serb.podpamp.utils.Utils;
 
@@ -26,6 +27,8 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 	boolean isRead;
 	int elapsed;
 	boolean isStarred;
+
+	private FeedItemFilter filter;
 
 	private ProgressBar progressBar;
 	Button downloadButton;
@@ -137,7 +140,11 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null)
+		{
 			itemId = extras.getLong("item_id");
+			filter = (FeedItemFilter)extras.getSerializable("filter");
+			filter.setShowUnreadOnly(true);
+		}
 
 		if (itemId > -1)
 		{
@@ -215,7 +222,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				break;
 			case R.id.btn_play:
 				if (isPlayerBound)
-					player.play(itemId, filePath, elapsed);
+					player.play(itemId, filePath, elapsed, filter);
 				break;
 			case R.id.btn_pause:
 				if (isPlayerBound)

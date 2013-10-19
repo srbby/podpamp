@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import com.serb.podpamp.model.domain.FeedItem;
 import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.managers.PlaylistManager;
+import com.serb.podpamp.ui.FeedItemFilter;
 
 import java.util.ArrayList;
 import java.util.Queue;
@@ -45,6 +46,7 @@ public class PlayerService extends Service {
 
 	private long itemId;
 
+	private FeedItemFilter playlistFilter;
 	private Queue<FeedItem> playlist;
 
 	private BroadcastReceiver statusReceiver = new BroadcastReceiver() {
@@ -107,29 +109,10 @@ public class PlayerService extends Service {
 
 
 
-	public void play(long id, String filePath, int position) {
-		//Log.e("PLAYER_SERVICE", "PLAY");
-		if (id < 0 || TextUtils.isEmpty(filePath))
-			return;
-
-		if (itemId == id && paused) {
-			startService(new Intent(ACTION_API_COMMAND).putExtra(COMMAND, TOGGLE_PLAY_PAUSE));
-			return;
-		}
-
-		itemId = id;
-
-		if (playlist == null || playlist.size() == 0)
-			playlist = PlaylistManager.getPlaylist(this, itemId);
-
-		Intent intent = new Intent(ACTION_API_COMMAND)
-			.putExtra(COMMAND, PLAY_COMMAND)
-			.setData(Uri.parse("file://" + filePath));
-
-		if (position > 0)
-			intent.putExtra(POSITION, position);
-
-		startService(intent);
+	public void play(long id, String filePath, int position, FeedItemFilter playlistFilter) {
+		this.playlistFilter = playlistFilter;
+		this.playlistFilter.setShowDownloadedOnly(true);
+		play(id, filePath, position);
 	}
 
 
@@ -277,10 +260,39 @@ public class PlayerService extends Service {
 		}
 	}
 
+
+
 	private void stop() {
 		playing = false;
 		paused = false;
 		stopSelf();
+	}
+
+
+
+	private void play(long id, String filePath, int position) {
+		//Log.e("PLAYER_SERVICE", "PLAY");
+		if (id < 0 || TextUtils.isEmpty(filePath))
+			return;
+
+		if (itemId == id && paused) {
+			startService(new Intent(ACTION_API_COMMAND).putExtra(COMMAND, TOGGLE_PLAY_PAUSE));
+			return;
+		}
+
+		itemId = id;
+
+		if (playlist == null || playlist.size() == 0)
+			playlist = PlaylistManager.getPlaylist(this, itemId, playlistFilter);
+
+		Intent intent = new Intent(ACTION_API_COMMAND)
+			.putExtra(COMMAND, PLAY_COMMAND)
+			.setData(Uri.parse("file://" + filePath));
+
+		if (position > 0)
+			intent.putExtra(POSITION, position);
+
+		startService(intent);
 	}
 
 	//endregion
