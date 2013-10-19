@@ -21,14 +21,12 @@
 
 		<Button android:id="@+id/btn_feeds"
 				style="@style/Button"
-				android:layout_toLeftOf="@+id/btn_refresh"
-				android:text="@string/feeds_btn_text"
+				android:layout_centerInParent="true"
 				android:drawableLeft="@drawable/icon_rss"/>
 
 		<Button android:id="@+id/btn_refresh"
 				style="@style/Button"
 				android:layout_alignParentRight="true"
-				android:text="@string/refresh_btn_text"
 				android:drawableLeft="@drawable/icon_refresh"/>
 	</RelativeLayout>
 
