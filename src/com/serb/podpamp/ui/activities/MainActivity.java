@@ -279,9 +279,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 				Contract.FeedItems.IS_STARRED
 		};
 
-		final String selection = filter.setupSelection(Contract.FeedItems.IS_READ + " = ? ");
-
-		final String[] selectionArgs = { "0" };
+		final String selection = filter.setupSelection(!filter.isShowStarred() ?
+			Contract.FeedItems.IS_READ + " = 0 " : "");
 
 		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc";
 
@@ -293,7 +292,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 					Contract.FeedItems.CONTENT_URI,
 					projection,
 					selection,
-					selectionArgs,
+					null,
 					sortOrder
 				);
 			}

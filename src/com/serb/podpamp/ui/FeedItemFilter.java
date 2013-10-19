@@ -6,6 +6,8 @@ import com.serb.podpamp.model.provider.Contract;
 public class FeedItemFilter {
 	//region Private Members.
 
+	private String selection;
+
 	private boolean showStarred;
 	private boolean showRead;
 	private boolean showUnread;
@@ -15,6 +17,11 @@ public class FeedItemFilter {
 	//endregion
 
 	//region Getters/Setters.
+
+	public String getSelection()
+	{
+		return selection;
+	}
 
 	public boolean isShowStarred() {
 		return showStarred;
@@ -60,15 +67,26 @@ public class FeedItemFilter {
 
 	//region Public Methods.
 
-	public String setupSelection(String selection) {
-		String result = selection;
+	public String setupSelection(String initialSelection) {
+		selection = initialSelection;
 		if (isShowStarred())
 		{
-			if (!TextUtils.isEmpty(result))
-				result = result + " and ";
-			result = result + Contract.FeedItems.IS_STARRED + " = 1 ";
+			selection = updateSelection(selection, Contract.FeedItems.IS_STARRED + " = 1 ");
 		}
-		return result;
+		return selection;
+	}
+
+	//endregion
+
+	//region Private Methods.
+
+	private String updateSelection(String selection, String update)
+	{
+		if (!TextUtils.isEmpty(selection))
+			selection += " and " + update;
+		else
+			selection = update;
+		return selection;
 	}
 
 	//endregion
