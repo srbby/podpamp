@@ -9,6 +9,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		super(context, name, factory, version);
 	}
 
+
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		String sql = "create table " + Contract.TABLE_FEEDS + " (" +
@@ -37,10 +39,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			Contract.FeedItems.IS_READ + " integer, " +
 			Contract.FeedItems.DURATION + " integer, " +
 			Contract.FeedItems.ELAPSED + " integer, " +
-			Contract.FeedItems.IS_STARRED + " integer" +
+			Contract.FeedItems.IS_STARRED + " integer, " +
+			"foreign key(" + Contract.FeedItems.FEED_ID + ") references " + Contract.TABLE_FEEDS + "(" + Contract.Feeds._ID + ")" +
 			")";
 		db.execSQL(sql);
+
+		createIndices(db);
 	}
+
+
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -60,5 +67,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			String sql = String.format(template, Contract.Feeds.STARRED_ITEMS_COUNT);
 			db.execSQL(sql);
 		}
+		if (oldVersion < 4)
+		{
+			createIndices(db);
+		}
+	}
+
+
+
+	private void createIndices(SQLiteDatabase db) {
+		String sql = "create index " + Contract.TABLE_FEED_ITEMS + "_" + Contract.FeedItems.FEED_ID + "_idx" +
+			" on " + Contract.TABLE_FEED_ITEMS + "(" + Contract.FeedItems.FEED_ID + ")";
+		db.execSQL(sql);
+
+		sql = "create index " + Contract.TABLE_FEED_ITEMS + "_" + Contract.FeedItems.GUID + "_idx" +
+			" on " + Contract.TABLE_FEED_ITEMS + "(" + Contract.FeedItems.GUID + ")";
+		db.execSQL(sql);
+
+		sql = "create index " + Contract.TABLE_FEED_ITEMS + "_" + Contract.FeedItems.PUBLISHED + "_idx" +
+			" on " + Contract.TABLE_FEED_ITEMS + "(" + Contract.FeedItems.PUBLISHED + ")";
+		db.execSQL(sql);
+
+		sql = "create index " + Contract.TABLE_FEED_ITEMS + "_" + Contract.FeedItems.IS_READ + "_idx" +
+			" on " + Contract.TABLE_FEED_ITEMS + "(" + Contract.FeedItems.IS_READ + ")";
+		db.execSQL(sql);
+
+		sql = "create index " + Contract.TABLE_FEED_ITEMS + "_" + Contract.FeedItems.IS_STARRED + "_idx" +
+			" on " + Contract.TABLE_FEED_ITEMS + "(" + Contract.FeedItems.IS_STARRED + ")";
+		db.execSQL(sql);
 	}
 }

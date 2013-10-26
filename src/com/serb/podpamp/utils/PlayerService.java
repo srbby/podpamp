@@ -101,7 +101,7 @@ public class PlayerService extends Service {
 		unregister();
 	}
 
-		//region Public Methods.
+	//region Public Methods.
 
 	public boolean isPlaying() {
 		return playing;
