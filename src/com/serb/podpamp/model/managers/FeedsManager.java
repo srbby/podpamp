@@ -226,14 +226,22 @@ public abstract class FeedsManager {
 			if (cursor.moveToNext())
 			{
 				String url = cursor.getString(cursor.getColumnIndex(Contract.Feeds.ICON_URL));
-
-				ContentValues values = new ContentValues();
-				values.put(Contract.FeedsColumns.ICON, DownloadManager.downloadImage(url));
-
-				context.getContentResolver().update(Contract.Feeds.CONTENT_URI, values, selection, selectionArgs);
+				setIcon(context, feedId, DownloadManager.downloadImage(url));
 			}
 			cursor.close();
 		}
+	}
+
+
+
+	public static void setIcon(Context context, long feedId, byte[] icon) {
+		final String selection = Contract.Feeds._ID + " = ?";
+		final String[] selectionArgs = { String.valueOf(feedId) };
+
+		ContentValues values = new ContentValues();
+		values.put(Contract.FeedsColumns.ICON, icon);
+
+		context.getContentResolver().update(Contract.Feeds.CONTENT_URI, values, selection, selectionArgs);
 	}
 
 

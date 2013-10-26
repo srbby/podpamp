@@ -20,8 +20,13 @@ import com.serb.podpamp.ui.FeedItemFilter;
 import com.serb.podpamp.ui.adapters.FeedItemsCursorAdapter;
 import com.serb.podpamp.utils.Utils;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class FeedItemsActivity extends FragmentActivity implements View.OnClickListener {
 	private static final int LOADER_ID = 0;
+	private static final int REQUEST_CODE = 1;
 
 	private long feedId = -1;
 
@@ -64,7 +69,7 @@ public class FeedItemsActivity extends FragmentActivity implements View.OnClickL
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.feeds_menu, menu);
+		inflater.inflate(R.menu.feed_items_menu, menu);
 		return true;
 	}
 
@@ -88,11 +93,14 @@ public class FeedItemsActivity extends FragmentActivity implements View.OnClickL
 					});
 				return true;
 			case R.id.mi_refresh_icon:
-				if (Utils.isNetworkAvailable(this, true))
+				if (Utils.isNetworkAvailable(this, false))
 				{
 					FeedsManager.refreshIcon(this, feedId);
 					setupFeedInfoPanel();
 				}
+				return true;
+			case R.id.mi_change_icon:
+				changeIcon();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -111,6 +119,24 @@ public class FeedItemsActivity extends FragmentActivity implements View.OnClickL
 				switchFilterStarred(false);
 				break;
 		}
+	}
+
+
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
+			try {
+				InputStream is = getContentResolver().openInputStream(data.getData());
+				FeedsManager.setIcon(this, feedId, Utils.compressImage(is));
+				is.close();
+				setupFeedInfoPanel();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	//region Private Methods.
@@ -235,6 +261,16 @@ public class FeedItemsActivity extends FragmentActivity implements View.OnClickL
 		btnClearFilterStarred.setVisibility(isStarred ? View.VISIBLE : View.INVISIBLE);
 
 		updateList();
+	}
+
+
+
+	private void changeIcon() {
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		startActivityForResult(intent, REQUEST_CODE);
 	}
 
 	//endregion

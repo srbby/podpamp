@@ -1,9 +1,8 @@
 package com.serb.podpamp.model.managers;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import com.foxykeep.datadroid.exception.DataException;
+import com.serb.podpamp.utils.Utils;
 
 import java.io.*;
 import java.net.URL;
@@ -35,12 +34,7 @@ public class DownloadManager {
 			URLConnection conn = getConnection(new URL(url));
 			if (conn != null)
 			{
-				InputStream is = conn.getInputStream();
-
-				Bitmap bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(is), 156, 156, true);
-				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-				bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-				return stream.toByteArray();
+				return Utils.compressImage(conn.getInputStream());
 			}
 		} catch (Exception e) {
 			Log.d("Utils", "Error: " + e.toString());

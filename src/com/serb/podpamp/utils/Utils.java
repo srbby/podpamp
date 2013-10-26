@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -137,6 +139,16 @@ public abstract class Utils {
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setPositiveButton(android.R.string.yes, okClickListener)
 			.setNegativeButton(android.R.string.no, null).show();
+	}
+
+
+
+	public static byte[] compressImage(InputStream is)
+	{
+		Bitmap bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(is), 156, 156, true);
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		return stream.toByteArray();
 	}
 
 	//region Private Methods.

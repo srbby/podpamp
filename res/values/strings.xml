@@ -58,6 +58,7 @@
 	<string name="mi_mark_all_listened_text">Mark all listened</string>
 	<string name="mi_delete_feed_text">Unsubscribe</string>
 	<string name="mi_refresh_feed_icon_text">Refresh icon</string>
+	<string name="mi_change_feed_icon_text">Change icon</string>
 
 	<!--Feed Item Menu-->
 	<string name="mi_remove_download_text">Remove download</string>

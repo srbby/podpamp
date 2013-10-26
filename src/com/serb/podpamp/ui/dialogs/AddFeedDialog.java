@@ -1,4 +1,4 @@
-package com.serb.podpamp.ui;
+package com.serb.podpamp.ui.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
