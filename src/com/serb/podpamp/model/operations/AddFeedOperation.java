@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.exception.DataException;
@@ -38,7 +39,11 @@ public class AddFeedOperation implements RequestService.Operation {
 
 			ContentValues values = new ContentValues();
 			values.put(Contract.FeedsColumns.TITLE, rss_feed.getTitle());
-			values.put(Contract.FeedsColumns.SUBTITLE, rss_feed.getSubtitle());
+
+			String subtitle = rss_feed.getSubtitle();
+			if (TextUtils.isEmpty(subtitle))
+				subtitle = rss_feed.getDescription();
+			values.put(Contract.FeedsColumns.SUBTITLE, subtitle);
 
 			Uri iconUri = rss_feed.getIconUrl();
 			if (iconUri != null)

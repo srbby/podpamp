@@ -3,32 +3,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 				style="@style/PageContainer">
 
-	<ImageView android:id="@+id/img_feed_icon"
-			   style="@style/FeedIcon"/>
+	<RelativeLayout android:id="@+id/pnl_header"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
 
-	<TextView android:id="@+id/txt_feed_title"
-			  style="@style/PageTitle"
-			  android:layout_toRightOf="@+id/img_feed_icon"
-			  android:layout_toLeftOf="@+id/btn_filter_starred"/>
+		<ImageView android:id="@+id/img_feed_icon"
+				   style="@style/FeedIconLarge"/>
 
-	<Button android:id="@+id/btn_clear_filter_starred"
-			style="@style/Button"
-			android:layout_alignParentRight="true"
-			android:drawableRight="@drawable/icon_star"
-			android:visibility="invisible"/>
+		<RelativeLayout android:id="@+id/pnl_title"
+						android:layout_height="wrap_content"
+						android:layout_width="fill_parent"
+						android:layout_alignTop="@+id/img_feed_icon"
+						android:layout_toRightOf="@+id/img_feed_icon">
 
-	<Button android:id="@+id/btn_filter_starred"
-			style="@style/Button"
-			android:layout_alignParentRight="true"
-			android:drawableRight="@drawable/icon_star_empty"/>
+			<TextView android:id="@+id/txt_feed_title"
+					  style="@style/PageTitle"
+					  android:layout_alignParentLeft="true"
+					  android:layout_toLeftOf="@+id/btn_filter_starred"/>
 
-	<TextView android:id="@+id/txt_feed_subtitle"
-			  style="@style/PageSubTitle"
-			  android:layout_toRightOf="@+id/img_feed_icon"
-			  android:layout_below="@+id/txt_feed_title"
-			  android:layout_toLeftOf="@+id/btn_filter_starred"/>
+			<Button android:id="@+id/btn_clear_filter_starred"
+					style="@style/Button"
+					android:layout_alignParentRight="true"
+					android:drawableRight="@drawable/icon_star"
+					android:visibility="invisible"/>
+
+			<Button android:id="@+id/btn_filter_starred"
+					style="@style/Button"
+					android:layout_alignParentRight="true"
+					android:drawableRight="@drawable/icon_star_empty"/>
+		</RelativeLayout>
+
+		<TextView android:id="@+id/txt_feed_subtitle"
+				  style="@style/PageSubTitle"
+				  android:layout_toRightOf="@+id/img_feed_icon"
+				  android:layout_below="@+id/pnl_title"/>
+	</RelativeLayout>
 
 	<ListView android:id="@+id/feed_items_list"
 			  style="@style/ListView"
-			  android:layout_below="@+id/img_feed_icon"/>
+			  android:layout_below="@+id/pnl_header"/>
 </RelativeLayout>

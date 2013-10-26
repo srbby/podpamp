@@ -188,7 +188,13 @@ public abstract class FeedsManager {
 		values.put(Contract.FeedItemsColumns.GUID, item.getGuid());
 		values.put(Contract.FeedItemsColumns.PUBLISHED, item.getPubDate().getTime());
 		values.put(Contract.FeedItemsColumns.TITLE, item.getTitle());
-		values.put(Contract.FeedItemsColumns.DESC, item.getSummary());
+
+		String desc = item.getSummary();
+		if (TextUtils.isEmpty(desc))
+			desc = item.getContent();
+		if (TextUtils.isEmpty(desc))
+			desc = item.getDescription();
+		values.put(Contract.FeedItemsColumns.DESC, desc);
 
 		final Enclosure enclosure = item.getEnclosure();
 		if (enclosure != null)

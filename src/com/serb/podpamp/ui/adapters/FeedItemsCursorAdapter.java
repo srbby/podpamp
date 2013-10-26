@@ -3,6 +3,7 @@ package com.serb.podpamp.ui.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ public class FeedItemsCursorAdapter extends SimpleCursorAdapter {
 		titleView.setTextColor(context.getResources().getColor(isRead ? R.color.read_item_color : R.color.unread_item_color));
 
 		TextView descView = (TextView) view.findViewById(R.id.txt_feed_item_desc);
-		descView.setText(desc);
+		descView.setText(Html.fromHtml(desc));
 
 		TextView publishedView = (TextView) view.findViewById(R.id.txt_feed_item_published);
 		publishedView.setText(Utils.getDateText(published));
