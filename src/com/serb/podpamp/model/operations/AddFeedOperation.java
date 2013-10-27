@@ -38,12 +38,12 @@ public class AddFeedOperation implements RequestService.Operation {
 			int unreadCount = Utils.getNewFeedKeepUnreadCount(context);
 
 			ContentValues values = new ContentValues();
-			values.put(Contract.FeedsColumns.TITLE, rss_feed.getTitle());
+			values.put(Contract.FeedsColumns.TITLE, rss_feed.getTitle().trim());
 
 			String subtitle = rss_feed.getSubtitle();
 			if (TextUtils.isEmpty(subtitle))
 				subtitle = rss_feed.getDescription();
-			values.put(Contract.FeedsColumns.SUBTITLE, subtitle);
+			values.put(Contract.FeedsColumns.SUBTITLE, subtitle.trim());
 
 			Uri iconUri = rss_feed.getIconUrl();
 			if (iconUri != null)

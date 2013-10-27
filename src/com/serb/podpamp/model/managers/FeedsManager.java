@@ -187,19 +187,19 @@ public abstract class FeedsManager {
 		values.put(Contract.FeedItemsColumns.FEED_ID, feedId);
 		values.put(Contract.FeedItemsColumns.GUID, item.getGuid());
 		values.put(Contract.FeedItemsColumns.PUBLISHED, item.getPubDate().getTime());
-		values.put(Contract.FeedItemsColumns.TITLE, item.getTitle());
+		values.put(Contract.FeedItemsColumns.TITLE, item.getTitle().trim());
 
 		String desc = item.getSummary();
 		if (TextUtils.isEmpty(desc))
 			desc = item.getContent();
 		if (TextUtils.isEmpty(desc))
 			desc = item.getDescription();
-		values.put(Contract.FeedItemsColumns.DESC, desc);
+		values.put(Contract.FeedItemsColumns.DESC, desc.trim());
 
 		final Enclosure enclosure = item.getEnclosure();
 		if (enclosure != null)
 		{
-			values.put(Contract.FeedItemsColumns.MEDIA_URL, enclosure.getUrl().toString());
+			values.put(Contract.FeedItemsColumns.MEDIA_URL, enclosure.getUrl().toString().trim());
 			values.put(Contract.FeedItemsColumns.SIZE, enclosure.getLength());
 		}
 
