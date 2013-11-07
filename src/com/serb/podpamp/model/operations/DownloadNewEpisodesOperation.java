@@ -18,6 +18,7 @@ public class DownloadNewEpisodesOperation implements RequestService.Operation {
 
 		final String[] projection = {
 			Contract.FeedItems._ID,
+			Contract.FeedItems.FEED_ID,
 			Contract.FeedItems.TITLE,
 			Contract.FeedItems.MEDIA_URL
 		};

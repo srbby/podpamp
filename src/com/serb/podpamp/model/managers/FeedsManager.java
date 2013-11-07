@@ -250,6 +250,7 @@ public abstract class FeedsManager {
 	{
 		final String[] projection = {
 			Contract.FeedItems._ID,
+			Contract.FeedItems.FEED_ID,
 			Contract.FeedItems.TITLE,
 			Contract.FeedItems.MEDIA_URL
 		};
@@ -279,11 +280,10 @@ public abstract class FeedsManager {
 	public static EpisodeMetadata getEpisodeMetadata(Cursor cursor) {
 		EpisodeMetadata result = new EpisodeMetadata();
 		result.feedItemId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems._ID));
+		long feedId = cursor.getLong(cursor.getColumnIndex(Contract.FeedItems.FEED_ID));
 		result.title = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
 		result.url = cursor.getString(cursor.getColumnIndex(Contract.FeedItems.MEDIA_URL));
-		//todo make filename of first 3 letter of the title + guid
-		//result.fileName = Utils.getDownloadFolder() + cursor.getString(cursor.getColumnIndex(Contract.FeedItems.TITLE));
-		result.fileName = Utils.getDownloadFolder() + result.feedItemId + ".mp3";
+		result.fileName = Utils.getDownloadFolder() + composeFileName(feedId, result.feedItemId, result.title, result.url);
 		result.file = new File(result.fileName);
 		return result;
 	}
@@ -475,6 +475,13 @@ public abstract class FeedsManager {
 			cursor.close();
 		}
 		return result;
+	}
+
+
+
+	private static String composeFileName(long feedId, long feedItemId, String title, String url) {
+		//todo make filename of first word of the feed url + title + guid + ext
+		return feedItemId + ".mp3";
 	}
 
 	//endregion
