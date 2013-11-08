@@ -42,7 +42,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
 			hideProgress();
-			Toast.makeText(MainActivity.this, "Refresh complete", Toast.LENGTH_LONG).show();
+			Toast.makeText(MainActivity.this, getString(R.string.refresh_complete), Toast.LENGTH_LONG).show();
 			if (Utils.isInstantDownloadSet(MainActivity.this))
 				downloadNewEpisodes();
 		}
@@ -78,7 +78,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
 			hideProgress();
-			Toast.makeText(MainActivity.this, "Download complete", Toast.LENGTH_LONG).show();
+			Toast.makeText(MainActivity.this, getString(R.string.download_complete), Toast.LENGTH_LONG).show();
 		}
 
 		@Override
@@ -111,9 +111,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 	RequestManager.RequestListener cleanUpRequestListener = new RequestManager.RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			String text = "Clean up complete.";
+			String text = getString(R.string.clean_up_complete);
 			if (resultData != null)
-				text += " " + String.valueOf(resultData.getInt("count")) + " episodes have been deleted";
+				text += " " + String.valueOf(resultData.getInt("count")) + " " + getString(R.string.episodes_deleted);
 			Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
 		}
 

@@ -10,6 +10,8 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.provider.Contract;
+import com.serb.podpamp.model.provider.DatabaseHelper;
+import com.serb.podpamp.model.provider.FeedsProvider;
 import com.serb.podpamp.ui.activities.MainActivity;
 import com.serb.podpamp.utils.Utils;
 import org.mcsoxford.rss.Enclosure;
@@ -166,6 +168,8 @@ public abstract class FeedsManager {
 				if (cursor.moveToNext())
 				{
 					unreadItemsCount = cursor.getInt(cursor.getColumnIndex(Contract.Feeds.UNREAD_ITEMS_COUNT)) + diff;
+					if (unreadItemsCount < 0)
+						unreadItemsCount = 0;
 				}
 				cursor.close();
 			}
@@ -435,6 +439,18 @@ public abstract class FeedsManager {
 		boolean result = cursor.getCount() > 0;
 		cursor.close();
 		return result;
+	}
+
+
+
+	public static void checkIntegrity(Context context) {
+		DatabaseHelper mDBHelper = new DatabaseHelper(context, FeedsProvider.DB_NAME, null, FeedsProvider.DB_VERSION);
+		String sql = "update " + Contract.TABLE_FEEDS + " set " + Contract.Feeds.UNREAD_ITEMS_COUNT +
+			" = (select count(*) from " + Contract.TABLE_FEED_ITEMS + " fi where fi." + Contract.FeedItems.FEED_ID +
+			" = " + Contract.TABLE_FEEDS + "." + Contract.Feeds._ID + " and fi." + Contract.FeedItems.IS_READ + " = 0)";
+
+		mDBHelper.getWritableDatabase().execSQL(sql);
+		mDBHelper.close();
 	}
 
 	//region Private Methods.

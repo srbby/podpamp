@@ -10,8 +10,8 @@ import android.net.Uri;
 public class FeedsProvider extends ContentProvider {
 	private DatabaseHelper mDBHelper;
 
-	private static final String DB_NAME = Contract.TABLE_FEEDS + ".db";
-	private static final int DB_VERSION = 4;
+	public static final String DB_NAME = Contract.TABLE_FEEDS + ".db";
+	public static final int DB_VERSION = 4;
 
 	private static final UriMatcher sUriMatcher;
 

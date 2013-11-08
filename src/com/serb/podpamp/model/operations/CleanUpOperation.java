@@ -14,6 +14,8 @@ public class CleanUpOperation implements RequestService.Operation {
 	public Bundle execute(Context context, Request request)
 		throws ConnectionException, DataException, CustomRequestException {
 
+		FeedsManager.checkIntegrity(context);
+
 		int count = FeedsManager.cleanUp(context);
 		Bundle result = new Bundle();
 		result.putInt("count", count);
