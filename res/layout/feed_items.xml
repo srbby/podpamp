@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				xmlns:pixlui="http://schemas.android.com/apk/com.neopixl.pixlui"
 				style="@style/PageContainer">
 
 	<RelativeLayout android:id="@+id/pnl_header"
@@ -16,10 +17,12 @@
 						android:layout_alignTop="@+id/img_feed_icon"
 						android:layout_toRightOf="@+id/img_feed_icon">
 
-			<TextView android:id="@+id/txt_feed_title"
-					  style="@style/PageTitle"
-					  android:layout_alignParentLeft="true"
-					  android:layout_toLeftOf="@+id/btn_filter_starred"/>
+			<com.neopixl.pixlui.components.textview.TextView
+				android:id="@+id/txt_feed_title"
+				style="@style/PageTitle"
+				android:layout_alignParentLeft="true"
+				android:layout_toLeftOf="@+id/btn_filter_starred"
+				pixlui:typeface="fontatigo.ttf"/>
 
 			<Button android:id="@+id/btn_clear_filter_starred"
 					style="@style/Button"
@@ -33,10 +36,12 @@
 					android:drawableRight="@drawable/icon_star_empty"/>
 		</RelativeLayout>
 
-		<TextView android:id="@+id/txt_feed_subtitle"
-				  style="@style/PageSubTitle"
-				  android:layout_toRightOf="@+id/img_feed_icon"
-				  android:layout_below="@+id/pnl_title"/>
+		<com.neopixl.pixlui.components.textview.TextView
+			android:id="@+id/txt_feed_subtitle"
+			style="@style/PageSubTitle"
+			android:layout_toRightOf="@+id/img_feed_icon"
+			android:layout_below="@+id/pnl_title"
+			pixlui:typeface="bravorg.ttf"/>
 	</RelativeLayout>
 
 	<ListView android:id="@+id/feed_items_list"

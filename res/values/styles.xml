@@ -36,8 +36,8 @@
 
 	<!--Images-->
 	<style name="FeedIcon">
-		<item name="android:layout_width">64dp</item>
-		<item name="android:layout_height">64dp</item>
+		<item name="android:layout_width">72dp</item>
+		<item name="android:layout_height">72dp</item>
 		<item name="android:contentDescription">@string/icon_desc</item>
 		<item name="android:adjustViewBounds">true</item>
 		<item name="android:scaleType">centerInside</item>
@@ -101,7 +101,7 @@
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:textStyle">bold</item>
-		<item name="android:textSize">16dp</item>
+		<item name="android:textSize">18dp</item>
 		<item name="android:maxLines">3</item>
 	</style>
 
@@ -110,7 +110,7 @@
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_alignParentTop">true</item>
 		<item name="android:textStyle">bold</item>
-		<item name="android:textSize">18dp</item>
+		<item name="android:textSize">19dp</item>
 		<item name="android:textColor">@color/title_color</item>
 	</style>
 
