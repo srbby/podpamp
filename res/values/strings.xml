@@ -14,7 +14,6 @@
 	<string name="download_new_episodes_failed">Unable to download episode</string>
 	<string name="cleanup_failed">Unable to remove read episodes</string>
 	<string name="refresh_complete">Refresh complete.</string>
-	<string name="download_complete">Download complete.</string>
 	<string name="clean_up_complete">Clean up complete.</string>
 	<string name="episodes_deleted">episodes have been deleted.</string>
 
@@ -29,9 +28,8 @@
 	<string name="one_episodes_text">new episode</string>
 
 	<!--FeedItemDetailsActivity-->
-	<string name="mark_listened_btn_text">Mark listened</string>
-	<string name="mark_not_listened_btn_text">Mark not listened</string>
-	<string name="download_btn_text">Download</string>
+	<string name="mark_listened_btn_text">Listened</string>
+	<string name="mark_not_listened_btn_text">Not listened</string>
 	<string name="download_failed">Unable to download episode</string>
 	<string name="remove_download_dialog_title">Remove download</string>
 	<string name="remove_download_dialog_message">Are you sure you want to remove the downloaded episode?</string>
@@ -43,6 +41,7 @@
 	<string name="no_new_episodes">No new episodes</string>
 	<string name="no_connection">No network connection</string>
 	<string name="waiting_download">Waiting</string>
+	<string name="download_complete">Download complete.</string>
 
 	<!--Settings-->
 	<string name="pref_conn_type">Sync on Wi-Fi only</string>

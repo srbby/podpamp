@@ -97,7 +97,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		public void onRequestFinished(Request request, Bundle resultData) {
 			hideProgress();
 			setupItemInfoPanel();
-			Toast.makeText(FeedItemDetailsActivity.this, "Download complete", Toast.LENGTH_LONG).show();
+			Toast.makeText(FeedItemDetailsActivity.this, getString(R.string.download_complete), Toast.LENGTH_LONG).show();
 		}
 
 		@Override
@@ -239,12 +239,12 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 			case R.id.btn_star:
 				isStarred = true;
 				FeedsManager.star(this, itemId, isStarred, feedId);
-				setStarVisibility(true);
+				setStarVisibility();
 				break;
 			case R.id.btn_clear_star:
 				isStarred = false;
 				FeedsManager.star(this, itemId, isStarred, feedId);
-				setStarVisibility(true);
+				setStarVisibility();
 				break;
 		}
 	}
@@ -335,14 +335,14 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 				{
 					playerPanel.setVisibility(View.INVISIBLE);
 					downloadButton.setVisibility(View.VISIBLE);
-					setStarVisibility(false);
 				}
 				else
 				{
 					downloadButton.setVisibility(View.INVISIBLE);
 					playerPanel.setVisibility(View.VISIBLE);
-					setStarVisibility(true);
 				}
+
+				setStarVisibility();
 
 				Button btnMarkListened = (Button) findViewById(R.id.btn_mark_listened);
 				Button btnMarkNotListened = (Button) findViewById(R.id.btn_mark_not_listened);
@@ -363,17 +363,9 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 
 
-	private void setStarVisibility(boolean isVisible) {
-		if (isVisible)
-		{
-			starButton.setVisibility(isStarred ? View.INVISIBLE : View.VISIBLE);
-			clearStarButton.setVisibility(isStarred ? View.VISIBLE : View.INVISIBLE);
-		}
-		else
-		{
-			starButton.setVisibility(View.INVISIBLE);
-			clearStarButton.setVisibility(View.INVISIBLE);
-		}
+	private void setStarVisibility() {
+		starButton.setVisibility(isStarred ? View.INVISIBLE : View.VISIBLE);
+		clearStarButton.setVisibility(isStarred ? View.VISIBLE : View.INVISIBLE);
 	}
 
 
