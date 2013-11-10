@@ -2,10 +2,9 @@ package com.serb.podpamp.model.managers;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.database.Cursor;
+import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import com.serb.podpamp.R;
@@ -13,6 +12,7 @@ import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.model.provider.DatabaseHelper;
 import com.serb.podpamp.model.provider.FeedsProvider;
 import com.serb.podpamp.ui.activities.MainActivity;
+import com.serb.podpamp.utils.DownloadService;
 import com.serb.podpamp.utils.Utils;
 import org.mcsoxford.rss.Enclosure;
 import org.mcsoxford.rss.RSSItem;
@@ -293,10 +293,41 @@ public abstract class FeedsManager {
 	}
 
 
+	private static DownloadService downloadService;
+	private static boolean isBound;
+	public static void downloadEpisode(final Context context, long feedItemId) {
+		final EpisodeMetadata metadata = getEpisodeMetadata(context, feedItemId);
 
-	public static void downloadEpisode(Context context, long feedItemId) {
-		EpisodeMetadata metadata = getEpisodeMetadata(context, feedItemId);
-		downloadEpisode(context, metadata, 1, 1);
+		ServiceConnection downloadServiceConnection = new ServiceConnection() {
+			@Override
+			public void onServiceConnected(ComponentName className, IBinder service) {
+				DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
+				downloadService = binder.getService();
+				isBound = true;
+			}
+
+			@Override
+			public void onServiceDisconnected(ComponentName arg0) {
+				isBound = false;
+			}
+		};
+
+		Intent downloaderIntent = new Intent(context, DownloadService.class);
+		context.bindService(downloaderIntent, downloadServiceConnection, Context.BIND_AUTO_CREATE);
+
+		if (isBound)
+			downloadService.updateDownloadProgress(context, metadata);
+
+		DownloadManager.downloadEpisode(metadata, new DownloadManager.OnProgressUpdateListener() {
+			@Override
+			public void updateProgress(EpisodeMetadata m) {
+				if (isBound)
+					downloadService.updateDownloadProgress(context, m);
+			}
+		});
+
+		context.unbindService(downloadServiceConnection);
+		updateDownloaded(context, metadata);
 	}
 
 
@@ -338,7 +369,6 @@ public abstract class FeedsManager {
 			notificationManager.notify(
 				NOTIFICATION_ID,
 				notifyBuilder.build());
-
 			}
 		});
 

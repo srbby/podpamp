@@ -1,7 +1,6 @@
 package com.serb.podpamp.ui.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.*;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,15 +8,15 @@ import android.os.IBinder;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.*;
-import android.widget.*;
-import com.foxykeep.datadroid.requestmanager.Request;
-import com.foxykeep.datadroid.requestmanager.RequestManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.serb.podpamp.R;
 import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
-import com.serb.podpamp.model.request.FeedsRequestManager;
-import com.serb.podpamp.model.request.RequestFactory;
 import com.serb.podpamp.ui.FeedItemFilter;
+import com.serb.podpamp.utils.DownloadService;
 import com.serb.podpamp.utils.PlayerService;
 import com.serb.podpamp.utils.Utils;
 
@@ -36,11 +35,11 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 	Button starButton;
 	Button clearStarButton;
 
-	private FeedsRequestManager requestManager;
-
 	private PlayerService player;
 	private boolean isPlayerBound = false;
 
+	private DownloadService downloadService;
+	private boolean isDownloadServiceBound = false;
 
 	private PlayerService.PlayerListener playerListener = new PlayerService.PlayerListener() {
 		@Override
@@ -72,7 +71,7 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 	};
 
 	/** Defines callbacks for service binding, passed to bindService() */
-	private ServiceConnection mConnection = new ServiceConnection() {
+	private ServiceConnection playerServiceConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			PlayerService.LocalBinder binder = (PlayerService.LocalBinder) service;
@@ -91,38 +90,45 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 
 
-
-	RequestManager.RequestListener requestListener = new RequestManager.RequestListener() {
+	private DownloadService.DownloadingListener downloadingListener = new DownloadService.DownloadingListener() {
 		@Override
-		public void onRequestFinished(Request request, Bundle resultData) {
-			hideProgress();
-			setupItemInfoPanel();
-			Toast.makeText(FeedItemDetailsActivity.this, getString(R.string.download_complete), Toast.LENGTH_LONG).show();
+		public void onDownloadCompleted(long feedItemId) {
+			if (feedItemId == itemId)
+			{
+				setDownloadButtonsVisibility(false);
+				setupItemInfoPanel();
+			}
 		}
 
 		@Override
-		public void onRequestDataError(Request request) {
-			showError();
+		public void onAllDownloadsCompleted() {
 		}
 
 		@Override
-		public void onRequestCustomError(Request request, Bundle resultData) {
-			showError();
+		public void onError(long feedItemId) {
+			if (feedItemId == itemId)
+			{
+				setDownloadButtonsVisibility(false);
+				downloadButton.setVisibility(View.VISIBLE);
+			}
+		}
+	};
+
+	/** Defines callbacks for service binding, passed to bindService() */
+	private ServiceConnection downloadServiceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
+			downloadService = binder.getService();
+			isDownloadServiceBound = true;
+			setDownloadButtonsVisibility(downloadService.isDownloading(itemId));
+			downloadService.registerClient(downloadingListener);
 		}
 
 		@Override
-		public void onRequestConnectionError(Request request, int statusCode) {
-			showError();
-		}
-
-		void showError() {
-			hideProgress();
-			downloadButton.setVisibility(View.VISIBLE);
-			AlertDialog.Builder builder = new AlertDialog.Builder(FeedItemDetailsActivity.this);
-			builder.setTitle(android.R.string.dialog_alert_title)
-				.setMessage(getString(R.string.download_failed))
-				.create()
-				.show();
+		public void onServiceDisconnected(ComponentName arg0) {
+			isDownloadServiceBound = false;
+			setDownloadButtonsVisibility(false);
 		}
 	};
 
@@ -161,8 +167,6 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		findViewById(R.id.btn_prev).setOnClickListener(this);
 		starButton.setOnClickListener(this);
 		clearStarButton.setOnClickListener(this);
-
-		requestManager = FeedsRequestManager.from(this);
 
 		startService(new Intent(this, PlayerService.class));
 	}
@@ -254,8 +258,11 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Intent intent = new Intent(this, PlayerService.class);
-		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+		Intent playerIntent = new Intent(this, PlayerService.class);
+		bindService(playerIntent, playerServiceConnection, Context.BIND_AUTO_CREATE);
+
+		Intent downloaderIntent = new Intent(this, DownloadService.class);
+		bindService(downloaderIntent, downloadServiceConnection, Context.BIND_AUTO_CREATE);
 	}
 
 
@@ -265,8 +272,14 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		super.onStop();
 		if (isPlayerBound) {
 			player.unregisterClient(playerListener);
-			unbindService(mConnection);
+			unbindService(playerServiceConnection);
 			isPlayerBound = false;
+		}
+
+		if (isDownloadServiceBound) {
+			downloadService.unregisterClient(downloadingListener);
+			unbindService(downloadServiceConnection);
+			isDownloadServiceBound = false;
 		}
 	}
 
@@ -370,17 +383,6 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 
 
-	private void downloadFeed() {
-		if (itemId > -1 && Utils.isNetworkAvailable(this, true))
-		{
-			downloadButton.setVisibility(View.INVISIBLE);
-			showProgress();
-			requestManager.execute(RequestFactory.getDownloadEpisodeRequest(itemId), requestListener);
-		}
-	}
-
-
-
 	private void setPlayerButtonsVisibility(boolean isPlaying) {
 		Button playBtn = (Button) findViewById(R.id.btn_play);
 		Button pauseBtn = (Button) findViewById(R.id.btn_pause);
@@ -391,14 +393,24 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 
 
-	private void showProgress() {
-		progressBar.setVisibility(View.VISIBLE);
+	private void downloadFeed() {
+		if (isDownloadServiceBound && downloadService.download(itemId)) {
+			setDownloadButtonsVisibility(true);
+		}
 	}
 
 
 
-	private void hideProgress() {
-		progressBar.setVisibility(View.INVISIBLE);
+	private void setDownloadButtonsVisibility(boolean isDownloading) {
+		if (isDownloading)
+		{
+			downloadButton.setVisibility(View.INVISIBLE);
+			progressBar.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			progressBar.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	//endregion
