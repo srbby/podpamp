@@ -92,7 +92,8 @@
 					android:visibility="invisible"/>
 			<ProgressBar android:id="@+id/progress_bar"
 						 style="@style/ProgressBar"
-						 android:layout_toLeftOf="@+id/btn_star"/>
+						 android:layout_alignLeft="@+id/btn_download"
+						 android:layout_marginLeft="7dp"/>
 			<Button android:id="@+id/btn_star"
 					style="@style/Button"
 					android:layout_alignParentRight="true"

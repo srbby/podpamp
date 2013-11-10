@@ -325,7 +325,8 @@ public class FeedItemDetailsActivity extends DownloadActivity implements View.On
 				if (TextUtils.isEmpty(filePath))
 				{
 					playerPanel.setVisibility(View.INVISIBLE);
-					downloadButton.setVisibility(View.VISIBLE);
+					if (!isDownloadServiceBound || !downloadService.isDownloading(itemId))
+						downloadButton.setVisibility(View.VISIBLE);
 				}
 				else
 				{
