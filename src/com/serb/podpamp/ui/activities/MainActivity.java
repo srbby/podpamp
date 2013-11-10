@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -16,6 +15,7 @@ import android.widget.*;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 import com.serb.podpamp.R;
+import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.model.request.FeedsRequestManager;
 import com.serb.podpamp.model.request.RequestFactory;
@@ -23,7 +23,7 @@ import com.serb.podpamp.ui.FeedItemFilter;
 import com.serb.podpamp.ui.adapters.QueueItemsCursorAdapter;
 import com.serb.podpamp.utils.Utils;
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener {
+public class MainActivity extends DownloadActivity implements View.OnClickListener {
 	private static final int LOADER_ID = 0;
 
 	private FeedsRequestManager requestManager;
@@ -67,40 +67,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 			builder.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(getString(R.string.refresh_failed))
-				.create()
-				.show();
-		}
-	};
-
-
-
-	RequestManager.RequestListener downloadRequestListener = new RequestManager.RequestListener() {
-		@Override
-		public void onRequestFinished(Request request, Bundle resultData) {
-			hideProgress();
-			Toast.makeText(MainActivity.this, getString(R.string.download_complete), Toast.LENGTH_LONG).show();
-		}
-
-		@Override
-		public void onRequestDataError(Request request) {
-			showError();
-		}
-
-		@Override
-		public void onRequestCustomError(Request request, Bundle resultData) {
-			showError();
-		}
-
-		@Override
-		public void onRequestConnectionError(Request request, int statusCode) {
-			showError();
-		}
-
-		void showError() {
-			hideProgress();
-			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-			builder.setTitle(android.R.string.dialog_alert_title)
-				.setMessage(getString(R.string.download_new_episodes_failed))
 				.create()
 				.show();
 		}
@@ -208,6 +174,37 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		}
 	}
 
+
+
+	@Override
+	protected void onDownloadServiceConnected() {
+		if (downloadService.isDownloading())
+			showProgress();
+	}
+
+
+
+	@Override
+	protected void onDownloadServiceDisconnected() {
+		hideProgress();
+	}
+
+
+
+	@Override
+	protected void onAllDownloadsCompleted() {
+		hideProgress();
+		Toast.makeText(this, getString(R.string.download_complete), Toast.LENGTH_LONG).show();
+	}
+
+
+
+	@Override
+	protected void onDownloadErrorOccurred(long feedItemId) {
+		if (!downloadService.isDownloading())
+			hideProgress();
+	}
+
 	//region Private Methods.
 
 	private void showFeedsList() {
@@ -228,10 +225,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
 	private void downloadNewEpisodes() {
-		if (Utils.isNetworkAvailable(this, true))
+		if (downloadService.downloadNewEpisodes(FeedsManager.getNewEpisodes(this)))
 		{
 			showProgress();
-			requestManager.execute(RequestFactory.getDownloadNewEpisodesRequest(), downloadRequestListener);
 		}
 	}
 

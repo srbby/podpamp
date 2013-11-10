@@ -11,7 +11,7 @@
 	<string name="feeds_btn_text">Feeds</string>
 	<string name="refresh_btn_text">Refresh</string>
 	<string name="refresh_failed">Unable to refresh feeds</string>
-	<string name="download_new_episodes_failed">Unable to download episode</string>
+	<string name="episode_downloading_failed">Unable to download episode</string>
 	<string name="cleanup_failed">Unable to remove read episodes</string>
 	<string name="refresh_complete">Refresh complete.</string>
 	<string name="clean_up_complete">Clean up complete.</string>

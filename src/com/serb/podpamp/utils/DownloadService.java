@@ -1,6 +1,5 @@
 package com.serb.podpamp.utils;
 
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -20,6 +19,7 @@ import com.serb.podpamp.ui.activities.MainActivity;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class DownloadService extends Service {
 
@@ -43,7 +43,7 @@ public class DownloadService extends Service {
 		public void onRequestFinished(Request request, Bundle resultData) {
 			downloadedCount++;
 
-			//Toast.makeText(DownloadService.this, getString(R.string.download_complete), Toast.LENGTH_LONG).show();
+			//Toast.makeText(context, getString(R.string.download_complete), Toast.LENGTH_LONG).show();
 			long feedItemId = request.getLong(RequestFactory.FEED_ITEM_ID);
 
 			downloads.remove(feedItemId);
@@ -78,11 +78,13 @@ public class DownloadService extends Service {
 				client.downloadErrorOccurred(feedItemId);
 			}
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(DownloadService.this);
+			/*String message = String.format("%s: %s", getString(R.string.download_failed),
+				FeedsManager.getEpisodeMetadata(DownloadService.this, feedItemId).title);
+			AlertDialog.Builder builder = new AlertDialog.Builder(request.context);
 			builder.setTitle(android.R.string.dialog_alert_title)
-				.setMessage(getString(R.string.download_failed))
+				.setMessage(message)
 				.create()
-				.show();
+				.show();*/
 
 			checkAllDownloadsCompleted();
 		}
@@ -151,6 +153,23 @@ public class DownloadService extends Service {
 
 
 
+	public boolean downloadNewEpisodes(Collection<Long> items) {
+		if (items != null && items.size() > 0 && Utils.isNetworkAvailable(this, true)) {
+			for (Long feedItemId : items) {
+				if (!downloads.contains(feedItemId))
+				{
+					totalDownloads++;
+					downloads.add(feedItemId);
+					requestManager.execute(RequestFactory.getDownloadEpisodeRequest(feedItemId), requestListener);
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+
+
 	public void updateDownloadProgress(Context context, EpisodeMetadata metadata) {
 		final NotificationManager notificationManager =
 			(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -178,6 +197,10 @@ public class DownloadService extends Service {
 			notifyBuilder.setContentText(percent);
 		}
 
+		/*if (metadata.downloaded == metadata.size)
+			Toast.makeText(context,
+			String.format("%s: %s", getString(R.string.download_complete), metadata.title), Toast.LENGTH_LONG).show();*/
+
 		notificationManager.notify(NOTIFICATION_ID, notifyBuilder.build());
 	}
 
@@ -185,6 +208,12 @@ public class DownloadService extends Service {
 
 	public boolean isDownloading(long feedItemId) {
 		return downloads.contains(feedItemId);
+	}
+
+
+
+	public boolean isDownloading() {
+		return downloads.size() > 0;
 	}
 
 

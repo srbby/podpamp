@@ -13,8 +13,6 @@ public class FeedsService extends RequestService {
 				return new DownloadEpisodeOperation();
 			case RequestFactory.REQUEST_REFRESH_FEEDS:
 				return new RefreshFeedsOperation();
-			case RequestFactory.REQUEST_DOWNLOAD_NEW_EPISODES:
-				return new DownloadNewEpisodesOperation();
 			case RequestFactory.REQUEST_CLEANUP:
 				return new CleanUpOperation();
 			default:
