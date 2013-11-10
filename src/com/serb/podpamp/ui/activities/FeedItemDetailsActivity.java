@@ -1,6 +1,5 @@
 package com.serb.podpamp.ui.activities;
 
-import android.app.Activity;
 import android.content.*;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,11 +15,10 @@ import com.serb.podpamp.R;
 import com.serb.podpamp.model.managers.FeedsManager;
 import com.serb.podpamp.model.provider.Contract;
 import com.serb.podpamp.ui.FeedItemFilter;
-import com.serb.podpamp.utils.DownloadService;
 import com.serb.podpamp.utils.PlayerService;
 import com.serb.podpamp.utils.Utils;
 
-public class FeedItemDetailsActivity extends Activity implements View.OnClickListener {
+public class FeedItemDetailsActivity extends DownloadActivity implements View.OnClickListener {
 	private long itemId = -1;
 	private long feedId;
 	String filePath;
@@ -37,9 +35,6 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 
 	private PlayerService player;
 	private boolean isPlayerBound = false;
-
-	private DownloadService downloadService;
-	private boolean isDownloadServiceBound = false;
 
 	private PlayerService.PlayerListener playerListener = new PlayerService.PlayerListener() {
 		@Override
@@ -85,50 +80,6 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		public void onServiceDisconnected(ComponentName arg0) {
 			isPlayerBound = false;
 			setPlayerButtonsVisibility(false);
-		}
-	};
-
-
-
-	private DownloadService.DownloadingListener downloadingListener = new DownloadService.DownloadingListener() {
-		@Override
-		public void onDownloadCompleted(long feedItemId) {
-			if (feedItemId == itemId)
-			{
-				setDownloadButtonsVisibility(false);
-				setupItemInfoPanel();
-			}
-		}
-
-		@Override
-		public void onAllDownloadsCompleted() {
-		}
-
-		@Override
-		public void onError(long feedItemId) {
-			if (feedItemId == itemId)
-			{
-				setDownloadButtonsVisibility(false);
-				downloadButton.setVisibility(View.VISIBLE);
-			}
-		}
-	};
-
-	/** Defines callbacks for service binding, passed to bindService() */
-	private ServiceConnection downloadServiceConnection = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
-			downloadService = binder.getService();
-			isDownloadServiceBound = true;
-			setDownloadButtonsVisibility(downloadService.isDownloading(itemId));
-			downloadService.registerClient(downloadingListener);
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName arg0) {
-			isDownloadServiceBound = false;
-			setDownloadButtonsVisibility(false);
 		}
 	};
 
@@ -260,9 +211,6 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 		super.onStart();
 		Intent playerIntent = new Intent(this, PlayerService.class);
 		bindService(playerIntent, playerServiceConnection, Context.BIND_AUTO_CREATE);
-
-		Intent downloaderIntent = new Intent(this, DownloadService.class);
-		bindService(downloaderIntent, downloadServiceConnection, Context.BIND_AUTO_CREATE);
 	}
 
 
@@ -275,11 +223,41 @@ public class FeedItemDetailsActivity extends Activity implements View.OnClickLis
 			unbindService(playerServiceConnection);
 			isPlayerBound = false;
 		}
+	}
 
-		if (isDownloadServiceBound) {
-			downloadService.unregisterClient(downloadingListener);
-			unbindService(downloadServiceConnection);
-			isDownloadServiceBound = false;
+
+
+	@Override
+	protected void onDownloadServiceConnected() {
+		setDownloadButtonsVisibility(downloadService.isDownloading(itemId));
+	}
+
+
+
+	@Override
+	protected void onDownloadServiceDisconnected() {
+		setDownloadButtonsVisibility(false);
+	}
+
+
+
+	@Override
+	protected void onDownloadCompleted(long feedItemId) {
+		if (feedItemId == itemId)
+		{
+			setDownloadButtonsVisibility(false);
+			setupItemInfoPanel();
+		}
+	}
+
+
+
+	@Override
+	protected void onDownloadErrorOccurred(long feedItemId) {
+		if (feedItemId == itemId)
+		{
+			setDownloadButtonsVisibility(false);
+			downloadButton.setVisibility(View.VISIBLE);
 		}
 	}
 

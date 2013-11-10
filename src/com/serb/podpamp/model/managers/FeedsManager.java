@@ -24,6 +24,9 @@ import java.util.Date;
 public abstract class FeedsManager {
 	private static final int NOTIFICATION_ID = 43287;
 
+	private static DownloadService downloadService;
+	private static boolean isDownloadServiceBound;
+
 	public static void updateFeedItemElapsed(Context context, long feedItemId, int elapsed) {
 		ContentValues values = new ContentValues();
 		values.put(Contract.FeedItemsColumns.ELAPSED, elapsed);
@@ -293,8 +296,7 @@ public abstract class FeedsManager {
 	}
 
 
-	private static DownloadService downloadService;
-	private static boolean isBound;
+
 	public static void downloadEpisode(final Context context, long feedItemId) {
 		final EpisodeMetadata metadata = getEpisodeMetadata(context, feedItemId);
 
@@ -303,25 +305,25 @@ public abstract class FeedsManager {
 			public void onServiceConnected(ComponentName className, IBinder service) {
 				DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
 				downloadService = binder.getService();
-				isBound = true;
+				isDownloadServiceBound = true;
 			}
 
 			@Override
 			public void onServiceDisconnected(ComponentName arg0) {
-				isBound = false;
+				isDownloadServiceBound = false;
 			}
 		};
 
 		Intent downloaderIntent = new Intent(context, DownloadService.class);
 		context.bindService(downloaderIntent, downloadServiceConnection, Context.BIND_AUTO_CREATE);
 
-		if (isBound)
+		if (isDownloadServiceBound)
 			downloadService.updateDownloadProgress(context, metadata);
 
 		DownloadManager.downloadEpisode(metadata, new DownloadManager.OnProgressUpdateListener() {
 			@Override
 			public void updateProgress(EpisodeMetadata m) {
-				if (isBound)
+				if (isDownloadServiceBound)
 					downloadService.updateDownloadProgress(context, m);
 			}
 		});

@@ -24,6 +24,7 @@
 				  android:theme="@android:style/Theme.NoTitleBar"/>
 		<activity android:name=".ui.activities.SettingsActivity"
 				  android:label="@string/settings_title"/>
+		<activity android:name=".ui.activities.DownloadActivity"/>
 		<provider android:name="com.serb.podpamp.model.provider.FeedsProvider"
 				  android:authorities="com.serb.podpamp"
 				  android:exported="false"/>

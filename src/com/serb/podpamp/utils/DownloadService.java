@@ -49,7 +49,7 @@ public class DownloadService extends Service {
 			downloads.remove(feedItemId);
 
 			for (DownloadingListener client : clients) {
-				client.onDownloadCompleted(feedItemId);
+				client.downloadCompleted(feedItemId);
 			}
 
 			checkAllDownloadsCompleted();
@@ -75,7 +75,7 @@ public class DownloadService extends Service {
 			downloads.remove(feedItemId);
 
 			for (DownloadingListener client : clients) {
-				client.onError(feedItemId);
+				client.downloadErrorOccurred(feedItemId);
 			}
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(DownloadService.this);
@@ -92,7 +92,7 @@ public class DownloadService extends Service {
 				totalDownloads = 0;
 				downloadedCount = 0;
 				for (DownloadingListener client : clients) {
-					client.onAllDownloadsCompleted();
+					client.allDownloadsCompleted();
 				}
 			}
 		}
@@ -209,11 +209,11 @@ public class DownloadService extends Service {
 	//region Public Interfaces.
 
 	public static interface DownloadingListener {
-		void onDownloadCompleted(long feedItemId);
+		void downloadCompleted(long feedItemId);
 
-		void onAllDownloadsCompleted();
+		void allDownloadsCompleted();
 
-		void onError(long feedItemId);
+		void downloadErrorOccurred(long feedItemId);
 	}
 
 	//endregion
