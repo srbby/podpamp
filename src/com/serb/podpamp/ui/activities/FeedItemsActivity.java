@@ -214,18 +214,18 @@ public class FeedItemsActivity extends FragmentActivity implements View.OnClickL
 
 		final String selection = filter.setupSelection(Contract.FeedItems.FEED_ID + " = ?");
 		final String[] selectionArgs = { String.valueOf(feedId) };
-		final String sortOrder = Contract.FeedItems.PUBLISHED + " desc limit 50";
+		final String sortOrder = Contract.FeedItems.IS_READ + ", " + Contract.FeedItems.PUBLISHED + " desc limit 50";
 
 		LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
 			@Override
 			public Loader<Cursor> onCreateLoader(int loaderId, Bundle arg1) {
 				return new CursorLoader(
-						FeedItemsActivity.this,
-						Contract.FeedItems.CONTENT_URI,
-						projection,
-						selection,
-						selectionArgs,
-						sortOrder
+					FeedItemsActivity.this,
+					Contract.FeedItems.CONTENT_URI,
+					projection,
+					selection,
+					selectionArgs,
+					sortOrder
 				);
 			}
 
