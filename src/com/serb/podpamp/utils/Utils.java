@@ -5,8 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.*;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
@@ -23,15 +22,15 @@ import java.util.Date;
 import java.util.HashMap;
 
 public abstract class Utils {
-	private static final HashMap<Long, byte[]> feedIconsMap = new HashMap<Long, byte[]>();
+	private static final HashMap<Long, Bitmap> feedIconsMap = new HashMap<Long, Bitmap>();
 
 
 
 	public static void setImageView(ImageView image_view, byte[] image, int alt_image)
 	{
-		if (image != null && image.length > 0) {
-			Bitmap b = BitmapFactory.decodeByteArray(image, 0, image.length);
-			image_view.setImageBitmap(b);
+		Bitmap bitmap = createBitmap(image, true);
+		if (bitmap != null) {
+			image_view.setImageBitmap(bitmap);
 		}
 		else if (alt_image > -1) {
 			image_view.setImageResource(alt_image);
@@ -45,9 +44,32 @@ public abstract class Utils {
 			putFeedIcon(context, feed_id);
 
 		if (feedIconsMap.containsKey(feed_id))
-			setImageView(imageView, feedIconsMap.get(feed_id), alt_image);
+			imageView.setImageBitmap(feedIconsMap.get(feed_id));
 		else
 			setImageView(imageView, null, alt_image);
+	}
+
+
+
+	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
+		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
+			.getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(output);
+
+		final int color = 0xff424242;
+		final Paint paint = new Paint();
+		final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		final RectF rectF = new RectF(rect);
+
+		paint.setAntiAlias(true);
+		canvas.drawARGB(0, 0, 0, 0);
+		paint.setColor(color);
+		canvas.drawRoundRect(rectF, pixels, pixels, paint);
+
+		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+		canvas.drawBitmap(bitmap, rect, rect, paint);
+
+		return output;
 	}
 
 
@@ -169,12 +191,26 @@ public abstract class Utils {
 			if (cursor.moveToNext())
 			{
 				byte[] icon = cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON));
-				if (icon != null)
-					feedIconsMap.put(feed_id, icon);
+				Bitmap bitmap = createBitmap(icon, true);
+				if (bitmap != null)
+					feedIconsMap.put(feed_id, bitmap);
 			}
 			cursor.close();
 		}
 	}
+
+
+
+	private static Bitmap createBitmap(byte[] image, boolean roundCorners) {
+		if (image != null && image.length > 0) {
+			Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+			if (roundCorners)
+				bitmap = getRoundedCornerBitmap(bitmap, 12);
+			return bitmap;
+		}
+		return null;
+	}
+
 
 	//endregion
 }

@@ -45,6 +45,6 @@
 	</RelativeLayout>
 
 	<ListView android:id="@+id/feed_items_list"
-			  style="@style/ListView"
+			  style="@style/PaddedListView"
 			  android:layout_below="@+id/pnl_header"/>
 </RelativeLayout>

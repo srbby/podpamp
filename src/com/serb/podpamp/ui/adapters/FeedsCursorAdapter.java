@@ -34,10 +34,10 @@ public class FeedsCursorAdapter extends SimpleCursorAdapter {
 		Cursor cursor = getCursor();
 		cursor.moveToPosition(pos);
 
+		long feedId = cursor.getLong(cursor.getColumnIndex(Contract.Feeds._ID));
 		String feed_title = cursor.getString(cursor.getColumnIndex(Contract.Feeds.TITLE));
 		int feedsCount = cursor.getInt(cursor.getColumnIndex(Contract.Feeds.UNREAD_ITEMS_COUNT));
 		int starredCount = cursor.getInt(cursor.getColumnIndex(Contract.Feeds.STARRED_ITEMS_COUNT));
-		byte[] feedIcon = cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON));
 
 		TextView title_view = (TextView) view.findViewById(R.id.txt_feed_title);
 		title_view.setText(feed_title);
@@ -55,8 +55,9 @@ public class FeedsCursorAdapter extends SimpleCursorAdapter {
 			count_view.setTextColor(context.getResources().getColor(R.color.read_item_color));
 		}
 
-		Utils.setImageView((ImageView) view.findViewById(R.id.img_feed_icon),
-			feedIcon,
+		Utils.setImageView(context,
+			(ImageView) view.findViewById(R.id.img_feed_icon),
+			feedId,
 			R.drawable.icon_rss);
 
 		TextView txtStarredItemsCount = (TextView) view.findViewById(R.id.txt_starred_items_count);

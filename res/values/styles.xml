@@ -87,6 +87,10 @@
 		<item name="android:drawSelectorOnTop">false</item>
 	</style>
 
+	<style name="PaddedListView" parent="ListView">
+		<item name="android:paddingTop">5dp</item>
+	</style>
+
 	<!--TextViews-->
 	<style name="PageTitle">
 		<item name="android:layout_width">wrap_content</item>
