@@ -21,6 +21,7 @@ import com.serb.podpamp.model.request.FeedsRequestManager;
 import com.serb.podpamp.model.request.RequestFactory;
 import com.serb.podpamp.ui.FeedItemFilter;
 import com.serb.podpamp.ui.adapters.QueueItemsCursorAdapter;
+import com.serb.podpamp.utils.SetupFeedIconsCacheTask;
 import com.serb.podpamp.utils.Utils;
 
 public class MainActivity extends DownloadActivity implements View.OnClickListener {
@@ -112,6 +113,9 @@ public class MainActivity extends DownloadActivity implements View.OnClickListen
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		new SetupFeedIconsCacheTask().execute(this);
+
 		setContentView(R.layout.main);
 
 		progressBar = (ProgressBar) findViewById(R.id.progress_bar);

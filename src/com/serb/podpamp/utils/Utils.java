@@ -173,15 +173,25 @@ public abstract class Utils {
 		return stream.toByteArray();
 	}
 
+
+
+	public static void putFeedIcon(long feedId, byte[] icon) {
+		if (feedIconsMap.containsKey(feedId))
+			return;
+		Bitmap bitmap = createBitmap(icon, true);
+		if (bitmap != null)
+			feedIconsMap.put(feedId, bitmap);
+	}
+
 	//region Private Methods.
 
-	private static void putFeedIcon(Context context, long feed_id) {
+	private static void putFeedIcon(Context context, long feedId) {
 		String[] projection = {
 			Contract.Feeds.ICON
 		};
 
 		String selection = Contract.Feeds._ID + " = ?";
-		String[] selectionArgs = { String.valueOf(feed_id) };
+		String[] selectionArgs = { String.valueOf(feedId) };
 
 		Cursor cursor = context.getContentResolver().query(Contract.Feeds.CONTENT_URI,
 			projection, selection, selectionArgs, null);
@@ -193,7 +203,7 @@ public abstract class Utils {
 				byte[] icon = cursor.getBlob(cursor.getColumnIndex(Contract.Feeds.ICON));
 				Bitmap bitmap = createBitmap(icon, true);
 				if (bitmap != null)
-					feedIconsMap.put(feed_id, bitmap);
+					feedIconsMap.put(feedId, bitmap);
 			}
 			cursor.close();
 		}
