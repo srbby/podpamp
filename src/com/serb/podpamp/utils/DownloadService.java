@@ -250,7 +250,7 @@ public class DownloadService extends Service {
 			NumberFormat percentFormat = NumberFormat.getPercentInstance();
 			percentFormat.setMaximumFractionDigits(1);
 			String percent = percentFormat.format((float)metadata.getDownloaded() / (float)metadata.getSize());
-			return String.format("%s / %s (%s)", Utils.getFileSizeText(metadata.getDownloaded()),
+			return String.format("%s of %s (%s)", Utils.getFileSizeText(metadata.getDownloaded(), false, true),
 				metadata.getSizeLabel(), percent);
 		}
 		else

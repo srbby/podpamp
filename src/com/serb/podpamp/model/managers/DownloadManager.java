@@ -72,13 +72,13 @@ public class DownloadManager {
 						if (updateProgressCounter == UPDATE_PERIOD && progressUpdateListener != null)
 						{
 							updateProgressCounter = 0;
-							metadata.setDownloaded(total, 0);
+							metadata.setDownloaded(total, false);
 							progressUpdateListener.updateProgress(metadata);
 						}
 						updateProgressCounter++;
 					}
 
-					metadata.setDownloaded(total, total);
+					metadata.setDownloaded(total, true);
 
 					if (progressUpdateListener != null)
 						progressUpdateListener.updateProgress(metadata);

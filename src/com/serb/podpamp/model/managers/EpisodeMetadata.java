@@ -32,10 +32,15 @@ public class EpisodeMetadata {
 		return downloaded;
 	}
 
-	public void setDownloaded(long downloaded, long sizeFallbackValue) {
+	public void setDownloaded(long downloaded, boolean isComplete) {
 		this.downloaded = downloaded;
-		if (downloaded > size) {
-			setSize(sizeFallbackValue);
+
+		if (isComplete) {
+			if (downloaded != size)
+				setSize(downloaded);
+		}
+		else if (downloaded > size) {
+			setSize(0);
 		}
 	}
 }

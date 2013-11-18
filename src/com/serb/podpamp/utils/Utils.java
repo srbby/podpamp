@@ -74,23 +74,32 @@ public abstract class Utils {
 
 
 
-	public static String getFileSizeText(double size_in_bytes) {
-		if (size_in_bytes > 0)
+	public static String getFileSizeText(double sizeInBytes) {
+		return getFileSizeText(sizeInBytes, false, false);
+	}
+
+
+
+	public static String getFileSizeText(double sizeInBytes, boolean hideKb, boolean hideMb) {
+		if (sizeInBytes > 0)
 		{
 			DecimalFormat form = new DecimalFormat("#.##");
-			if (size_in_bytes >= 1048576)
-				return form.format(size_in_bytes / 1048576) + " MB";
-			return form.format(size_in_bytes / 1024) + " KB";
+			if (sizeInBytes >= 1048576) {
+				String result = form.format(sizeInBytes / 1048576);
+				return hideMb ? result : result + " MB";
+			}
+			String result = form.format(sizeInBytes / 1024);
+			return hideKb ? result : result + " KB";
 		}
 		return "";
 	}
 
 
 
-	public static String getDateText(long date_in_milliseconds) {
-		if (date_in_milliseconds > 0)
+	public static String getDateText(long dateInMilliseconds) {
+		if (dateInMilliseconds > 0)
 		{
-			Date pub_date = new Date(date_in_milliseconds);
+			Date pub_date = new Date(dateInMilliseconds);
 			return new SimpleDateFormat("MMM dd, yyyy").format(pub_date);
 		}
 		return "";
