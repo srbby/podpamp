@@ -317,8 +317,8 @@ public abstract class FeedsManager {
 		DownloadManager.downloadEpisode(metadata, new DownloadManager.OnProgressUpdateListener() {
 			@Override
 			public void updateProgress(EpisodeMetadata m) {
-				if (isDownloadServiceBound)
-					downloadService.updateDownloadProgress(context, m);
+			if (isDownloadServiceBound)
+				downloadService.updateDownloadProgress(context, m);
 			}
 		});
 
@@ -469,8 +469,8 @@ public abstract class FeedsManager {
 	private static void updateDownloaded(Context context, EpisodeMetadata metadata) {
 		ContentValues values = new ContentValues();
 		values.put(Contract.FeedItemsColumns.FILE_PATH, metadata.fileName);
-		values.put(Contract.FeedItemsColumns.SIZE, metadata.size);
-		values.put(Contract.FeedItemsColumns.DOWNLOADED, metadata.downloaded);
+		values.put(Contract.FeedItemsColumns.SIZE, metadata.getSize());
+		values.put(Contract.FeedItemsColumns.DOWNLOADED, metadata.getDownloaded());
 
 		final String selection = Contract.FeedItems._ID + " = ?";
 		final String[] selectionArgs = { String.valueOf(metadata.feedItemId) };

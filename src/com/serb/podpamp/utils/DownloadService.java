@@ -189,12 +189,8 @@ public class DownloadService extends Service {
 		// Puts the PendingIntent into the notification builder
 		notifyBuilder.setContentIntent(notifyIntent);
 
-		if (metadata.downloaded > 0) {
-			NumberFormat percentFormat = NumberFormat.getPercentInstance();
-			percentFormat.setMaximumFractionDigits(1);
-			String percent = percentFormat.format((float)metadata.downloaded / (float)metadata.size) +
-				" of " + Utils.getFileSizeText(metadata.size);
-			notifyBuilder.setContentText(percent);
+		if (metadata.getDownloaded() > 0) {
+			notifyBuilder.setContentText(getDownloadedInfo(metadata));
 		}
 
 		/*if (metadata.downloaded == metadata.size)
@@ -243,6 +239,22 @@ public class DownloadService extends Service {
 		void allDownloadsCompleted();
 
 		void downloadErrorOccurred(long feedItemId);
+	}
+
+	//endregion
+
+	//region Private Methods.
+
+	private String getDownloadedInfo(EpisodeMetadata metadata) {
+		if (metadata.getSize() > 0) {
+			NumberFormat percentFormat = NumberFormat.getPercentInstance();
+			percentFormat.setMaximumFractionDigits(1);
+			String percent = percentFormat.format((float)metadata.getDownloaded() / (float)metadata.getSize());
+			return String.format("%s / %s (%s)", Utils.getFileSizeText(metadata.getDownloaded()),
+				metadata.getSizeLabel(), percent);
+		}
+		else
+			return Utils.getFileSizeText(metadata.getDownloaded());
 	}
 
 	//endregion

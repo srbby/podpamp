@@ -51,7 +51,7 @@ public class DownloadManager {
 			if (conn != null)
 			{
 				// this will be useful so that you can show a typical 0-100% progress bar
-				metadata.size = conn.getContentLength();
+				metadata.setSize(conn.getContentLength());
 
 				// download the file
 				InputStream input = new BufferedInputStream(url.openStream());
@@ -72,13 +72,14 @@ public class DownloadManager {
 						if (updateProgressCounter == UPDATE_PERIOD && progressUpdateListener != null)
 						{
 							updateProgressCounter = 0;
-							metadata.downloaded = total;
+							metadata.setDownloaded(total, 0);
 							progressUpdateListener.updateProgress(metadata);
 						}
 						updateProgressCounter++;
 					}
 
-					metadata.downloaded = total;
+					metadata.setDownloaded(total, total);
+
 					if (progressUpdateListener != null)
 						progressUpdateListener.updateProgress(metadata);
 
