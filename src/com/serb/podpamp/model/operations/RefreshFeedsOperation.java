@@ -74,6 +74,9 @@ public class RefreshFeedsOperation implements RequestService.Operation {
 		} catch (RSSReaderException e) {
 			e.printStackTrace();
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 
