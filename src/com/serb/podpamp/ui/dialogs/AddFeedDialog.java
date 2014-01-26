@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.serb.podpamp.R;
 
 public class AddFeedDialog extends DialogFragment {
@@ -15,9 +17,9 @@ public class AddFeedDialog extends DialogFragment {
 		public void onDialogPositiveClick(String feed_url);
 	}
 
-
-
 	AddFeedDialogListener mListener;
+
+	public static final int FILE_SELECT_CODE = 4444;
 
 
 
@@ -32,7 +34,6 @@ public class AddFeedDialog extends DialogFragment {
 			throw new ClassCastException(activity.toString() + " must implement AddFeedDialogListener");
 		}
 	}
-
 
 
 
@@ -55,10 +56,28 @@ public class AddFeedDialog extends DialogFragment {
 			.setNegativeButton(R.string.cancel_btn_text, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
-
+				}
+			})
+			.setNeutralButton(R.string.add_feeds_from_file_text, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					pickFile();
 				}
 			});
 		return builder.create();
 	}
 
+
+
+	private void pickFile() {
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		intent.setType("file/*");
+		try {
+			getActivity().startActivityForResult(intent, FILE_SELECT_CODE);
+		}
+		catch (android.content.ActivityNotFoundException ex) {
+			Toast.makeText(getActivity(), getString(R.string.install_file_manager),
+				Toast.LENGTH_SHORT).show();
+		}
+	}
 }

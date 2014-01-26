@@ -107,8 +107,8 @@ public class DownloadManager {
 		URLConnection conn = null;
 		try {
 			conn = url.openConnection();
-			conn.setReadTimeout(10000); // milliseconds
-			conn.setConnectTimeout(15000); // milliseconds
+			conn.setReadTimeout(30000); // milliseconds
+			conn.setConnectTimeout(30000); // milliseconds
 			conn.connect();
 		} catch (IOException e) {
 			Log.d("DownloadManager", "Error: " + e.toString());

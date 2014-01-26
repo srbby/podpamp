@@ -174,6 +174,16 @@ public abstract class Utils {
 
 
 
+	public static void showAlert(Context context, String title, String message) {
+		new AlertDialog.Builder(context)
+			.setTitle(title)
+			.setMessage(message)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setPositiveButton(android.R.string.ok, null).show();
+	}
+
+
+
 	public static byte[] compressImage(InputStream is)
 	{
 		Bitmap bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(is), 156, 156, true);

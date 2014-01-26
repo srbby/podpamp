@@ -7,7 +7,7 @@ public class FeedsService extends RequestService {
 	@Override
 	public Operation getOperationForType(int requestType) {
 		switch (requestType) {
-			case RequestFactory.REQUEST_ADD_FEED:
+			case RequestFactory.REQUEST_ADD_FEEDS:
 				return new AddFeedOperation();
 			case RequestFactory.REQUEST_DOWNLOAD_EPISODE:
 				return new DownloadEpisodeOperation();
