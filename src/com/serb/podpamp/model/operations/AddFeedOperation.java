@@ -6,6 +6,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import com.foxykeep.datadroid.exception.ConnectionException;
 import com.foxykeep.datadroid.exception.CustomRequestException;
 import com.foxykeep.datadroid.exception.DataException;
@@ -22,9 +23,12 @@ import org.mcsoxford.rss.RSSItem;
 import org.mcsoxford.rss.RSSReader;
 import org.mcsoxford.rss.RSSReaderException;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 public class AddFeedOperation implements RequestService.Operation {
+
 	@Override
 	public Bundle execute(Context context, Request request)
 		throws ConnectionException, DataException, CustomRequestException {
@@ -33,7 +37,7 @@ public class AddFeedOperation implements RequestService.Operation {
 
 		for (String url : container.getUrls()) {
 			if (FeedsManager.isFeedAdded(context, url))
-				return null;
+				continue;
 
 			RSSReader reader = new RSSReader();
 
@@ -61,6 +65,8 @@ public class AddFeedOperation implements RequestService.Operation {
 				values.put(Contract.FeedsColumns.URL, url);
 				values.put(Contract.FeedsColumns.UNREAD_ITEMS_COUNT, items.size() < unreadCount ? items.size() : unreadCount);
 
+				values.put(Contract.FeedsColumns.FILENAME_PREFIX, getFilenamePrefix(url));
+
 				Uri feedUri = context.getContentResolver().insert(Contract.Feeds.CONTENT_URI, values);
 
 				long feedId = ContentUris.parseId(feedUri);
@@ -73,6 +79,22 @@ public class AddFeedOperation implements RequestService.Operation {
 			}
 		}
 
+		return null;
+	}
+
+
+
+	private String getFilenamePrefix(String urlString) {
+		String TAG = "AddFeedOperation";
+		try {
+			URL url = new URL(urlString);
+			String host = url.getHost();
+			return host.split("\\.")[0];
+		} catch (MalformedURLException e) {
+			Log.e(TAG, String.format("Invalid feed url %s %n %s", urlString, e.toString()));
+		} catch (Exception e) {
+			Log.e(TAG, e.toString());
+		}
 		return null;
 	}
 }

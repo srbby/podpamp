@@ -21,7 +21,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			Contract.Feeds.ICON_URL + " text, " +
 			Contract.Feeds.ICON + " blob, " +
 			Contract.Feeds.UNREAD_ITEMS_COUNT + " integer, " +
-			Contract.Feeds.STARRED_ITEMS_COUNT + " integer" +
+			Contract.Feeds.STARRED_ITEMS_COUNT + " integer," +
+			Contract.Feeds.FILENAME_PREFIX + " text" +
 			")";
 		db.execSQL(sql);
 
@@ -51,8 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (oldVersion < 2)
-		{
+		if (oldVersion < 2) {
 			String template = "alter table " + Contract.TABLE_FEED_ITEMS + " add column %s integer";
 			String sql = String.format(template, Contract.FeedItems.DOWNLOADED);
 			db.execSQL(sql);
@@ -61,15 +61,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			sql = String.format(template, Contract.FeedItems.IS_STARRED);
 			db.execSQL(sql);
 		}
-		if (oldVersion < 3)
-		{
+		if (oldVersion < 3) {
 			String template = "alter table " + Contract.TABLE_FEEDS + " add column %s integer";
 			String sql = String.format(template, Contract.Feeds.STARRED_ITEMS_COUNT);
 			db.execSQL(sql);
 		}
-		if (oldVersion < 4)
-		{
+		if (oldVersion < 4) {
 			createIndices(db);
+		}
+		if (oldVersion < 5) {
+			String template = "alter table " + Contract.TABLE_FEEDS + " add column %s text";
+			String sql = String.format(template, Contract.Feeds.FILENAME_PREFIX);
+			db.execSQL(sql);
 		}
 	}
 
